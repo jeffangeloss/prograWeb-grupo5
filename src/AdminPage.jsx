@@ -29,7 +29,7 @@ function AdminPage() {
                     </select>
                 </div>
 
-                <div className="border border-black mt-10 mx-8 rounded-2xl shadow-xl overflow-hidden ">
+                <div className="border border-blue-900/50 mt-10 mx-8 rounded-2xl shadow-xl overflow-hidden ">
                     <table className="text-xs text-white text-left min-w-full">
                         <thead className="text-sm text-gray-200 bg-blue-900">
                             <tr>
@@ -42,7 +42,7 @@ function AdminPage() {
                                 <th className="font-medium px-4 py-3">ÚLTIMO ACCESO</th>
                             </tr>
                         </thead>
-                        <tbody className="divide-y divide-black">
+                        <tbody className="divide-y divide-blue-900/50">
                             <tr className="hover:bg-blue-600 transition">
                                 <td className="px-4 py-4">
                                     <input type="checkbox" className="w-4 h-4" />
@@ -67,7 +67,7 @@ function AdminPage() {
                             </tr>
                         </tbody>
                     </table>
-                    <span class="p-2 text-white text-xs">Usuarios: 2</span>
+                    <span class="p-3 text-white text-xs flex justify-end">Usuarios: 2</span>
                 </div>
             </div>
         </div>
