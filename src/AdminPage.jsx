@@ -7,9 +7,9 @@ function AdminPage() {
                 class="border border-gray-500 rounded-md p-2 bg-blue-900 hover:bg-blue-300 text-white">Usuario</button>
         </div>
         <div class="grid grid-cols-[260px_1fr] min-h-screen">
-            <div class="px-6 flex flex-col bg-blue-950 gap-4">
-                <button type="button" class="mt-4 shadow-md bg-blue-700 rounded-2xl w-64 py-3 text-white">Usuarios</button>
-                <button type="button" class="shadow-md bg-blue-700 rounded-2xl w-64 py-3 text-white">Dashboard</button>
+            <div class="px-8 flex flex-col bg-blue-950 gap-4">
+                <button type="button" class="mt-4 shadow-md bg-blue-700 rounded-2xl w-48 py-3 text-white">Usuarios</button>
+                <button type="button" class="shadow-md bg-blue-700 rounded-2xl w-48 py-3 text-white">Dashboard</button>
             </div>
             <div class="bg-sky-700">
                 <h1 class="mt-6 ml-6 object-left text-3xl text-white">Usuarios</h1>
@@ -20,8 +20,8 @@ function AdminPage() {
                         class="shadow-md bg-blue-700 rounded-2xl w-64 py-2 text-white">Exportar</button>
                 </div>
                 <div class="mt-6 gap-6 flex flex-auto px-12">
-                    <input class="px-4 py-1 rounded-md shadow-md" type="text" value="Buscar usuario..."></input>
-                    <select class="pl-4 rounded-md shadow-md" value="Rol">
+                    <input class="bg-white px-4 py-1 rounded-md shadow-md" type="text" placeholder="Buscar usuario..."></input>
+                    <select class="bg-white pl-4 rounded-md shadow-md" value="Rol">
                         <option>Rol</option>
                         <option>Usuario</option>
                         <option>Administrador</option>
