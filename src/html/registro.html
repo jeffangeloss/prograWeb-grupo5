@@ -3,11 +3,144 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Crear cuenta</title>
+    <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body>
-    <!--  PODEMOS HACER INICIOSESION.HTML -->
-      <!-- REGISTRO.HTML -->
-       <!-- REESTABLECER.HTML etc -->
-</body>
+
+  <body class="min-h-screen bg-white text-slate-800">
+    <main class="min-h-screen grid grid-cols-1 md:grid-cols-[360px_1fr]">
+      <!-- Panel azul (imagen) -->
+      <section
+        class="hidden md:block"
+        style="
+          background-image: url('/src/img/azul.png');
+          background-size: cover;
+          background-position: center;
+        "
+        aria-hidden="true"
+      ></section>
+
+      <!-- Contenido -->
+      <section class="relative flex items-center justify-center px-6 py-10">
+        <!-- Top-right: login -->
+        <div class="absolute top-6 right-6 flex items-center gap-3 text-sm text-slate-600">
+          <span class="hidden sm:inline">¿Ya tienes una cuenta?</span>
+          <a
+            href="#"
+            class="inline-flex items-center justify-center rounded-full border border-indigo-400 px-5 py-2 font-medium text-indigo-600 hover:bg-indigo-50 focus:outline-none focus:ring-2 focus:ring-indigo-300"
+          >
+            Iniciar sesión
+          </a>
+        </div>
+
+        <!-- Card -->
+        <div class="w-full max-w-xl">
+          <header class="mb-8">
+            <h1 class="text-3xl sm:text-4xl font-extrabold tracking-tight text-slate-700">
+              CREA TU CUENTA
+            </h1>
+            <p class="mt-2 text-slate-500">Complete con su información personal</p>
+          </header>
+
+          <form class="space-y-5">
+            <!-- Grid principal -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <!-- Nombre -->
+              <div class="space-y-2">
+                <label for="nombre" class="text-sm font-medium text-slate-700">Nombre</label>
+                <input
+                  id="nombre"
+                  name="nombre"
+                  type="text"
+                  placeholder="Nombre"
+                  class="w-full rounded-md border border-slate-200 bg-white px-3 py-2 text-slate-700 placeholder:text-slate-400 shadow-sm focus:border-indigo-400 focus:ring-2 focus:ring-indigo-200"
+                />
+              </div>
+
+              <!-- Apellido -->
+              <div class="space-y-2">
+                <label for="apellido" class="text-sm font-medium text-slate-700">Apellido</label>
+                <input
+                  id="apellido"
+                  name="apellido"
+                  type="text"
+                  placeholder="Apellido"
+                  class="w-full rounded-md border border-slate-200 bg-white px-3 py-2 text-slate-700 placeholder:text-slate-400 shadow-sm focus:border-indigo-400 focus:ring-2 focus:ring-indigo-200"
+                />
+              </div>
+
+              <!-- Correo (full width) -->
+              <div class="space-y-2 md:col-span-2">
+                <label for="correo" class="text-sm font-medium text-slate-700">Correo electrónico</label>
+                <input
+                  id="correo"
+                  name="correo"
+                  type="email"
+                  placeholder="hello@reallygreatsite.com"
+                  class="w-full rounded-md border border-slate-200 bg-white px-3 py-2 text-slate-700 placeholder:text-slate-400 shadow-sm focus:border-indigo-400 focus:ring-2 focus:ring-indigo-200"
+                />
+              </div>
+
+              <!-- Contraseña -->
+              <div class="space-y-2">
+                <label for="password" class="text-sm font-medium text-slate-700">Contraseña</label>
+                <input
+                  id="password"
+                  name="password"
+                  type="password"
+                  placeholder="••••••••"
+                  class="w-full rounded-md border border-slate-200 bg-white px-3 py-2 text-slate-700 placeholder:text-slate-400 shadow-sm focus:border-indigo-400 focus:ring-2 focus:ring-indigo-200"
+                />
+              </div>
+
+              <!-- Confirmar -->
+              <div class="space-y-2">
+                <label for="confirm" class="text-sm font-medium text-slate-700">Confirmar contraseña</label>
+                <input
+                  id="confirm"
+                  name="confirm"
+                  type="password"
+                  placeholder="••••••••"
+                  class="w-full rounded-md border border-slate-200 bg-white px-3 py-2 text-slate-700 placeholder:text-slate-400 shadow-sm focus:border-indigo-400 focus:ring-2 focus:ring-indigo-200"
+                />
+              </div>
+            </div>
+
+            <!-- Checkbox -->
+            <label class="flex items-center gap-2 text-sm text-slate-600">
+              <input
+                type="checkbox"
+                class="h-4 w-4 rounded border-slate-300 text-indigo-600 focus:ring-indigo-200"
+              />
+              <span>Acepto los términos y condiciones.</span>
+            </label>
+
+            <!-- Botón -->
+            <button
+              type="submit"
+              class="w-full rounded-full bg-indigo-600 px-6 py-3 font-semibold text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-300 active:scale-[0.99] transition"
+            >
+              Crear cuenta
+            </button>
+
+            <!-- Errores (estáticos por ahora, como en tu imagen) -->
+            <div class="pt-2 space-y-1 text-sm text-red-500">
+              <p>Debe completar todos los campos para continuar</p>
+              <p>El correo ingresado es inválido</p>
+              <p>La contraseña debe tener mínimo 8 caracteres y un símbolo (quizá mayúscula o número)</p>
+            </div>
+          </form>
+
+          <!-- Nota: en mobile puedes mostrar un header “azul” arriba si quieres -->
+          <div class="mt-10 md:hidden rounded-xl overflow-hidden border border-slate-100">
+            <div
+              class="h-28"
+              style="background-image:url('azul.png'); background-size:cover; background-position:center;"
+              aria-hidden="true"
+            ></div>
+          </div>
+        </div>
+      </section>
+    </main>
+  </body>
 </html>
