@@ -1,4 +1,4 @@
-function adminPage() {
+function AdminPage() {
     return <div>
 
         <div class="bg-blue-600 border p-4 shadow-md flex sm:justify-between ">
@@ -68,4 +68,4 @@ function adminPage() {
     </div>
 }
 
-export default adminPage;
+export default AdminPage;
