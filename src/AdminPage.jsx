@@ -15,10 +15,7 @@ function AdminPage() {
             <div className="bg-sky-900 px-4">
                 <h1 className="mt-6 ml-6 object-left text-3xl text-white font-semibold">Usuarios</h1>
                 <div className="ml-4 flex gap-4 mt-4">
-                    <button type="button" className="shadow-md bg-blue-700 rounded-2xl w-64 py-2 text-white">Añadir
-                        Usuario</button>
-                    <button type="button"
-                        className="shadow-md bg-blue-700 rounded-2xl w-64 py-2 text-white">Eliminar usuario</button>
+                    <button type="button" className="shadow-md bg-blue-700 rounded-2xl w-64 py-2 text-white">Añadir Usuario</button>
                 </div>
                 <div className="ml-4 mt-6 gap-6 flex flex-auto">
                     <input className="bg-white px-10 py-1 rounded-xl shadow-xl" type="text" placeholder="Buscar usuario..."></input>

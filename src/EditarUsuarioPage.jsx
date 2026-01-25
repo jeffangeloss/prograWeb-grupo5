@@ -23,12 +23,12 @@ function EditarUsuarioPage() {
           <div className="bg-blue-950 rounded-2xl shadow-xl p-8 max-w-2xl">
             <div className="mb-6">
               <label className="text-white mb-2 ml-1">Nombre completo</label>
-              <input type="text" placeholder="Nombre del usuario" className="w-full mt-2 px-4 py-2 rounded-xl shadow-md bg-white text-black"/>
+              <input type="text" placeholder="Nombre del usuario" className="w-full mt-2 px-4 py-2 rounded-xl shadow-md bg-white text-black" />
             </div>
 
             <div className="mb-6">
               <label className="text-white mb-2 ml-1">Correo electrónico</label>
-              <input type="email" placeholder="correo@ejemplo.com" className="w-full mt-2 px-4 py-2 rounded-xl shadow-md bg-white text-black"/>
+              <input type="email" placeholder="correo@ejemplo.com" className="w-full mt-2 px-4 py-2 rounded-xl shadow-md bg-white text-black" />
             </div>
 
             <div className="mb-6">
