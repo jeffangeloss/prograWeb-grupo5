@@ -4,6 +4,6 @@ import './main.css'
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>
-    <div className="bg-amber-300">Prueba de TailwindCSS</div>
+    <adminPage />
   </StrictMode>,
 )
