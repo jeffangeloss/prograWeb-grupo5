@@ -1,6 +1,9 @@
-import { useState } from "react";
+import { useState } from "react"
+import { useNavigate } from "react-router-dom"
 
-function Formulario({onLogin}) {
+function Formulario({ onLogin }) {
+    const navigate = useNavigate()
+
     const [correo, setCorreo] = useState("")
     const [password, setPassword] = useState("")
 
@@ -26,7 +29,7 @@ function Formulario({onLogin}) {
                 </label>
                 <input id="email" name="email" type="email" placeholder="ejemplo@user.com"
                     className="w-full h-14 px-5 border border-gray-300 rounded-md outline-none text-base focus:border-[#bb88ee] focus:ring-4 focus:ring-[#bb88ee] focus:ring-offset-2 focus:ring-offset-white"
-                    value={correo} onChange={function(ev){
+                    value={correo} onChange={function (ev) {
                         setCorreo(ev.target.value)
                     }} />
             </div>
@@ -37,20 +40,20 @@ function Formulario({onLogin}) {
                 </label>
                 <input id="password" name="password" type="password" placeholder="********"
                     className="w-full h-14 px-5 border border-gray-300 rounded-md outline-none text-base focus:border-[#bb88ee] focus:ring-4 focus:ring-[#bb88ee] focus:ring-offset-2 focus:ring-offset-white"
-                    value={password} onChange={function(ev){
+                    value={password} onChange={function (ev) {
                         setPassword(ev.target.value)
                     }} />
             </div>
 
             <div className="w-full mt-5 text-right">
-                <a href="#" className="text-sm sm:text-base underline text-gray-600 hover:text-gray-800">
+                <a href="#/restablecer" className="text-sm sm:text-base underline text-gray-600 hover:text-gray-800">
                     ¿Olvidaste tu contraseña?
                 </a>
             </div>
 
             <button
-                className="mt-10 w-full sm:w-auto sm:px-16 h-14 rounded-full text-white bg-indigo-500 hover:opacity-90 transition-opacity text-base sm:text-lg" type="button" onClick={function(){
-                    onLogin(correo,password)
+                className="mt-10 w-full sm:w-auto sm:px-16 h-14 rounded-full text-white bg-indigo-500 hover:opacity-90 transition-opacity text-base sm:text-lg" type="button" onClick={function () {
+                    onLogin(correo, password)
                 }}>
                 Iniciar sesión
             </button>
