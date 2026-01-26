@@ -1,8 +1,42 @@
+import Formulario from "../components/Formulario";
+import Mensaje from "../components/Mensaje";
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+
 function InicioSesion() {
+    const [mensajeVisible, setMensajeVisible] = useState(false)
+    const [mensaje, setMensaje] = useState("")
+    const navigate = useNavigate()
+
+    function login(correo, password) {
+        if (!correo || !password) {
+            setMensaje("Debe completar todos los campos para continuar")
+            setMensajeVisible(true)
+            return
+        }
+
+        if (correo === "ejemplo@admin.com" && password === "admin1234") {
+            setMensaje("")
+            setMensajeVisible(false)
+            navigate("/admin")
+            return
+        }
+
+        if (correo === "ejemplo@user.com" && password === "user1234") {
+            setMensaje("")
+            setMensajeVisible(false)
+            navigate("/user")
+            return
+        }
+
+        setMensaje("Correo y/o contraseña incorrectos")
+        setMensajeVisible(true)
+    }
+
     return <div className="min-h-screen">
         <div className="flex min-h-screen w-full">
-            <div className="hidden md:block md:w-1/4 xl:w-[22%] max-w-[420px] shrink-0">
-                <img className="h-full w-full object-cover" src="/src/img/azul.png" alt="leftSideImage" />
+            <div className="hidden md:block md:w-1/4 xl:w-[22%] max-w-md">
+                <img className="h-full w-full object-cover" src="/public/img/azul.png" alt="leftSideImage" />
             </div>
 
             <div className="flex-1 flex flex-col">
@@ -16,48 +50,8 @@ function InicioSesion() {
 
                 <div className="flex-1 flex items-center">
                     <div className="w-full px-6 sm:px-10 lg:pl-16 lg:pr-12">
-                        <form className="w-full max-w-3xl flex flex-col items-start">
-                            <h2 className="text-4xl sm:text-5xl text-gray-900 font-bold">INICIAR SESIÓN</h2>
-
-                            <p className="text-base sm:text-lg text-gray-500/90 font-normal mt-4">
-                                Inicia sesión y empieza a gestionar tu dinero
-                            </p>
-
-                            <div className="w-full mt-10 sm:mt-12">
-                                <label for="email" className="block text-base sm:text-lg text-gray-700 mb-3">
-                                    Correo electrónico
-                                </label>
-                                <input id="email" name="email" type="email" placeholder="ejemplo@user.com"
-                                    className="w-full h-14 px-5 border border-gray-300 rounded-md outline-none text-base focus:border-[#bb88ee] focus:ring-4 focus:ring-[#bb88ee] focus:ring-offset-2 focus:ring-offset-white"
-                                    required autocomplete="current-password" />
-                            </div>
-
-                            <div className="w-full mt-7 sm:mt-8">
-                                <label for="password" className="block text-base sm:text-lg text-gray-700 mb-3">
-                                    Contraseña
-                                </label>
-                                <input id="password" name="password" type="password" placeholder="********"
-                                    className="w-full h-14 px-5 border border-gray-300 rounded-md outline-none text-base focus:border-[#bb88ee] focus:ring-4 focus:ring-[#bb88ee] focus:ring-offset-2 focus:ring-offset-white"
-                                    required autocomplete="current-password" />
-
-                            </div>
-
-                            <div className="w-full mt-5 text-right">
-                                <a href="#" className="text-sm sm:text-base underline text-gray-600 hover:text-gray-800">
-                                    ¿Olvidaste tu contraseña?
-                                </a>
-                            </div>
-
-                            <button type="submit"
-                                className="mt-10 w-full sm:w-auto sm:px-16 h-14 rounded-full text-white bg-indigo-500 hover:opacity-90 transition-opacity text-base sm:text-lg">
-                                Iniciar sesión
-                            </button>
-                            <div className="pt-2 space-y-1 text-sm text-red-500">
-                                <p>Debe completar todos los campos para continuar</p>
-                                <p>El correo ingresado no tiene una cuenta asociada</p>
-                                <p>La contraseña es incorrecta</p>
-                            </div>
-                        </form>
+                        <Formulario onLogin={login} />
+                        <Mensaje msg={mensaje} visible={mensajeVisible} />
                     </div>
                 </div>
             </div>
