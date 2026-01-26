@@ -6,7 +6,6 @@ import InicioSesion from './pages/InicioSesion'
 import AdminPage from './pages/AdminPage'
 import EditarUsuarioPage from './pages/EditarUsuarioPage'
 import RestableceContra from './pages/RestableceContra'
-import RegistroPage from './pages/RegistroPage'
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>
@@ -16,7 +15,6 @@ createRoot(document.getElementById('root')).render(
       <Route path="/admin" element={<AdminPage />} />
       <Route path="/user" element={<EditarUsuarioPage />} />
       <Route path="/restablecer" element={<RestableceContra />} />
-      <Route path="/registro" element={<RegistroPage />} />
     </Routes>
   </HashRouter>
   </StrictMode>,
