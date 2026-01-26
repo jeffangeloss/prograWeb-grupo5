@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Inicio Sesión</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+
+<body class="min-h-screen">
+    <div class="flex min-h-screen w-full">
+        <div class="hidden md:block md:w-1/4 xl:w-[22%] max-w-[420px] shrink-0">
+            <img class="h-full w-full object-cover" src="/src/img/azul.png" alt="leftSideImage" />
+        </div>
+
+        <div class="flex-1 flex flex-col">
+            <div class="w-full flex justify-end items-center gap-4 px-6 sm:px-10 py-6">
+                <span class="text-gray-700 text-sm sm:text-base">¿No tienes una cuenta?</span>
+                <a href="#"
+                    class="px-8 py-2.5 rounded-full border border-indigo-500 text-indigo-600 hover:bg-indigo-50 transition text-sm sm:text-base">
+                    Registrarse
+                </a>
+            </div>
+
+            <div class="flex-1 flex items-center">
+                <div class="w-full px-6 sm:px-10 lg:pl-16 lg:pr-12">
+                    <form class="w-full max-w-3xl flex flex-col items-start">
+                        <h2 class="text-4xl sm:text-5xl text-gray-900 font-bold">INICIAR SESIÓN</h2>
+
+                        <p class="text-base sm:text-lg text-gray-500/90 font-normal mt-4">
+                            Inicia sesión y empieza a gestionar tu dinero
+                        </p>
+
+                        <div class="w-full mt-10 sm:mt-12">
+                            <label for="email" class="block text-base sm:text-lg text-gray-700 mb-3">
+                                Correo electrónico
+                            </label>
+                            <input id="email" name="email" type="email" placeholder="ejemplo@user.com"
+                                class="w-full h-14 px-5 border border-gray-300 rounded-md outline-none text-base focus:border-[#bb88ee] focus:ring-4 focus:ring-[#bb88ee] focus:ring-offset-2 focus:ring-offset-white"
+                                required autocomplete="current-password" />
+                        </div>
+
+                        <div class="w-full mt-7 sm:mt-8">
+                            <label for="password" class="block text-base sm:text-lg text-gray-700 mb-3">
+                                Contraseña
+                            </label>
+                            <input id="password" name="password" type="password" placeholder="********"
+                                class="w-full h-14 px-5 border border-gray-300 rounded-md outline-none text-base focus:border-[#bb88ee] focus:ring-4 focus:ring-[#bb88ee] focus:ring-offset-2 focus:ring-offset-white"
+                                required autocomplete="current-password" />
+
+                        </div>
+
+                        <div class="w-full mt-5 text-right">
+                            <a href="#" class="text-sm sm:text-base underline text-gray-600 hover:text-gray-800">
+                                ¿Olvidaste tu contraseña?
+                            </a>
+                        </div>
+
+                        <button type="submit"
+                            class="mt-10 w-full sm:w-auto sm:px-16 h-14 rounded-full text-white bg-indigo-500 hover:opacity-90 transition-opacity text-base sm:text-lg">
+                            Iniciar sesión
+                        </button>
+                        <div class="pt-2 space-y-1 text-sm text-red-500">
+                            <p>Debe completar todos los campos para continuar</p>
+                            <p>El correo ingresado no tiene una cuenta asociada</p>
+                            <p>La contraseña es incorrecta</p>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>
