@@ -71,7 +71,7 @@ function AdminPage() {
                             </tr>
                         </tbody>
                     </table>
-                    <span class="p-3 text-white text-xs flex justify-end">Usuarios: 2</span>
+                    <span className="p-3 text-white text-xs flex justify-end">Usuarios: 2</span>
                 </div>
             </div>
         </div>
