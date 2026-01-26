@@ -1,3 +1,10 @@
+# Credenciales de acceso (demo)
+
+- Admin: ejemplo@admin.com / admin1234
+- User: ejemplo@user.com / user1234
+
+> Nota: credenciales solo para pruebas locales.
+
 # React + Vite
 
 This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
