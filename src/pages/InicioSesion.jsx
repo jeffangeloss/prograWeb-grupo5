@@ -42,8 +42,8 @@ function InicioSesion() {
             <div className="flex-1 flex flex-col">
                 <div className="w-full flex justify-end items-center gap-4 px-6 sm:px-10 py-6">
                     <span className="text-gray-700 text-sm sm:text-base">¿No tienes una cuenta?</span>
-                    <a href="#"
-                        className="px-8 py-2.5 rounded-full border border-indigo-500 text-indigo-600 hover:bg-indigo-50 transition text-sm sm:text-base">
+                    <a href="#/registro"
+                        className="px-8 py-2.5 rounded-full border border-indigo-500 text-indigo-600 hover:bg-indigo-50 transition text-sm sm:text-base" >
                         Registrarse
                     </a>
                 </div>
