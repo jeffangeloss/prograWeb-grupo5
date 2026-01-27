@@ -1,7 +1,7 @@
 import CrearUsuarioAdminForm from "../components/CrearUsuarioAdminForm"
-import NavBarAdmin from "../components/NavbarAdmin"
+import NavBarAdmin from "../components/NavBarAdmin"
 
-function EditarUsuarioPage() {
+function CrearUsuarioAdminPage() {
   return <div>
     <div className="bg-[url('/img/azul.png')] bg-cover min-h-screen bg-center">
       <NavBarAdmin />
@@ -14,4 +14,4 @@ function EditarUsuarioPage() {
 
 }
 
-export default EditarUsuarioPage
+export default CrearUsuarioAdminPage

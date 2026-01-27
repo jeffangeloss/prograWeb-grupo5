@@ -1,5 +1,5 @@
 import EditarUsuarioForm from "../components/EditarUsuarioForm"
-import NavBarAdmin from "../components/NavbarAdmin"
+import NavBarAdmin from "../components/NavBarAdmin"
 
 function EditarUsuarioPage() {
   return <div>
