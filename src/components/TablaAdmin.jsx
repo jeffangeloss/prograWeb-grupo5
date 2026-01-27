@@ -4,7 +4,7 @@ function TablaAdmin() {
     const navigate = useNavigate()
 
     return <div className="border border-blue-900/50 mt-10 mx-8 rounded-2xl shadow-xl overflow-hidden">
-        <table className="text-xs bg-gray-50/50 text-gray-200 text-left min-w-full">
+        <table className="text-xs bg-gray-800/50 text-gray-200 text-left min-w-full">
             <thead className="text-sm text-gray-200 bg-blue-900">
                 <tr>
                     <th className="px-4 py-4">
@@ -18,7 +18,7 @@ function TablaAdmin() {
                 </tr>
             </thead>
             <tbody className="divide-y divide-blue-900/50">
-                <tr className="hover:bg-gray-800/50 transition">
+                <tr className="hover:bg-gray-500/50 transition">
                     <td className="px-4 py-4">
                         <input type="checkbox" className="w-4 h-4" />
                     </td>
@@ -33,7 +33,7 @@ function TablaAdmin() {
                             onClick={function () { navigate("/editarUsuario") }}>Editar</button>
                     </td>
                 </tr>
-                <tr className="hover:bg-gray-800/50 transition">
+                <tr className="hover:bg-gray-500/50 transition">
                     <td className="px-4 py-4">
                         <input type="checkbox" className="w-4 h-4" />
                     </td>
