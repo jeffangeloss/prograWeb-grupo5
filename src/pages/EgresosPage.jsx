@@ -1,7 +1,11 @@
 import EgresosForm from "../components/EgresosForm"
 import NavBarUser from "../components/NavBarUser"
+import { useNavigate } from "react-router-dom"
 
 function EgresosPage() {
+
+    const navigate = useNavigate()
+
     return <div className="bg-slate-50 text-slate-800 lg:h-screen lg:overflow-hidden">
         <NavBarUser />
 
@@ -29,7 +33,7 @@ function EgresosPage() {
                             <p className="text-sm text-slate-500">Total registrado: S/ 0.00</p>
                         </div>
                         <span className="rounded-full border border-slate-200 bg-white/70 px-3 py-1 text-xs font-semibold text-slate-700">
-                            0 registros
+                            1 registro
                         </span>
                     </div>
 
@@ -45,9 +49,23 @@ function EgresosPage() {
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr>
-                                    <td className="px-4 py-6 text-center text-sm text-slate-500" colSpan="5">
-                                        Aún no hay egresos registrados.
+                                <tr className="border-b border-slate-100">
+                                    <td className="px-4 py-3">27/01/2026</td>
+                                    <td className="px-4 py-3">Alimentación</td>
+                                    <td className="px-4 py-3">Compra supermercado</td>
+                                    <td className="px-4 py-3 text-right font-medium">
+                                        S/ 85.50
+                                    </td>
+                                    <td className="px-4 py-3 text-slate-500">
+                                        Hoy
+                                    </td>
+                                    <td className="px-4 py-3 text-center">
+                                        <button className="rounded-full border border-slate-200 px-3 py-1 text-xs font-semibold text-slate-700 hover:bg-slate-100 transition"
+                                        onClick={function() {
+                                            navigate("/editarEgreso")
+                                        }}>
+                                            Editar egreso
+                                        </button>
                                     </td>
                                 </tr>
                             </tbody>
