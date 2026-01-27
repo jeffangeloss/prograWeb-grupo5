@@ -15,7 +15,7 @@ function CorreoForm({onContinue}){
                         value={correo}
                         onChange={correoOnChange}
                         className="w-full rounded-md border border-slate-200 bg-white px-3 py-2 text-slate-700 placeholder:text-slate-400 shadow-sm focus:border-indigo-400 focus:ring-2 focus:ring-indigo-200"
-                        type="text" placeholder="ejemplo@user.com">
+                        type="email" placeholder="ejemplo@user.com">
                     </input>
                     <button
                         onClick={ function(){

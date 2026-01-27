@@ -1,4 +1,5 @@
 import TextoContra from "../components/TextoContra"
+import { useEffect, useState } from "react"
 
 function RestablecerContra_2() {
 
@@ -33,6 +34,7 @@ function RestablecerContra_2() {
             </div>
 
             {/* texto */}
+            
             <TextoContra correo={correo} />
         </div>
     </div>

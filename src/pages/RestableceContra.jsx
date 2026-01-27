@@ -49,7 +49,7 @@ function RestableceContra() {
             {/* header */}
             <div className="my-10">
                 <h1 className="text-4xl font-extrabold tracking-tight text-slate-700">RESTABLECER CONTRASEÑA</h1>
-                <p className="mt-2 -->text-slate-500">Indica el correo electrónico con el que te registraste</p>
+                <p className="mt-2 text-slate-500">Indica el correo electrónico con el que te registraste</p>
             </div>
 
             <CorreoForm onContinue={continuar} />
