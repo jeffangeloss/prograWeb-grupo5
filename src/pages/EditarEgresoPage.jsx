@@ -1,4 +1,9 @@
+import { useNavigate } from "react-router-dom"
+
 function EditarEgresoPage() {
+
+    const navigate = useNavigate()
+
     return (
         <div className="bg-slate-50 text-slate-800 min-h-screen flex items-start justify-center p-4 md:p-6">
             <section className="w-full max-w-md bg-white border border-slate-200 rounded-2xl shadow-sm p-4 sm:p-5">
@@ -63,7 +68,9 @@ function EditarEgresoPage() {
                     <button
                         type="button"
                         className="text-sm text-slate-500 underline text-center hover:text-slate-700"
-                    >
+                        onClick={function() {
+                            navigate("/user")
+                        }}>
                         Cancelar
                     </button>
                 </form>
