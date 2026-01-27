@@ -3,16 +3,16 @@ import { useNavigate } from "react-router-dom"
 function NavBarAdmin() {
     const navigate = useNavigate()
 
-    return <div className="bg-linear-to-r from-blue-700 to-blue-900 px-6 py-4 shadow-xl flex sm:justify-between ">
+    return <div className="bg-slate-100 px-6 py-4 shadow-md flex flex-row justify-between">
         <img src="https://www.ulima.edu.pe/themes/custom/ulima/logo.svg" className="h-10" />
         <div className="flex gap-4">
             <button type="button"
-                className="px-8 py-2.5 rounded-full border border-white text-white hover:bg-blue-100/50 transition text-sm sm:text-base">Usuario</button>
+                className="px-6 py-2.5 rounded-full border border-blue-900/30 text-blue-900 hover:bg-blue-900/10 transition">Perfil</button>
             <button type="button"
-                className="px-8 py-2.5 rounded-full border border-white text-white hover:bg-blue-100/50 transition text-sm sm:text-base">Dashboard</button>
+                className="px-6 py-2.5 rounded-full border border-blue-900/30 text-blue-900 hover:bg-blue-900/10 transition">Dashboard</button>
                 {/* Este botón esta para la parte donde salen las métricas de los usuarios mensaules y tal*/}
             <button type="button"
-                className="px-8 py-2.5 rounded-full border border-white text-white hover:bg-blue-100/50 transition text-sm sm:text-base"
+                className="px-6 py-2.5 rounded-full border border-blue-900/30 text-blue-900 hover:bg-blue-900/10 transition"
                 onClick={function () { navigate("/") }}>Cerrar sesión</button>
         </div>
 
