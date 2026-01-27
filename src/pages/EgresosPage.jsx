@@ -5,10 +5,9 @@ function EgresosPage() {
     return <div className="bg-slate-50 text-slate-800 lg:h-screen lg:overflow-hidden">
         <NavBarUser />
 
-        <main className="min-h-screen lg:h-screen lg:flex lg:items-start lg:justify-center p-4 md:p-6 pt-2 sm:pt-3 lg:pt-2">
+        <main className="min-h-screen lg:h-screen lg:flex lg:items-start lg:justify-center p-3 sm:p-4 md:p-6">
             <div className="w-full max-w-6xl mx-auto grid gap-4 lg:grid-cols-[340px_1fr]">
-                <section className="bg-white border border-slate-200 rounded-2xl shadow-sm p-4 sm:p-5">
-
+                <section className="bg-white border border-slate-200 rounded-2xl shadow-sm p-5">
                     <div className="space-y-1">
                         <h2 className="text-xl font-extrabold tracking-tight text-slate-700">
                             REGISTRAR EGRESO
@@ -20,7 +19,7 @@ function EgresosPage() {
                     <EgresosForm />
                 </section>
 
-                <section className="bg-white border border-slate-200 rounded-2xl shadow-sm p-4 sm:p-5">
+                <section className="bg-white border border-slate-200 rounded-2xl shadow-sm p-5">
                     <div className="flex flex-col gap-1 sm:flex-row sm:items-center sm:justify-between">
                         <div>
                             <h2 className="text-xl font-extrabold tracking-tight text-slate-700">
@@ -33,7 +32,7 @@ function EgresosPage() {
                         </span>
                     </div>
 
-                    <div className="mt-4 overflow-x-auto lg:max-h-[50vh] lg:overflow-y-auto hidden sm:block">
+                    <div className="mt-4 overflow-x-auto lg:max-h-[50vh] lg:overflow-y-auto">
                         <table className="min-w-[720px] text-left text-sm text-slate-700">
                             <thead className="border-b border-slate-200/80 text-xs uppercase tracking-wide text-slate-500">
                                 <tr>
