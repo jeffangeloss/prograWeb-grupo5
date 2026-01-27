@@ -1,4 +1,4 @@
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { useNavigate } from "react-router-dom"
 import CorreoForm from "../components/CorreoForm"
 import Mensaje from "../components/Mensaje"
@@ -18,8 +18,8 @@ function RestableceContra() {
             console.log("correo ingresado")
             setMensaje("")
             setMensajeVisible(false)
-            localStorage.setItem("correo_restablecer", correo)
             navigate('/restablecer/mensaje')
+            localStorage.setItem("CorreoRecuperar", correo)
         }
         else{
             setMensaje("El correo ingresado no tiene una cuenta asociada")
