@@ -1,5 +1,4 @@
 import EgresosForm from "../components/EgresosForm"
-import { useNavigate } from "react-router-dom"
 
 function EgresosPage() {
     return <div className="bg-slate-50 text-slate-800 lg:h-screen lg:overflow-hidden">
