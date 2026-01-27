@@ -1,9 +1,26 @@
 import EgresosForm from "../components/EgresosForm"
+import { useNavigate } from "react-router-dom"
 
 function EgresosPage() {
+    const navigate = useNavigate()
+
+    function cerrarSesion() {
+        const datosLogin = { ingreso: false }
+        localStorage.setItem("DATOS_LOGIN", JSON.stringify(datosLogin))
+        navigate("/")
+    }
+
     return <div className="bg-slate-50 text-slate-800 lg:h-screen lg:overflow-hidden">
         <main className="min-h-screen lg:h-screen lg:flex lg:items-center lg:justify-center p-4 md:p-6">
-            <div className="w-full max-w-6xl grid gap-4 lg:grid-cols-[340px_1fr]">
+            <div className="w-full max-w-6xl">
+                <div className="flex justify-end mb-3">
+                    <button type="button"
+                        className="px-8 py-2.5 rounded-full border border-white text-white bg-blue-700 hover:bg-blue-600 transition text-sm sm:text-base"
+                        onClick={function () { cerrarSesion() }}>
+                        Cerrar sesión
+                    </button>
+                </div>
+                <div className="grid gap-4 lg:grid-cols-[340px_1fr]">
 
                 <section className="bg-white border border-slate-200 rounded-2xl shadow-sm p-5">
                     <div className="space-y-1">
@@ -14,7 +31,6 @@ function EgresosPage() {
                             Completa los campos y guarda el gasto asociado a tu sesión.
                         </p>
                     </div>
-
                     <EgresosForm />
                 </section>
 
@@ -50,7 +66,7 @@ function EgresosPage() {
                         </table>
                     </div>
                 </section>
-
+                </div>
             </div>
         </main>
     </div >
