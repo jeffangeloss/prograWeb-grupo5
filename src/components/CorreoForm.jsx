@@ -1,6 +1,6 @@
 import { useState } from "react"
 
-function CorreoForm(){
+function CorreoForm({onContinue}){
     
     const [correo, setCorreo] = useState("")
 
@@ -18,8 +18,11 @@ function CorreoForm(){
                         type="text" placeholder="ejemplo@user.com">
                     </input>
                     <button
+                        onClick={ function(){
+                            onContinue(correo)
+                        }}
                         className="mt-4 w-min rounded-full bg-indigo-600 px-16 py-3 font-semibold text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-300 active:scale-[0.99] transition"
-                        type="submit">Continuar
+                        type="button">Continuar
                     </button>
                 </form>
             </div>
