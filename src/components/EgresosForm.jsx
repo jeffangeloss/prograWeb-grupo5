@@ -29,13 +29,11 @@ function EgresosForm({ onComplete }) {
         setMensajeVisible(false)
     }
 
-
-
     return <div>
         <form className="mt-4 space-y-3">
             <div className="space-y-1">
-                <label for="fecha" className="text-sm font-medium text-slate-700">Fecha</label>
-                <input id="fecha" name="fecha" type="date"
+                <label className="text-sm font-medium text-slate-700">Fecha</label>
+                <input type="date"
                     className="w-full rounded-md border border-slate-200 bg-white px-3 py-2 text-slate-700 shadow-sm focus:border-indigo-400 focus:ring-2 focus:ring-indigo-200"
                     required value={Fecha} onChange={function (ev) {
                         setFecha(ev.target.value)
@@ -43,8 +41,8 @@ function EgresosForm({ onComplete }) {
             </div>
 
             <div className="space-y-1">
-                <label for="monto" className="text-sm font-medium text-slate-700">Monto</label>
-                <input id="monto" name="monto" type="number" step="0.01" min="0" placeholder="250.00"
+                <label className="text-sm font-medium text-slate-700">Monto</label>
+                <input type="number" step="0.01" min="0" placeholder="250.00"
                     className="w-full rounded-md border border-slate-200 bg-white px-3 py-2 text-slate-700 placeholder:text-slate-400 shadow-sm focus:border-indigo-400 focus:ring-2 focus:ring-indigo-200"
                     required value={Monto} onChange={function (ev) {
                         setMonto(ev.target.value)
@@ -52,9 +50,8 @@ function EgresosForm({ onComplete }) {
             </div>
 
             <div className="space-y-1">
-                <label for="categoria" className="text-sm font-medium text-slate-700">Categoría</label>
-                <select id="categoria" name="categoria"
-                    className="w-full rounded-md border border-slate-200 bg-white px-3 py-2 text-slate-700 shadow-sm focus:border-indigo-400 focus:ring-2 focus:ring-indigo-200"
+                <label className="text-sm font-medium text-slate-700">Categoría</label>
+                <select className="w-full rounded-md border border-slate-200 bg-white px-3 py-2 text-slate-700 shadow-sm focus:border-indigo-400 focus:ring-2 focus:ring-indigo-200"
                     required value={categoria} onChange={function (ev) {
                         setCategoria(ev.target.value)
                     }} >
@@ -69,8 +66,8 @@ function EgresosForm({ onComplete }) {
             </div>
 
             <div className="space-y-1">
-                <label for="descripcion" className="text-sm font-medium text-slate-700">Descripción</label>
-                <textarea id="descripcion" name="descripcion" rows="3" placeholder="Ej: Taxi al aeropuerto"
+                <label className="text-sm font-medium text-slate-700">Descripción</label>
+                <textarea rows="3" placeholder="Ej: Pollito a la brasa"
                     className="w-full resize-none rounded-md border border-slate-200 bg-white px-3 py-2 text-slate-700 placeholder:text-slate-400 shadow-sm focus:border-indigo-400 focus:ring-2 focus:ring-indigo-200"
                     required value={Descripcion} onChange={function (ev) {
                         setDescripcion(ev.target.value)
@@ -79,7 +76,7 @@ function EgresosForm({ onComplete }) {
 
             <Mensaje msg={mensaje} visible={mensajeVisible} />
 
-            <div className="mt-3 flex items-center gap-2">
+            <div className="mt-3 flex flex-col gap-2 sm:flex-row sm:items-center">
                 <button type="button"
                     className="flex-1 rounded-full bg-indigo-600 px-4 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-300" onClick={function () {
                         if (validarCampos()) {

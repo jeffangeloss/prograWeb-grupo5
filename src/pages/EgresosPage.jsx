@@ -1,28 +1,14 @@
 import EgresosForm from "../components/EgresosForm"
-import { useNavigate } from "react-router-dom"
+import NavBarUser from "../components/NavBarUser"
 
 function EgresosPage() {
-    const navigate = useNavigate()
-
-    function cerrarSesion() {
-        const datosLogin = { ingreso: false }
-        localStorage.setItem("DATOS_LOGIN", JSON.stringify(datosLogin))
-        navigate("/")
-    }
-
     return <div className="bg-slate-50 text-slate-800 lg:h-screen lg:overflow-hidden">
-        <main className="min-h-screen lg:h-screen lg:flex lg:items-center lg:justify-center p-4 md:p-6">
-            <div className="w-full max-w-6xl">
-                <div className="flex justify-end mb-3">
-                    <button type="button"
-                        className="px-8 py-2.5 rounded-full border border-white text-white bg-blue-700 hover:bg-blue-600 transition text-sm sm:text-base"
-                        onClick={function () { cerrarSesion() }}>
-                        Cerrar sesión
-                    </button>
-                </div>
-                <div className="grid gap-4 lg:grid-cols-[340px_1fr]">
+        <NavBarUser />
 
-                <section className="bg-white border border-slate-200 rounded-2xl shadow-sm p-5">
+        <main className="min-h-screen lg:h-screen lg:flex lg:items-start lg:justify-center p-4 md:p-6 pt-2 sm:pt-3 lg:pt-2">
+            <div className="w-full max-w-6xl mx-auto grid gap-4 lg:grid-cols-[340px_1fr]">
+                <section className="bg-white border border-slate-200 rounded-2xl shadow-sm p-4 sm:p-5">
+
                     <div className="space-y-1">
                         <h2 className="text-xl font-extrabold tracking-tight text-slate-700">
                             REGISTRAR EGRESO
@@ -34,10 +20,12 @@ function EgresosPage() {
                     <EgresosForm />
                 </section>
 
-                <section className="bg-white border border-slate-200 rounded-2xl shadow-sm p-5">
+                <section className="bg-white border border-slate-200 rounded-2xl shadow-sm p-4 sm:p-5">
                     <div className="flex flex-col gap-1 sm:flex-row sm:items-center sm:justify-between">
                         <div>
-                            <h2 className="text-xl font-extrabold tracking-tight text-slate-700">MIS EGRESOS</h2>
+                            <h2 className="text-xl font-extrabold tracking-tight text-slate-700">
+                                MIS EGRESOS
+                            </h2>
                             <p className="text-sm text-slate-500">Total registrado: S/ 0.00</p>
                         </div>
                         <span className="rounded-full border border-slate-200 bg-white/70 px-3 py-1 text-xs font-semibold text-slate-700">
@@ -45,7 +33,7 @@ function EgresosPage() {
                         </span>
                     </div>
 
-                    <div className="mt-4 overflow-x-auto lg:max-h-[50vh] lg:overflow-y-auto">
+                    <div className="mt-4 overflow-x-auto lg:max-h-[50vh] lg:overflow-y-auto hidden sm:block">
                         <table className="min-w-[720px] text-left text-sm text-slate-700">
                             <thead className="border-b border-slate-200/80 text-xs uppercase tracking-wide text-slate-500">
                                 <tr>
@@ -66,10 +54,9 @@ function EgresosPage() {
                         </table>
                     </div>
                 </section>
-                </div>
             </div>
         </main>
-    </div >
+    </div>
 }
 
-export default EgresosPage; 
+export default EgresosPage
