@@ -16,7 +16,7 @@ createRoot(document.getElementById('root')).render(
     <Routes>
       <Route path="/" element={<InicioSesion />} />
       <Route path="/admin" element={<AdminPage />} />
-      <Route path="/user" element={<EditarUsuarioPage />} />
+      <Route path="/editarUsuario" element={<EditarUsuarioPage />} />
       <Route path="/restablecer" element={<RestableceContra />} />
       <Route path="/restablecer/mensaje" element={<RestablecerContra_2/>} />
       <Route path="/restablecer/correo" element={<RestablecerContra_correo/>} />
