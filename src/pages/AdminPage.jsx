@@ -6,6 +6,24 @@ import TablaAdmin from "../components/TablaAdmin";
 function AdminPage() {
     const navigate = useNavigate()
 
+    const usuarios = [
+        {
+          id: 1,
+          nombre: "Isabella Stanley",
+          email: "ejemplo@usuario.com",
+          rol: "Usuario",
+          ultimoAcceso: "25/01/2025"
+        },
+        {
+          id: 2,
+          nombre: "Jose Blake",
+          email: "ejemplo@admin.com",
+          rol: "Administrador",
+          ultimoAcceso: "21/01/2025"
+        }
+      ]
+      
+
     return <div className="bg-[url('/img/azul.png')] bg-cover min-h-screen bg-center">
         <NavBarAdmin />
         <div className="justify-self-center">
@@ -16,7 +34,7 @@ function AdminPage() {
                     onClick={function() {navigate("/crearUsuario")}}>Añadir Usuario</button>
                 </div>
                 <FiltradoAdmin />
-                <TablaAdmin />
+                <TablaAdmin usuarios={usuarios}/>
             </div>
         </div>
     </div>
