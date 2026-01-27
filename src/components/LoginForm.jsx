@@ -1,9 +1,6 @@
 import { useState } from "react"
-import { useNavigate } from "react-router-dom"
 
-function Formulario({ onLogin }) {
-    const navigate = useNavigate()
-
+function LoginForm({ onLogin }) {
     const [correo, setCorreo] = useState("")
     const [password, setPassword] = useState("")
 
@@ -61,4 +58,4 @@ function Formulario({ onLogin }) {
     </div>
 }
 
-export default Formulario
+export default LoginForm

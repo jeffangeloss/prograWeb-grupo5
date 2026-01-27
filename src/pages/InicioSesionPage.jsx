@@ -1,9 +1,9 @@
-import Formulario from "../components/Formulario";
+import LoginForm from "../components/LoginForm";
 import Mensaje from "../components/Mensaje";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
-function InicioSesion() {
+function InicioSesionPage() {
     const [mensajeVisible, setMensajeVisible] = useState(false)
     const [mensaje, setMensaje] = useState("")
     const navigate = useNavigate()
@@ -50,7 +50,7 @@ function InicioSesion() {
 
                 <div className="flex-1 flex items-center">
                     <div className="w-full px-6 sm:px-10 lg:pl-16 lg:pr-12">
-                        <Formulario onLogin={login} />
+                        <LoginForm onLogin={login} />
                         <Mensaje msg={mensaje} visible={mensajeVisible} />
                     </div>
                 </div>
@@ -59,4 +59,4 @@ function InicioSesion() {
     </div>
 }
 
-export default InicioSesion;
+export default InicioSesionPage;
