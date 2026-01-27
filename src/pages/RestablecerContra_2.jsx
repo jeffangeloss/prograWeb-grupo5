@@ -1,4 +1,15 @@
+import TextoContra from "../components/TextoContra"
+
 function RestablecerContra_2() {
+
+    const [correo, setCorreo] = useState("")
+
+    useEffect( function () {
+        const correo_contra = localStorage.getItem("correo_restablecer")
+        if (correo_contra) {
+            setCorreo(correo_contra)
+        }
+    }, [] )
 
     return <div className="grid md:grid-cols-[30%_70%]">
         {/* imagen izq */}
@@ -21,16 +32,8 @@ function RestablecerContra_2() {
             </div>
 
             {/* texto */}
-            <div className="mb-5">
-                <p className="text-slate-500">Hemos enviado un correo a (email) con las instrucciones para continuar</p>
-                <div className="mt-5">
-                    <span className="text-slate-500">¿No recibió un correo?</span>
-                    <a href="#" className="text-sm sm:text-base underline text-gray-600 hover:text-gray-800">
-                        Reenviar correo
-                    </a>
-                </div>
-
-            </div>
+            
+            <TextoContra correo={corr} />
         </div>
     </div>
 

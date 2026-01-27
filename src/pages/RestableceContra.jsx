@@ -1,5 +1,7 @@
 import { useState } from "react"
 import { useNavigate } from "react-router-dom"
+import CorreoForm from "../components/CorreoForm"
+import Mensaje from "../components/Mensaje"
 
 function RestableceContra() {
 
@@ -7,23 +9,24 @@ function RestableceContra() {
     const [mensaje, setMensaje] = useState("")
     const navigate = useNavigate()
 
-    function continuar(){
-        if(!correo){
+    function continuar(correo) {
+        if (!correo) {
             setMensaje("Debe completar todos los campos para continuar")
             setMensajeVisible(true)
         }
-
-        if(correo == "ejemplo@admin.com" || correo =="ejemplo@user.com"){
+        else if (correo == "ejemplo@admin.com" || correo == "ejemplo@user.com") {
+            console.log("correo ingresado")
             setMensaje("")
             setMensajeVisible(false)
-            navigate("/restablecer/mensaje")
+            localStorage.setItem("correo_restablecer", correo)
+            navigate('/restablecer/mensaje')
         }
         else{
             setMensaje("El correo ingresado no tiene una cuenta asociada")
             setMensajeVisible(true)
+
         }
     }
-        
 
     return <div className="grid md:grid-cols-[30%_70%]">
         {/*imagen izq*/}
@@ -36,7 +39,8 @@ function RestableceContra() {
         <div className="py-8 px-16">
             {/* boton regresar */}
             <div className="justify-self-end flex items-center gap-3 text-sm text-slate-600">
-                <a href="#"
+                <span className="text-gray-700 text-sm sm:text-base">¿Recordaste tu contraseña?</span>
+                <a href="#/"
                     className="inline-flex items-center justify-center rounded-full border border-indigo-400 px-5 py-2 font-medium text-indigo-600 hover:bg-indigo-50 focus:outline-none focus:ring-2 focus:ring-indigo-300">
                     Regresar
                 </a>
@@ -48,26 +52,13 @@ function RestableceContra() {
                 <p className="mt-2 -->text-slate-500">Indica el correo electrónico con el que te registraste</p>
             </div>
 
-            {/* form */}
-            <div className="mb-5">
-                <form className="grid gap-3">
-                    <label className="text-sm font-medium text-slate-700">Correo electrónico</label>
-                    <input
-                        className="w-full rounded-md border border-slate-200 bg-white px-3 py-2 text-slate-700 placeholder:text-slate-400 shadow-sm focus:border-indigo-400 focus:ring-2 focus:ring-indigo-200"
-                        type="text" placeholder="hello@reallygreatsite.com">
-                    </input>
-                    <button
-                        className="mt-4 w-min rounded-full bg-indigo-600 px-16 py-3 font-semibold text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-300 active:scale-[0.99] transition"
-                        type="submit">Continuar
-                    </button>
-                </form>
-            </div>
+            <CorreoForm onContinue={continuar} />
 
             {/* mensaje de error */}
-            <div className="pt-2 space-y-1 text-sm text-red-500">
-                <p>Debe completar todos los campos para continuar</p>
-                <p>El correo ingresado no tiene una cuenta asociada</p>
-            </div>
+            <Mensaje
+                msg={mensaje}
+                visible={mensajeVisible}
+            />
 
         </div>
     </div>
