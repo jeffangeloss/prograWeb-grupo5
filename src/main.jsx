@@ -14,6 +14,7 @@ import RestablecerContra_correo from './pages/RestablecerContra_correo'
 import EgresosPage from './pages/EgresosPage'
 import EditarEgresoPage from './pages/EditarEgresoPage'
 import RegistroPage from './pages/RegistroPage'
+import EstadisticasPage from './pages/EstadisticasPage'
 
 
 createRoot(document.getElementById('root')).render(
@@ -32,6 +33,7 @@ createRoot(document.getElementById('root')).render(
       <Route path="/restablecer/correo" element={<RestablecerContra_correo/>} />
       <Route path="/restablecer/form" element={<RestablecerContra_3/>} />
       <Route path="/editarEgreso" element={<EditarEgresoPage/>} />
+      <Route path="/estadisticas" element={<EstadisticasPage/>} />
     </Routes>
   </HashRouter>
   </StrictMode>,

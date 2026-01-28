@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Landing - Gestión de Gastos</title>
+    <script src="/tailwind.js"></script>
+  </head>
+
+  <body class="min-h-screen bg-white text-slate-900">
+    <!-- HEADER (sticky celeste) -->
+        <!-- sticky hace que se quede pegado arriba (top-0), z-50 para que esté encima de todo -->
+    <header
+      class="sticky top-0 z-50 shadow-md bg-gradient-to-r from-[#96c7ef] to-[#cfe6f2]"
+    >
+      <div class="mx-auto max-w-6xl px-6 h-16 flex items-center justify-between">
+        <!-- LOGO TEMPORAL (imagen en /public/img) -->
+        <a href="#" class="flex items-center gap-3">
+          <img src="/public/img/logotemp.png" alt="logo" class="h-10 w-auto" />
+        </a>
+
+        <!-- BOTONES HEADER -->
+        <nav class="flex items-center gap-3">
+          <a
+            href="/src/html/registro.html"
+            class="rounded-full bg-indigo-600 px-6 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-black hover:font-extrabold focus:outline-none focus:ring-4 focus:ring-indigo-300"
+          >
+            Registrarse
+          </a>
+          <a
+            href="/src/html/InicioSesion.html"
+            class="rounded-full bg-blue-700 px-6 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-black hover:font-extrabold focus:outline-none focus:ring-4 focus:ring-indigo-300"
+          >
+            Iniciar sesión
+          </a>
+        </nav>
+      </div>
+    </header>
+
+    <!-- MAIN -->
+    <main class="mx-auto max-w-6xl px-6 pt-24 pb-14">
+      <section class="grid grid-cols-1 md:grid-cols-2 gap-10 items-center">
+        <!-- HERO ? -->
+        <div>
+          <h1 class="text-5xl sm:text-6xl font-extrabold tracking-tight leading-[1.05]">
+            Nuestro registro <br class="hidden sm:block" /> <!-- salto de linea solo cuando sea mayor que sm -->
+            de finanzas
+          </h1>
+
+          <h2 class="mt-4 text-2xl sm:text-3xl font-extrabold text-slate-900">
+            Hecho por estudiantes para cualquier usuario!
+          </h2>
+
+          <!-- leading-relaxed para que haya espacio entre lineas -->
+          <p class="mt-5 text-slate-700 leading-relaxed max-w-prose">
+            Lorem ipsum dolor sit amet, consectetur adipisicing elit. Vivamus accumsan lorem pharetra,
+            fringilla est id, fermentum libero. Proin dictum volutpat nulla eu aliquam. Sed tempor
+            ipsum id leo porta, rhoncus bibendum magna consequat. Proin et est vitae elit tincidunt
+            blandit. Donec in malesuada augue, sed sodales leo. Pellentesque accumsan condimentum est,
+            ac convallis mi ultrices sit amet. Vivamus varius lacinia porta.
+          </p>
+
+          <div class="mt-8 flex flex-wrap gap-3">
+            <a
+              href="/src/html/registro.html"
+              class="rounded-full bg-indigo-600 px-7 py-3 font-semibold text-white shadow-sm hover:bg-black hover:font-extrabold focus:outline-none focus:ring-2 focus:ring-indigo-300"
+            >
+              Registrarse
+            </a>
+
+            <a
+              href="/src/html/InicioSesion.html"
+              class="rounded-full bg-blue-700 px-7 py-3 font-semibold text-white shadow-sm hover:bg-black hover:font-extrabold focus:outline-none focus:ring-2 focus:ring-indigo-300"
+            >
+              Iniciar sesión
+            </a>
+          </div>
+        </div>
+
+        <!-- CHANCHITO (imagen en /public/img) -->
+        <div class="flex justify-center md:justify-end">
+          <img
+            src="/public/img/chanchito.svg"
+            alt="Ilustración"
+            class="w-[260px] sm:w-[320px] md:w-[360px]"
+          />
+        </div>
+      </section>
+    </main>
+
+    <!-- FOOTER (gris) -->
+    <footer class=" bg-blue-900">
+      <div class="mx-auto max-w-6xl px-6 py-10 grid grid-cols-1 md:grid-cols-[1fr_auto] gap-8 items-end">
+        <div>
+          <h3 class="text-2xl text-blue-100 font-extrabold">Hecho por</h3>
+          <ul class="mt-4 space-y-1 text-sm text-blue-100">
+            <li class="font-semibold">Mariel Casolda - 20230000</li>
+            <li class="font-semibold">Gabriela Garay - 20233903</li>
+            <li class="font-semibold">Rafael Lau - 20230000</li>
+            <li class="font-semibold">Rafel Pérez - 20230000</li>
+            <li class="font-semibold">Jefferson Sanchez - 20235218</li>
+          </ul>
+        </div>
+
+        <!-- Logo esquina (imagen en /public/img) -->
+        <div class="flex md:justify-end">
+          <img src="/public/img/logotemp.png" alt="logo" class="h-12 w-auto" />
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

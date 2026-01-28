@@ -9,7 +9,7 @@ function EgresosPage() {
     const navigate = useNavigate()
     const [openFiltro, setOpenFiltro] = useState(false)
 
-    return <div className="bg-slate-50 text-slate-800 lg:h-screen lg:overflow-hidden">
+    return <div className="bg-slate-50 text-slate-800 min-h-screen">
         <NavBarUser />
 
         <main className="lg:h-screen lg:flex lg:items-start lg:justify-center p-2 sm:p-4 md:p-6">
@@ -62,7 +62,7 @@ function EgresosPage() {
                             <FiltroPopUp 
                             visible={openFiltro} onClose={function () {
                                 setOpenFiltro(false)
-                            }}/>
+                            }} />
 
                             <span className="rounded-full border border-slate-200 bg-white/70 px-3 py-1 text-xs font-semibold text-slate-700">
                                 1 registro
@@ -96,9 +96,9 @@ function EgresosPage() {
                                     </td>
                                     <td className="px-4 py-3 text-center">
                                         <button className="rounded-full border border-slate-200 px-3 py-1 text-xs font-semibold text-slate-700 hover:bg-slate-100 transition"
-                                        onClick={function() {
-                                            navigate("/editarEgreso")
-                                        }}>
+                                            onClick={function () {
+                                                navigate("/editarEgreso")
+                                            }}>
                                             Editar egreso
                                         </button>
                                     </td>

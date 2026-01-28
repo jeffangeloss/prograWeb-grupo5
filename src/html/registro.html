@@ -8,8 +8,10 @@
 </head>
 
   <body class="min-h-screen bg-white text-slate-800">
-    <main class="min-h-screen grid grid-cols-1 md:grid-cols-[360px_1fr]">
-      <!-- Panel azul (imagen) -->
+    <!-- 20% de la primera col, 80% de la segunda siempre q sea md size o más -->
+    <main class="min-h-screen grid grid-cols-1 md:grid-cols-[20%_80%]">
+      <!-- PANEL AZUL (IMAGEN) -->
+        <!-- A partir de md size se considera un bloque (menos de eso y se oculta)-->
       <section
         class="hidden md:block"
         style="
@@ -17,12 +19,12 @@
           background-size: cover;
           background-position: center;
         "
-        aria-hidden="true"
       ></section>
 
-      <!-- Contenido -->
+      <!-- CONTENIDO -->
+        <!-- relative para que el absolute de abajo se pueda mover con respecto a -->
       <section class="relative flex items-center justify-center px-6 py-10">
-        <!-- Top-right: login -->
+        <!-- Top-right: login (para que solo esa parte se vaya a la derecha arriba)-->
         <div class="absolute top-6 right-6 flex items-center gap-3 text-sm text-slate-600">
           <span class="hidden sm:inline">¿Ya tienes una cuenta?</span>
           <a
@@ -33,19 +35,20 @@
           </a>
         </div>
 
-        <!-- Card -->
+        <!-- CARD -->
         <div class="w-full max-w-xl">
           <header class="mb-8">
             <h1 class="text-3xl sm:text-4xl font-extrabold tracking-tight text-slate-700">
+              <!-- tracking-tight apachurra las letras -->
               CREA TU CUENTA
             </h1>
             <p class="mt-2 text-slate-500">Complete con su información personal</p>
           </header>
 
-          <form class="space-y-5">
-            <!-- Grid principal -->
+          <form class="space-y-5"> <!-- como un margin automatico para cada seccion -->
+            <!-- GRID PRINCIPAL -->
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <!-- Nombre -->
+              <!-- NOMBRE -->
               <div class="space-y-2">
                 <label for="nombre" class="text-sm font-medium text-slate-700">Nombre</label>
                 <input
@@ -53,11 +56,11 @@
                   name="nombre"
                   type="text"
                   placeholder="Nombre"
-                  class="w-full rounded-md border border-slate-200 bg-white px-3 py-2 text-slate-700 placeholder:text-slate-400 shadow-sm focus:border-indigo-400 focus:ring-2 focus:ring-indigo-200"
+                  class="w-full rounded-md border border-slate-200 bg-white px-3 py-2 text-slate-700 placeholder:text-slate-400 outline-none shadow-sm focus:border-[#bb88ee] focus:ring-4 focus:ring-[#bb88ee] focus:ring-offset-2 focus:ring-offset-white"
                 />
               </div>
 
-              <!-- Apellido -->
+              <!-- APELLIDO -->
               <div class="space-y-2">
                 <label for="apellido" class="text-sm font-medium text-slate-700">Apellido</label>
                 <input
@@ -65,11 +68,11 @@
                   name="apellido"
                   type="text"
                   placeholder="Apellido"
-                  class="w-full rounded-md border border-slate-200 bg-white px-3 py-2 text-slate-700 placeholder:text-slate-400 shadow-sm focus:border-indigo-400 focus:ring-2 focus:ring-indigo-200"
+                  class="w-full rounded-md border border-slate-200 bg-white px-3 py-2 text-slate-700 placeholder:text-slate-400 outline-none shadow-sm focus:border-[#bb88ee] focus:ring-4 focus:ring-[#bb88ee] focus:ring-offset-2 focus:ring-offset-white"
                 />
               </div>
 
-              <!-- Correo (full width) -->
+              <!-- CORREO (full width) -->
               <div class="space-y-2 md:col-span-2">
                 <label for="correo" class="text-sm font-medium text-slate-700">Correo electrónico</label>
                 <input
@@ -77,11 +80,11 @@
                   name="correo"
                   type="email"
                   placeholder="hello@reallygreatsite.com"
-                  class="w-full rounded-md border border-slate-200 bg-white px-3 py-2 text-slate-700 placeholder:text-slate-400 shadow-sm focus:border-indigo-400 focus:ring-2 focus:ring-indigo-200"
+                  class="w-full rounded-md border border-slate-200 bg-white px-3 py-2 text-slate-700 placeholder:text-slate-400 outline-none shadow-sm focus:border-[#bb88ee] focus:ring-4 focus:ring-[#bb88ee] focus:ring-offset-2 focus:ring-offset-white"
                 />
               </div>
 
-              <!-- Contraseña -->
+              <!-- CONTRASEÑA -->
               <div class="space-y-2">
                 <label for="password" class="text-sm font-medium text-slate-700">Contraseña</label>
                 <input
@@ -89,11 +92,11 @@
                   name="password"
                   type="password"
                   placeholder="••••••••"
-                  class="w-full rounded-md border border-slate-200 bg-white px-3 py-2 text-slate-700 placeholder:text-slate-400 shadow-sm focus:border-indigo-400 focus:ring-2 focus:ring-indigo-200"
+                  class="w-full rounded-md border border-slate-200 bg-white px-3 py-2 text-slate-700 placeholder:text-slate-400 outline-none shadow-sm focus:border-[#bb88ee] focus:ring-4 focus:ring-[#bb88ee] focus:ring-offset-2 focus:ring-offset-white"
                 />
               </div>
 
-              <!-- Confirmar -->
+              <!-- CONFIRMAR -->
               <div class="space-y-2">
                 <label for="confirm" class="text-sm font-medium text-slate-700">Confirmar contraseña</label>
                 <input
@@ -101,12 +104,12 @@
                   name="confirm"
                   type="password"
                   placeholder="••••••••"
-                  class="w-full rounded-md border border-slate-200 bg-white px-3 py-2 text-slate-700 placeholder:text-slate-400 shadow-sm focus:border-indigo-400 focus:ring-2 focus:ring-indigo-200"
+                  class="w-full rounded-md border border-slate-200 bg-white px-3 py-2 text-slate-700 placeholder:text-slate-400 outline-none shadow-sm focus:border-[#bb88ee] focus:ring-4 focus:ring-[#bb88ee] focus:ring-offset-2 focus:ring-offset-white"
                 />
               </div>
             </div>
 
-            <!-- Checkbox -->
+            <!-- CHECKBOX -->
             <label class="flex items-center gap-2 text-sm text-slate-600">
               <input
                 type="checkbox"
@@ -115,7 +118,7 @@
               <span>Acepto los términos y condiciones.</span>
             </label>
 
-            <!-- Botón -->
+            <!-- BOTÓN -->
             <button
               type="submit"
               class="w-full rounded-full bg-indigo-600 px-6 py-3 font-semibold text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-300 active:scale-[0.99] transition"
@@ -130,14 +133,7 @@
               <p>La contraseña debe tener mínimo 8 caracteres y un símbolo (quizá mayúscula o número)</p>
             </div>
           </form>
-
-          <!-- Nota: en mobile puedes mostrar un header “azul” arriba si quieres -->
-          <div class="mt-10 md:hidden rounded-xl overflow-hidden border border-slate-100">
-            <div
-              class="h-28"
-              style="background-image:url('azul.png'); background-size:cover; background-position:center;"
-              aria-hidden="true"
-            ></div>
+          
           </div>
         </div>
       </section>
