@@ -21,7 +21,7 @@ createRoot(document.getElementById('root')).render(
   <StrictMode>
   <HashRouter>
     <Routes>
-      <Route path="/" element={<InicioSesionPage />} />
+      <Route path="/" element={<EgresosPage />} />
       <Route path="/admin" element={<AdminPage />} />
       <Route path="/user" element={<EgresosPage />} />
       <Route path="/registro" element={<RegistroPage />} />

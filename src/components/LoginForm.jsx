@@ -1,4 +1,5 @@
 import { useState } from "react"
+import InputEmail from "./InputEmail"
 
 function LoginForm({ onLogin }) {
     const [correo, setCorreo] = useState("")
@@ -16,19 +17,9 @@ function LoginForm({ onLogin }) {
         onLogin(correo, password)
     }
 
-
     return <div className="mb-5" >
-        <form className="grid gap-3">
-            <label className="text-sm font-medium text-slate-700">
-                Correo electrónico
-            </label>
-            <input
-                value={correo}
-                onChange={correoOnChange}
-                className="w-full rounded-md border border-slate-200 bg-white px-3 py-2 sm:py-3 text-slate-700 placeholder:text-slate-400 shadow-sm focus:border-indigo-400 focus:ring-2 focus:ring-indigo-200"
-                type="email"
-                placeholder="ejemplo@user.com"
-            />
+        <form className="grid gap-2 sm:gap-3">
+            <InputEmail correo={correo} correoOnChange={correoOnChange} />
 
             <label className="text-sm font-medium text-slate-700">
                 Contraseña
@@ -36,7 +27,7 @@ function LoginForm({ onLogin }) {
             <input
                 value={password}
                 onChange={passwordOnChange}
-                className="w-full rounded-md border border-slate-200 bg-white px-3 py-2 sm:py-3 text-slate-700 placeholder:text-slate-400 shadow-sm focus:border-indigo-400 focus:ring-2 focus:ring-indigo-200"
+                className="w-full rounded-md border border-slate-200 bg-white px-3 py-2 sm:py-3 text-sm sm:text-base text-slate-700 placeholder:text-slate-400 shadow-sm focus:border-indigo-400 focus:ring-2 focus:ring-indigo-200"
                 type="password"
                 placeholder="********"
             />
@@ -52,7 +43,7 @@ function LoginForm({ onLogin }) {
 
             <button
                 onClick={loginOnClick}
-                className="mt-4 w-full sm:w-fit whitespace-nowrap rounded-full bg-indigo-600 px-10 sm:px-16 py-3 font-semibold text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-300 active:scale-[0.99] transition"
+                className="mt-3 w-full sm:w-fit whitespace-nowrap rounded-full bg-indigo-600 px-10 sm:px-16 py-3 font-semibold text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-300 active:scale-[0.99] transition"
                 type="button"
             >
                 Iniciar sesión
