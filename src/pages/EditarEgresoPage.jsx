@@ -25,6 +25,7 @@ function EditarEgresoPage() {
                         <input
                             type="number"
                             className="w-full rounded-lg border border-slate-300 px-3 py-2 text-sm focus:border-blue-500 focus:outline-none"
+                            placeholder="250.00"
                         />
                     </div>
 
@@ -33,8 +34,13 @@ function EditarEgresoPage() {
                             Categoría
                         </label>
                         <select className="w-full rounded-lg border border-slate-300 px-3 py-2 text-sm focus:border-blue-500 focus:outline-none">
-                            <option>Categoría 1</option>
-                            <option>Categoría 2</option>
+                            <option value="">Seleccione</option>
+                            <option>Alimentación</option>
+                            <option>Transporte</option>
+                            <option>Servicios</option>
+                            <option>Salud</option>
+                            <option>Educación</option>
+                            <option>Otros</option>
                         </select>
                     </div>
 
@@ -55,6 +61,7 @@ function EditarEgresoPage() {
                         <textarea
                             rows="3"
                             className="w-full rounded-lg border border-slate-300 px-3 py-2 text-sm focus:border-blue-500 focus:outline-none"
+                            placeholder="Ej: Compra de ropa"
                         />
                     </div>
 

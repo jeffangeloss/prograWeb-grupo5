@@ -32,7 +32,7 @@ function EgresosPage() {
                             <h2 className="text-xl font-extrabold tracking-tight text-slate-700">
                                 MIS EGRESOS
                             </h2>
-                            <p className="text-sm text-slate-500">Total registrado: S/ 0.00</p>
+                            <p className="text-sm text-slate-500">Total registrado: S/ 85.50</p>
                         </div>
 
                         <div className="flex flex-wrap items-center gap-2 mt-2 sm:mt-0 relative">
