@@ -32,17 +32,17 @@ function EstadisticasPage() {
   };
 
   return (
-    <div className="bg-[url('/img/azul.png')] bg-cover bg-center min-h-screen">
+    <div className="bg-cover bg-center min-h-screen">
       <NavBarAdmin />
-      <div className="px-6 py-6 flex flex-col items-center">
-        <h1 className="text-3xl text-white font-semibold mb-6">
+      <div className="px-5 py-5 flex flex-col items-center">
+        <h1 className="text-2xl font-extrabold tracking-tight text-slate-700 mb-3">
           Total de usuarios registrados
         </h1>
-        <div className="bg-white/90 backdrop-blur border-2 border-black rounded-xl px-20 py-6 text-4xl font-bold mb-10">
+        <div className="bg-white/90 backdrop-blur border-2 border-black rounded-xl px-10 py-4 text-4xl  text-slate-700 font-bold mb-5">
           1,984
         </div>
-        <h1 className="text-3xl text-white font-semibold mb-6">Registros de usuarios por mes</h1>
-        <div className="bg-white/90 backdrop-blur border-2 border-black rounded-xl p-6 w-full max-w-3xl">
+        <h1 className="text-2xl font-extrabold tracking-tight text-slate-700 mb-4">Registros de usuarios por mes</h1>
+        <div className="bg-white/90 backdrop-blur border-2 border-slate-700 rounded-xl p-6 w-full max-w-2xl">
           <Line data={data} />
         </div>
 
