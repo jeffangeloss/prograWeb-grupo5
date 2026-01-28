@@ -23,7 +23,6 @@ function AdminPage() {
         }
       ]
       
-
     return <div className="bg-[url('/img/azul.png')] bg-cover min-h-screen bg-center">
         <NavBarAdmin />
         <div className="justify-self-center">
