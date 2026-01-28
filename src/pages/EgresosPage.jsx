@@ -12,8 +12,8 @@ function EgresosPage() {
     return <div className="bg-slate-50 text-slate-800 lg:h-screen lg:overflow-hidden">
         <NavBarUser />
 
-        <main className="min-h-screen lg:h-screen lg:flex lg:items-start lg:justify-center p-3 sm:p-4 md:p-6">
-            <div className="w-full max-w-6xl mx-auto grid gap-4 lg:grid-cols-[340px_1fr]">
+        <main className="lg:h-screen lg:flex lg:items-start lg:justify-center p-2 sm:p-4 md:p-6">
+            <div className="w-full max-w-6xl mx-auto grid gap-4 grid-cols-1 lg:grid-cols-[340px_1fr]">
                 <section className="bg-white border border-slate-200 rounded-2xl shadow-sm p-5">
                     <div className="space-y-1">
                         <h2 className="text-xl font-extrabold tracking-tight text-slate-700">
@@ -35,20 +35,32 @@ function EgresosPage() {
                             <p className="text-sm text-slate-500">Total registrado: S/ 0.00</p>
                         </div>
 
-                        <div className="flex items-center gap-3 mt-2 md:m-0 relative">
-
+                        <div className="flex flex-wrap items-center gap-2 mt-2 sm:mt-0 relative">
+                            {/* boton estadistica usuario */}
                             <button
                                 onClick={function () {
                                     setOpenFiltro(true)
                                 }}
-                                className="focus:border-indigo-400 focus:ring-2 focus:ring-indigo-200 hover:bg-slate-200 rounded-md p-0.5" type="button">
+                                className="peer focus:border-indigo-400 focus:ring-2 focus:ring-indigo-200 hover:bg-slate-200 rounded-md p-0.5" type="button">
+                                <img
+                                    className="w-7"
+                                    src="https://cdn-icons-png.freepik.com/512/5952/5952983.png" alt="Filtro"
+                                />
+                            </button>
+                            {/* boton filtros */}
+                            <button
+                                onClick={function () {
+                                    setOpenFiltro(true)
+                                }}
+                                className="peer focus:border-indigo-400 focus:ring-2 focus:ring-indigo-200 hover:bg-slate-200 rounded-md p-0.5" type="button">
                                 <img
                                     className="w-7"
                                     src="https://cdn-icons-png.flaticon.com/256/11462/11462900.png" alt="Filtro"
                                 />
                             </button>
 
-                            <FiltroPopUp visible={openFiltro} onClose={ function(){
+                            <FiltroPopUp 
+                            visible={openFiltro} onClose={function () {
                                 setOpenFiltro(false)
                             }}/>
 
