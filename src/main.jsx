@@ -13,6 +13,8 @@ import RestablecerContra_3 from './pages/RestablecerContra_3'
 import RestablecerContra_correo from './pages/RestablecerContra_correo'
 import EgresosPage from './pages/EgresosPage'
 import EditarEgresoPage from './pages/EditarEgresoPage'
+import RegistroPage from './pages/RegistroPage'
+
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>
@@ -21,6 +23,7 @@ createRoot(document.getElementById('root')).render(
       <Route path="/" element={<InicioSesionPage />} />
       <Route path="/admin" element={<AdminPage />} />
       <Route path="/user" element={<EgresosPage />} />
+      <Route path="/registro" element={<RegistroPage />} />
       <Route path="/editarUsuario" element={<EditarUsuarioPage />} />
       <Route path="/crearUsuario" element={<CrearUsuarioAdminPage />} />
       <Route path="/seguridadUsuario" element={<SeguridadUsuarioPage />} />

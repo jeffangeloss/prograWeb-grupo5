@@ -6,7 +6,7 @@ function NavBarAdmin() {
     return <div className="bg-slate-100 px-4 py-3 shadow-md flex flex-row justify-between">
         <div className="flex items-center gap-3">
             <img
-                src="/img/user.jpg"
+                src="/public/img/admin.jpg"
                 alt="Administrador"
                 className="h-10 w-10 rounded-full object-cover border border-blue-900/20" />
             <h1 className="text-lg font-semibold text-slate-700">Administrador</h1>
