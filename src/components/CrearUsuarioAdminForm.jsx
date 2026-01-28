@@ -1,6 +1,7 @@
+import { useState } from "react"
 import { useNavigate } from "react-router-dom"
 
-function CrearUsuarioForm({ crearUsuarioAdmin }) {
+function CrearUsuarioForm() {
     const navigate = useNavigate()
 
     const [nombre, setNombre] = useState("")
@@ -9,16 +10,17 @@ function CrearUsuarioForm({ crearUsuarioAdmin }) {
     const [confirmarContra, setConfirmarContra] = useState("")
     const [rol, setRol] = useState("Usuario")
 
-    function contraseñasIguales() {
-        if (contra == confirmarContra) {
-            return true
+    function formatearUsuarioNuevo() {
+        const usuarioNuevo = {
+            nombre: nombre,
+            email: email,
+            contraseña: contra,
+            rol: rol
         }
-        else {
-            return false
-        }
+        console.log(usuarioNuevo)
     }
 
-    return <div>
+    return (<div>
         <div className="bg-gray-800/50 rounded-2xl shadow-xl p-8 min-w-xl lg:min-w-2xl place-self-center">
 
             <div className="mb-6">
@@ -61,10 +63,10 @@ function CrearUsuarioForm({ crearUsuarioAdmin }) {
 
                 <button
                     className="px-4 py-2 rounded-xl bg-blue-600 text-white border border-blue-900 hover:bg-blue-700/30 transition"
-                    onClick={function () { crearUsuarioAdmin(), navigate("/admin") }}>Crear usuario</button>
+                    onClick={function () {formatearUsuarioNuevo(), navigate("/admin") }}>Crear usuario</button>
             </div>
         </div>
-    </div>
+    </div>)
 }
 
 export default CrearUsuarioForm
