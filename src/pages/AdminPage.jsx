@@ -1,6 +1,6 @@
 import { useNavigate } from "react-router-dom";
 import FiltradoAdmin from "../components/FiltradoAdmin";
-import NavBarAdmin from "../components/NavbarAdmin";
+import NavBarAdmin from "../components/NavBarAdmin";
 import TablaAdmin from "../components/TablaAdmin";
 
 function AdminPage() {
