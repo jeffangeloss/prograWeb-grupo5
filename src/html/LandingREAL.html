@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Landing - TITULO EMPRESA</title>
+    <script src="/tailwind.js"></script>
+  </head>
+
+  <body class="min-h-screen bg-gradient-to-b from-[#c5d7e3] to-white text-slate-900">
+    <!-- HEADER (sticky celeste) -->
+    <header class="sticky top-0 z-50 shadow-md bg-gradient-to-r from-[#96c7ef] to-[#cfe6f2]">
+      <div class="mx-auto max-w-6xl px-6 h-16 flex items-center justify-between">
+        <!-- LOGO -->
+        <a href="#" class="flex items-center gap-3">
+          <!-- Si está en public/img => /img/logotemp.png -->
+          <img src="/img/logotemp.png" alt="logo" class="h-10 w-auto" />
+          <span class="hidden sm:block font-extrabold text-slate-900">
+            TITULO EMPRESA
+          </span>
+        </a>
+
+        <!-- BOTONES NAV -->
+        <nav class="flex items-center gap-3">
+          <a
+            href="/src/html/registro.html"
+            class="rounded-full bg-indigo-600 px-6 py-2.5 text-sm font-semibold text-white shadow-sm
+                   hover:bg-black hover:font-extrabold transition
+                   focus:outline-none focus:ring-4 focus:ring-indigo-300"
+          >
+            Registrarse
+          </a>
+          <a
+            href="/src/html/InicioSesion.html"
+            class="rounded-full bg-blue-700 px-6 py-2.5 text-sm font-semibold text-white shadow-sm
+                   hover:bg-black hover:font-extrabold transition
+                   focus:outline-none focus:ring-4 focus:ring-indigo-300"
+          >
+            Iniciar sesión
+          </a>
+        </nav>
+      </div>
+    </header>
+
+    <!-- MAIN -->
+    <main class="mx-auto max-w-6xl px-6 pt-14 pb-16">
+      <!-- HERO -->
+      <section class="relative overflow-hidden rounded-3xl border border-slate-200 bg-white shadow-sm">
+        <!-- decor -->
+        <div class="pointer-events-none absolute -top-24 -right-24 h-72 w-72 rounded-full bg-indigo-200/40 blur-3xl"></div>
+        <div class="pointer-events-none absolute -bottom-24 -left-24 h-72 w-72 rounded-full bg-sky-200/40 blur-3xl"></div>
+
+        <div class="relative grid grid-cols-1 lg:grid-cols-2 gap-10 items-center p-8 sm:p-12">
+          <!-- Texto -->
+          <div class="min-w-0">
+            <h1 class="mt-6 text-5xl sm:text-6xl font-extrabold leading-[1.05]">
+              Controla tus gastos <br class="hidden sm:block" />
+              sin complicarte
+            </h1>
+
+            <p class="mt-5 text-slate-700 leading-relaxed max-w-prose">
+              Registra ingresos y egresos, clasifica por categorías y revisa tu historial.
+              Hecho para que se vea bien en móvil y sea fácil de usar desde el primer día.
+            </p>
+
+            <div class="mt-8 flex flex-wrap gap-3">
+              <a
+                href="/src/html/registro.html"
+                class="rounded-full bg-indigo-600 px-7 py-3 font-semibold text-white shadow-sm
+                       hover:bg-black hover:font-extrabold transition
+                       focus:outline-none focus:ring-4 focus:ring-indigo-300"
+              >
+                Crear cuenta
+              </a>
+
+              <a
+                href="/src/html/InicioSesion.html"
+                class="rounded-full bg-blue-700 px-7 py-3 font-semibold text-white shadow-sm
+                       hover:bg-black hover:font-extrabold transition
+                       focus:outline-none focus:ring-4 focus:ring-indigo-300"
+              >
+                Ya tengo cuenta
+              </a>
+
+              <a
+                href="#features"
+                class="rounded-full border border-slate-300 bg-white px-7 py-3 font-semibold text-slate-800 shadow-sm
+                       hover:bg-slate-50 transition
+                       focus:outline-none focus:ring-4 focus:ring-slate-200"
+              >
+                Ver más
+              </a>
+            </div>
+
+            <!-- mini stats -->
+            <div class="mt-10 grid grid-cols-3 gap-3 max-w-md">
+              <div class="rounded-2xl border border-slate-200 bg-white px-4 py-3">
+                <p class="text-xs text-slate-500">Categorías</p>
+                <p class="text-lg font-extrabold">Rápidas</p>
+              </div>
+              <div class="rounded-2xl border border-slate-200 bg-white px-4 py-3">
+                <p class="text-xs text-slate-500">Historial</p>
+                <p class="text-lg font-extrabold">Ordenado</p>
+              </div>
+              <div class="rounded-2xl border border-slate-200 bg-white px-4 py-3">
+                <p class="text-xs text-slate-500">Diseño</p>
+                <p class="text-lg font-extrabold">Responsive</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Imagen -->
+          <div class="flex justify-center">
+            <div class="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm">
+              <!-- Si está en public/img => /img/chanchito.svg -->
+              <img
+                src="/public/img/chanchito.svg"
+                alt="Ilustración"
+                class="block w-full max-w-[360px] h-auto"
+              />
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- FEATURES -->
+      <section id="features" class="mt-14">
+        <div class="flex items-end justify-between gap-6 flex-wrap">
+          <div>
+            <h2 class="text-3xl sm:text-4xl font-extrabold">¿Qué ofrece?</h2>
+            <p class="mt-2 text-slate-600 max-w-prose">
+              Lo esencial para llevar un control real, sin saturarte.
+            </p>
+          </div>
+          <div class="text-sm text-slate-500">
+            Minimalista • Legible • Hecho para móviles
+          </div>
+        </div>
+
+        <div class="mt-8 grid grid-cols-1 md:grid-cols-3 gap-6">
+          <!-- Card 1 -->
+          <div class="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm hover:shadow-md transition">
+            <img src="/img/icon1.png" alt="" class="h-12 w-12 object-contain" />
+            <h3 class="mt-4 text-xl font-extrabold">Registro rápido</h3>
+            <p class="mt-2 text-slate-600 leading-relaxed">
+              Agrega montos y descripciones en pocos segundos con campos claros.
+            </p>
+          </div>
+
+          <!-- Card 2 -->
+          <div class="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm hover:shadow-md transition">
+            <img src="/img/icon2.png" alt="" class="h-12 w-12 object-contain" />
+            <h3 class="mt-4 text-xl font-extrabold">Visual simple</h3>
+            <p class="mt-2 text-slate-600 leading-relaxed">
+              Ordena tu historial y detecta hábitos con una interfaz limpia.
+            </p>
+          </div>
+
+          <!-- Card 3 -->
+          <div class="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm hover:shadow-md transition">
+            <img src="/img/icon3.png" alt="" class="h-12 w-12 object-contain" />
+            <h3 class="mt-4 text-xl font-extrabold">Orden y seguridad</h3>
+            <p class="mt-2 text-slate-600 leading-relaxed">
+              Flujos pensados para autenticación y control básico de acceso.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <!-- STEPS -->
+      <section class="mt-14">
+        <h2 class="text-3xl sm:text-4xl font-extrabold">¿Cómo funciona?</h2>
+
+        <div class="mt-8 grid grid-cols-1 md:grid-cols-3 gap-6">
+          <div class="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm">
+            <div class="text-sm font-bold text-slate-500">Paso 1</div>
+            <div class="mt-2 text-xl font-extrabold">Crea tu cuenta</div>
+            <p class="mt-2 text-slate-600 leading-relaxed">
+              Regístrate con tus datos y entra al sistema.
+            </p>
+          </div>
+
+          <div class="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm">
+            <div class="text-sm font-bold text-slate-500">Paso 2</div>
+            <div class="mt-2 text-xl font-extrabold">Registra movimientos</div>
+            <p class="mt-2 text-slate-600 leading-relaxed">
+              Añade egresos/ingresos con categoría, fecha y descripción.
+            </p>
+          </div>
+
+          <div class="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm">
+            <div class="text-sm font-bold text-slate-500">Paso 3</div>
+            <div class="mt-2 text-xl font-extrabold">Revisa tu historial</div>
+            <p class="mt-2 text-slate-600 leading-relaxed">
+              Consulta tu información y mantén control continuo.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <!-- CALL TO ACTION -->
+      <section class="mt-14">
+        <div class="rounded-3xl bg-gradient-to-r from-indigo-600 to-blue-700 text-white p-8 sm:p-10 shadow-md">
+          <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-6">
+            <div>
+              <h2 class="text-3xl sm:text-4xl font-extrabold">
+                Empieza hoy y ordénate en minutos
+              </h2>
+              <p class="mt-2 text-white/90 leading-relaxed max-w-prose">
+                Regístrate y prueba el flujo completo de registro y acceso.
+              </p>
+            </div>
+
+            <div class="flex gap-3 flex-wrap">
+              <a
+                href="/src/html/registro.html"
+                class="rounded-full bg-white px-7 py-3 font-extrabold text-slate-900 shadow-sm
+                       hover:bg-slate-100 transition
+                       focus:outline-none focus:ring-4 focus:ring-white/40"
+              >
+                Registrarme
+              </a>
+              <a
+                href="/src/html/InicioSesion.html"
+                class="rounded-full border border-white bg-white/10 px-7 py-3 font-extrabold text-white shadow-sm
+                       hover:bg-white/15 transition
+                       focus:outline-none focus:ring-4 focus:ring-white/40"
+              >
+                Iniciar sesión
+              </a>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <!-- FOOTER -->
+    <footer class="bg-blue-900 text-blue-50">
+      <div class="mx-auto max-w-6xl px-6 py-10 grid grid-cols-1 md:grid-cols-[1fr_auto] gap-8 items-end">
+        <div>
+          <!-- text-blue-10 no existe: cambié a text-blue-50 -->
+          <h3 class="text-2xl font-extrabold">Hecho por</h3>
+          <ul class="mt-4 space-y-1 text-sm text-blue-100">
+            <li class="font-semibold">Mariel Casolda - 20230000</li>
+            <li class="font-semibold">Gabriela Garay - 20233903</li>
+            <li class="font-semibold">Rafael Lau - 20230000</li>
+            <li class="font-semibold">Rafel Pérez - 20230000</li>
+            <li class="font-semibold">Jefferson Sanchez - 20235218</li>
+          </ul>
+          <p class="mt-6 text-xs text-blue-200">
+            © 2026 — Universidad de Lima
+          </p>
+        </div>
+
+        <div class="flex md:justify-end">
+          <img src="/img/logotemp.png" alt="logo" class="h-12 w-auto opacity-90" />
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>
