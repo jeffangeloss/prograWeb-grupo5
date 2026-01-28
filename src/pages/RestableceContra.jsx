@@ -1,4 +1,4 @@
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { useNavigate } from "react-router-dom"
 import CorreoForm from "../components/CorreoForm"
 import Mensaje from "../components/Mensaje"
@@ -18,19 +18,19 @@ function RestableceContra() {
             console.log("correo ingresado")
             setMensaje("")
             setMensajeVisible(false)
-            localStorage.setItem("correo_restablecer", correo)
             navigate('/restablecer/mensaje')
+            localStorage.setItem("CorreoRecuperar", correo)
         }
-        else{
+        else {
             setMensaje("El correo ingresado no tiene una cuenta asociada")
             setMensajeVisible(true)
 
         }
     }
 
-    return <div className="grid md:grid-cols-[30%_70%]">
+    return <div className="grid md:grid-cols-[20%_80%]">
         {/*imagen izq*/}
-        <div className="h-40 md:h-screen">
+        <div className="h-20 md:h-screen">
             <img className="w-full h-full"
                 src="https://images.unsplash.com/photo-1614850523011-8f49ffc73908?fm=jpg&q=60&w=3000&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8Ymx1ZSUyMGJhY2tncm91bmR8ZW58MHx8MHx8fDA%3D" />
         </div>
@@ -46,19 +46,23 @@ function RestableceContra() {
                 </a>
             </div>
 
-            {/* header */}
-            <div className="my-10">
-                <h1 className="text-4xl font-extrabold tracking-tight text-slate-700">RESTABLECER CONTRASEÑA</h1>
-                <p className="mt-2 text-slate-500">Indica el correo electrónico con el que te registraste</p>
+
+            <div className="">
+                {/* header */}
+                <div className="my-10">
+                    <h1 className="text-4xl font-extrabold tracking-tight text-slate-700">RESTABLECER CONTRASEÑA</h1>
+                    <p className="mt-2 text-slate-500">Indica el correo electrónico con el que te registraste</p>
+                </div>
+
+                <CorreoForm onContinue={continuar} />
+
+                {/* mensaje de error */}
+                <Mensaje
+                    msg={mensaje}
+                    visible={mensajeVisible}
+                />
             </div>
 
-            <CorreoForm onContinue={continuar} />
-
-            {/* mensaje de error */}
-            <Mensaje
-                msg={mensaje}
-                visible={mensajeVisible}
-            />
 
         </div>
     </div>

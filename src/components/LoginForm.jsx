@@ -14,7 +14,7 @@ function LoginForm({ onLogin }) {
 
     return <div>
         <form className="w-full max-w-3xl flex flex-col items-start">
-            <h2 className="text-4xl sm:text-5xl text-gray-900 font-bold">INICIAR SESIÓN</h2>
+            <h2 className="text-4xl sm:text-5xl text-gray-900 font-extrabold">INICIAR SESIÓN</h2>
 
             <p className="text-base sm:text-lg text-gray-500/90 font-normal mt-4">
                 Inicia sesión y empieza a gestionar tu dinero

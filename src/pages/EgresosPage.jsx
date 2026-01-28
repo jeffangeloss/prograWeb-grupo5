@@ -1,27 +1,19 @@
+import { useState } from "react"
 import EgresosForm from "../components/EgresosForm"
+import NavBarUser from "../components/NavBarUser"
 import { useNavigate } from "react-router-dom"
+import FiltroPopUp from "../components/FiltroPopUp"
 
 function EgresosPage() {
-    const navigate = useNavigate()
 
-    function cerrarSesion() {
-        const datosLogin = { ingreso: false }
-        localStorage.setItem("DATOS_LOGIN", JSON.stringify(datosLogin))
-        navigate("/")
-    }
+    const navigate = useNavigate()
+    const [openFiltro, setOpenFiltro] = useState(false)
 
     return <div className="bg-slate-50 text-slate-800 lg:h-screen lg:overflow-hidden">
-        <main className="min-h-screen lg:h-screen lg:flex lg:items-center lg:justify-center p-4 md:p-6">
-            <div className="w-full max-w-6xl">
-                <div className="flex justify-end mb-3">
-                    <button type="button"
-                        className="px-8 py-2.5 rounded-full border border-white text-white bg-blue-700 hover:bg-blue-600 transition text-sm sm:text-base"
-                        onClick={function () { cerrarSesion() }}>
-                        Cerrar sesión
-                    </button>
-                </div>
-                <div className="grid gap-4 lg:grid-cols-[340px_1fr]">
+        <NavBarUser />
 
+        <main className="min-h-screen lg:h-screen lg:flex lg:items-start lg:justify-center p-3 sm:p-4 md:p-6">
+            <div className="w-full max-w-6xl mx-auto grid gap-4 lg:grid-cols-[340px_1fr]">
                 <section className="bg-white border border-slate-200 rounded-2xl shadow-sm p-5">
                     <div className="space-y-1">
                         <h2 className="text-xl font-extrabold tracking-tight text-slate-700">
@@ -37,12 +29,35 @@ function EgresosPage() {
                 <section className="bg-white border border-slate-200 rounded-2xl shadow-sm p-5">
                     <div className="flex flex-col gap-1 sm:flex-row sm:items-center sm:justify-between">
                         <div>
-                            <h2 className="text-xl font-extrabold tracking-tight text-slate-700">MIS EGRESOS</h2>
+                            <h2 className="text-xl font-extrabold tracking-tight text-slate-700">
+                                MIS EGRESOS
+                            </h2>
                             <p className="text-sm text-slate-500">Total registrado: S/ 0.00</p>
                         </div>
-                        <span className="rounded-full border border-slate-200 bg-white/70 px-3 py-1 text-xs font-semibold text-slate-700">
-                            0 registros
-                        </span>
+
+                        <div className="flex items-center gap-3 mt-2 md:m-0 relative">
+
+                            <button
+                                onClick={function () {
+                                    setOpenFiltro(true)
+                                }}
+                                className="focus:border-indigo-400 focus:ring-2 focus:ring-indigo-200 hover:bg-slate-200 rounded-md p-0.5" type="button">
+                                <img
+                                    className="w-7"
+                                    src="https://cdn-icons-png.flaticon.com/256/11462/11462900.png" alt="Filtro"
+                                />
+                            </button>
+
+                            <FiltroPopUp visible={openFiltro} onClose={ function(){
+                                setOpenFiltro(false)
+                            }}/>
+
+                            <span className="rounded-full border border-slate-200 bg-white/70 px-3 py-1 text-xs font-semibold text-slate-700">
+                                1 registro
+                            </span>
+
+                        </div>
+
                     </div>
 
                     <div className="mt-4 overflow-x-auto lg:max-h-[50vh] lg:overflow-y-auto">
@@ -57,19 +72,32 @@ function EgresosPage() {
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr>
-                                    <td className="px-4 py-6 text-center text-sm text-slate-500" colSpan="5">
-                                        Aún no hay egresos registrados.
+                                <tr className="border-b border-slate-100">
+                                    <td className="px-4 py-3">27/01/2026</td>
+                                    <td className="px-4 py-3">Alimentación</td>
+                                    <td className="px-4 py-3">Compra supermercado</td>
+                                    <td className="px-4 py-3 text-right font-medium">
+                                        S/ 85.50
+                                    </td>
+                                    <td className="px-4 py-3 text-slate-500">
+                                        Hoy
+                                    </td>
+                                    <td className="px-4 py-3 text-center">
+                                        <button className="rounded-full border border-slate-200 px-3 py-1 text-xs font-semibold text-slate-700 hover:bg-slate-100 transition"
+                                        onClick={function() {
+                                            navigate("/editarEgreso")
+                                        }}>
+                                            Editar egreso
+                                        </button>
                                     </td>
                                 </tr>
                             </tbody>
                         </table>
                     </div>
                 </section>
-                </div>
             </div>
         </main>
-    </div >
+    </div>
 }
 
-export default EgresosPage; 
+export default EgresosPage
