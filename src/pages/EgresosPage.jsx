@@ -1,10 +1,13 @@
+import { useState } from "react"
 import EgresosForm from "../components/EgresosForm"
 import NavBarUser from "../components/NavBarUser"
 import { useNavigate } from "react-router-dom"
+import FiltroPopUp from "../components/FiltroPopUp"
 
 function EgresosPage() {
 
     const navigate = useNavigate()
+    const [openFiltro, setOpenFiltro] = useState(false)
 
     return <div className="bg-slate-50 text-slate-800 lg:h-screen lg:overflow-hidden">
         <NavBarUser />
@@ -31,9 +34,30 @@ function EgresosPage() {
                             </h2>
                             <p className="text-sm text-slate-500">Total registrado: S/ 0.00</p>
                         </div>
-                        <span className="rounded-full border border-slate-200 bg-white/70 px-3 py-1 text-xs font-semibold text-slate-700">
-                            1 registro
-                        </span>
+
+                        <div className="flex items-center gap-3 mt-2 md:m-0 relative">
+
+                            <button
+                                onClick={function () {
+                                    setOpenFiltro(true)
+                                }}
+                                className="focus:border-indigo-400 focus:ring-2 focus:ring-indigo-200 hover:bg-slate-200 rounded-md p-0.5" type="button">
+                                <img
+                                    className="w-7"
+                                    src="https://cdn-icons-png.flaticon.com/256/11462/11462900.png" alt="Filtro"
+                                />
+                            </button>
+
+                            <FiltroPopUp visible={openFiltro} onClose={ function(){
+                                setOpenFiltro(false)
+                            }}/>
+
+                            <span className="rounded-full border border-slate-200 bg-white/70 px-3 py-1 text-xs font-semibold text-slate-700">
+                                1 registro
+                            </span>
+
+                        </div>
+
                     </div>
 
                     <div className="mt-4 overflow-x-auto lg:max-h-[50vh] lg:overflow-y-auto">

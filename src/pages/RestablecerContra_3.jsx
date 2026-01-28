@@ -34,9 +34,9 @@ function RestableceContra_3() {
 
     }
 
-    return <div className="grid md:grid-cols-[30%_70%]">
+    return <div className="grid md:grid-cols-[20%_80%]">
         {/* imagen izq */}
-        <div className="h-40 md:h-screen">
+        <div className="h-20 md:h-screen">
             <img className="w-full h-full"
                 src="https://images.unsplash.com/photo-1614850523011-8f49ffc73908?fm=jpg&q=60&w=3000&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8Ymx1ZSUyMGJhY2tncm91bmR8ZW58MHx8MHx8fDA%3D" />
         </div>
