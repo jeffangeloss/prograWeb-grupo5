@@ -12,6 +12,9 @@ function NavBarAdmin() {
             <h1 className="text-lg font-semibold text-slate-700">Administrador</h1>
         </div>
         <div className="flex gap-4">
+            <button type ="button"
+            className="px-6 py-2.5 rounded-full border border-blue-900/30 text-blue-900 hover:bg-blue-900/10 transition"
+            onClick={function() { navigate("/estadisticas") }}>Estadísticas de usuarios</button>
             <button type="button"
                 className="px-6 py-2.5 rounded-full border border-blue-900/30 text-blue-900 hover:bg-blue-900/10 transition">Dashboard</button>
             <button type="button"
