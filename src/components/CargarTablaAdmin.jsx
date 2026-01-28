@@ -6,7 +6,7 @@ function CargarTablaAdmin({ listaUsuarios }) {
     return (
             listaUsuarios.map(function (usuario) {
                 return (
-                    <tr key={usuario.id} className="hover:bg-gray-500/50 transition">
+                    <tr key={usuario.id} className="hover:bg-indigo-50/20 transition">
                         <td className="px-4 py-4">{usuario.nombre}</td>
                         <td className="px-4 py-4">{usuario.email}</td>
                         <td>
@@ -15,7 +15,7 @@ function CargarTablaAdmin({ listaUsuarios }) {
                         </td>
                         <td className="px-4 py-4">{usuario.ultimoAcceso}</td>
                         <td className="px-6 py-4 text-right">
-                            <button className="px-3 py-1.5 text-xs rounded-xl bg-emerald-500/10 text-emerald-400 border border-emerald-500/30 hover:bg-emerald-500/20 transition"
+                            <button className="px-3 py-1.5 text-xs rounded-xl bg-emerald-500/10 text-emerald-400 border border-emerald-500/30 hover:bg-emerald-800/50 transition"
                                 onClick={function () { navigate("/seguridadUsuario") }}>Seguridad</button>
                         </td>
                         <td className="px-6 py-4 text-right">

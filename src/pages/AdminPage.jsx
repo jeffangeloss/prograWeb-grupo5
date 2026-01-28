@@ -23,12 +23,12 @@ function AdminPage() {
         }
       ]
       
-    return <div className="bg-[url('/img/azul.png')] bg-cover min-h-screen bg-center">
+    return <div className="bg-slate-50">
         <NavBarAdmin />
-        <div className="justify-self-center">
+        <div className="flex justify-center">
             <div className="px-6 py-6">
-                <h1 className="ml-6 object-left text-3xl text-white font-semibold">Usuarios</h1>
-                <div className="ml-4 mr-4 flex gap-4 mt-4">
+                <h1 className="ml-6 object-left text-3xl font-semibold">Usuarios</h1>
+                <div className="ml-4 flex gap-4 mt-4">
                     <button type="button" className="shadow-xl bg-[#297383] rounded-2xl w-64 py-2 text-white hover:bg-[#5a9ca4] transition"
                     onClick={function() {navigate("/crearUsuario")}}>Añadir Usuario</button>
                 </div>
