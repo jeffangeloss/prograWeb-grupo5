@@ -4,7 +4,6 @@ function CargarTablaAdmin({ listaUsuarios }) {
     const navigate = useNavigate()
 
     return (
-        <> {
             listaUsuarios.map(function (usuario) {
                 return (
                     <tr key={usuario.id} className="hover:bg-gray-500/50 transition">
@@ -16,14 +15,16 @@ function CargarTablaAdmin({ listaUsuarios }) {
                         </td>
                         <td className="px-4 py-4">{usuario.ultimoAcceso}</td>
                         <td className="px-6 py-4 text-right">
+                            <button className="px-3 py-1.5 text-xs rounded-xl bg-emerald-500/10 text-emerald-400 border border-emerald-500/30 hover:bg-emerald-500/20 transition"
+                                onClick={function () { navigate("/seguridadUsuario") }}>Seguridad</button>
+                        </td>
+                        <td className="px-6 py-4 text-right">
                             <button className="px-3 py-1.5 text-xs rounded-xl bg-orange-300/30 text-orange-300 border border-orange-500/30 hover:bg-orange-500/30 transition"
                                 onClick={function () { navigate("/editarUsuario") }}>Editar</button>
                         </td>
                     </tr>
                 )
             })
-        }
-        </>
     )
 }
 

@@ -13,6 +13,7 @@ function TablaAdmin({ usuarios }) {
                     <th className="font-medium px-4 py-3">ROL</th>
                     <th className="font-medium px-4 py-3">ÚLTIMO ACCESO</th>
                     <th className="font-medium px-4 py-3"></th>
+                    <th className="font-medium px-4 py-3"></th>
                 </tr>
             </thead>
             <tbody className="divide-y divide-blue-900/50 text-gray-200">
