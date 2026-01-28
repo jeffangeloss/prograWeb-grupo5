@@ -9,10 +9,10 @@ function EgresosPage() {
     const navigate = useNavigate()
     const [openFiltro, setOpenFiltro] = useState(false)
 
-    return <div className="bg-slate-50 text-slate-800 lg:h-screen lg:overflow-hidden">
+    return <div className="bg-slate-50 text-slate-800 min-h-screen">
         <NavBarUser />
 
-        <main className="min-h-screen lg:h-screen lg:flex lg:items-start lg:justify-center p-3 sm:p-4 md:p-6">
+        <main className="min-h-screen lg:h-screen lg:flex lg:items-start lg:justify-center p-2 sm:p-4 md:p-6">
             <div className="w-full max-w-6xl mx-auto grid gap-4 lg:grid-cols-[340px_1fr]">
                 <section className="bg-white border border-slate-200 rounded-2xl shadow-sm p-5">
                     <div className="space-y-1">
@@ -35,7 +35,7 @@ function EgresosPage() {
                             <p className="text-sm text-slate-500">Total registrado: S/ 0.00</p>
                         </div>
 
-                        <div className="flex items-center gap-3 mt-2 md:m-0 relative">
+                        <div className="flex flex-wrap items-center gap-2 mt-2 sm:mt-0 relative">
 
                             <button
                                 onClick={function () {
@@ -48,9 +48,9 @@ function EgresosPage() {
                                 />
                             </button>
 
-                            <FiltroPopUp visible={openFiltro} onClose={ function(){
+                            <FiltroPopUp visible={openFiltro} onClose={function () {
                                 setOpenFiltro(false)
-                            }}/>
+                            }} />
 
                             <span className="rounded-full border border-slate-200 bg-white/70 px-3 py-1 text-xs font-semibold text-slate-700">
                                 1 registro
@@ -84,9 +84,9 @@ function EgresosPage() {
                                     </td>
                                     <td className="px-4 py-3 text-center">
                                         <button className="rounded-full border border-slate-200 px-3 py-1 text-xs font-semibold text-slate-700 hover:bg-slate-100 transition"
-                                        onClick={function() {
-                                            navigate("/editarEgreso")
-                                        }}>
+                                            onClick={function () {
+                                                navigate("/editarEgreso")
+                                            }}>
                                             Editar egreso
                                         </button>
                                     </td>
