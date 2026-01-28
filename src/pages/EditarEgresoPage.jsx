@@ -67,8 +67,13 @@ function EditarEgresoPage() {
 
                     <button
                         type="button"
-                        className="text-sm text-slate-500 underline text-center hover:text-slate-700"
-                        onClick={function() {
+                        className="mt-2 rounded-full bg-red-500 py-2 text-sm font-semibold text-white hover:bg-red-600 transition">Eliminar
+                    </button>
+
+                    <button
+                        type="button"
+                        className="mt-2 text-sm text-slate-500 underline text-center hover:text-slate-700"
+                        onClick={function () {
                             navigate("/user")
                         }}>
                         Cancelar

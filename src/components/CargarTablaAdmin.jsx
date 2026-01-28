@@ -4,7 +4,6 @@ function CargarTablaAdmin({ listaUsuarios }) {
     const navigate = useNavigate()
 
     return (
-        <> {
             listaUsuarios.map(function (usuario) {
                 return (
                     <tr key={usuario.id} className="hover:bg-gray-500/50 transition">
@@ -26,8 +25,6 @@ function CargarTablaAdmin({ listaUsuarios }) {
                     </tr>
                 )
             })
-        }
-        </>
     )
 }
 
