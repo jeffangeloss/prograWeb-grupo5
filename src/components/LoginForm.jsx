@@ -5,57 +5,61 @@ function LoginForm({ onLogin }) {
     const [password, setPassword] = useState("")
 
     function correoOnChange(ev) {
-        setCorreo(ev.target.value);
+        setCorreo(ev.target.value)
     }
 
     function passwordOnChange(ev) {
         setPassword(ev.target.value)
     }
 
-    return <div>
-        <form className="w-full max-w-3xl flex flex-col items-start">
-            <h2 className="text-4xl sm:text-5xl text-gray-900 font-extrabold">INICIAR SESIÓN</h2>
+    function loginOnClick() {
+        onLogin(correo, password)
+    }
 
-            <p className="text-base sm:text-lg text-gray-500/90 font-normal mt-4">
-                Inicia sesión y empieza a gestionar tu dinero
-            </p>
 
-            <div className="w-full mt-10 sm:mt-12">
-                <label type="email" className="block text-base sm:text-lg text-gray-700 mb-3">
-                    Correo electrónico
-                </label>
-                <input id="email" name="email" type="email" placeholder="ejemplo@user.com"
-                    className="w-full h-14 px-5 border border-gray-300 rounded-md outline-none text-base focus:border-[#bb88ee] focus:ring-4 focus:ring-[#bb88ee] focus:ring-offset-2 focus:ring-offset-white"
-                    value={correo} onChange={function (ev) {
-                        setCorreo(ev.target.value)
-                    }} />
-            </div>
+    return <div className="mb-5" >
+        <form className="grid gap-3">
+            <label className="text-sm font-medium text-slate-700">
+                Correo electrónico
+            </label>
+            <input
+                value={correo}
+                onChange={correoOnChange}
+                className="w-full rounded-md border border-slate-200 bg-white px-3 py-2 sm:py-3 text-slate-700 placeholder:text-slate-400 shadow-sm focus:border-indigo-400 focus:ring-2 focus:ring-indigo-200"
+                type="email"
+                placeholder="ejemplo@user.com"
+            />
 
-            <div className="w-full mt-7 sm:mt-8">
-                <label type="password" className="block text-base sm:text-lg text-gray-700 mb-3">
-                    Contraseña
-                </label>
-                <input id="password" name="password" type="password" placeholder="********"
-                    className="w-full h-14 px-5 border border-gray-300 rounded-md outline-none text-base focus:border-[#bb88ee] focus:ring-4 focus:ring-[#bb88ee] focus:ring-offset-2 focus:ring-offset-white"
-                    value={password} onChange={function (ev) {
-                        setPassword(ev.target.value)
-                    }} />
-            </div>
+            <label className="text-sm font-medium text-slate-700">
+                Contraseña
+            </label>
+            <input
+                value={password}
+                onChange={passwordOnChange}
+                className="w-full rounded-md border border-slate-200 bg-white px-3 py-2 sm:py-3 text-slate-700 placeholder:text-slate-400 shadow-sm focus:border-indigo-400 focus:ring-2 focus:ring-indigo-200"
+                type="password"
+                placeholder="********"
+            />
 
-            <div className="w-full mt-5 text-right">
-                <a href="#/restablecer" className="text-sm sm:text-base underline text-gray-600 hover:text-gray-800">
+            <div className="text-right">
+                <a
+                    href="#/restablecer"
+                    className="text-sm sm:text-base underline text-gray-600 hover:text-gray-800"
+                >
                     ¿Olvidaste tu contraseña?
                 </a>
             </div>
 
             <button
-                className="mt-10 w-full sm:w-auto sm:px-16 h-14 rounded-full text-white bg-indigo-500 hover:opacity-90 transition-opacity text-base sm:text-lg" type="button" onClick={function () {
-                    onLogin(correo, password)
-                }}>
+                onClick={loginOnClick}
+                className="mt-4 w-full sm:w-fit whitespace-nowrap rounded-full bg-indigo-600 px-10 sm:px-16 py-3 font-semibold text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-300 active:scale-[0.99] transition"
+                type="button"
+            >
                 Iniciar sesión
             </button>
+
         </form>
-    </div>
+    </div >
 }
 
 export default LoginForm
