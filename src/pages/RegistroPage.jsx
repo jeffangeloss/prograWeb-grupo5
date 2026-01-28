@@ -1,3 +1,5 @@
+import Azul from "../components/auth/Azul";
+
 function RegistroPage() {
     return <div>
         {/* Por ahora tenemos: */}
@@ -11,13 +13,7 @@ function RegistroPage() {
             <main className="min-h-screen grid grid-cols-1 md:grid-cols-[20%_80%]">
                 {/* <!-- PANEL AZUL (IMAGEN) --> */}
                 {/* <!-- A partir de md size se considera un bloque (menos de eso y se oculta)--> */}
-                <section
-                    className="hidden md:block"
-                    style={{ backgroundImage: "url('/img/azul.png')",
-                        backgroundSize: "cover",
-                        backgroundPosition: "center",
-                    }}
-                ></section>
+                <Azul />
 
                 {/* <!-- CONTENIDO --> */}
                 {/* <!-- relative para que el absolute de abajo se pueda mover con respecto a --> */}
