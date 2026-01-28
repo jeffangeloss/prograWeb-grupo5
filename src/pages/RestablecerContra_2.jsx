@@ -3,14 +3,15 @@ import { useEffect, useState } from "react"
 
 function RestablecerContra_2() {
 
+
     const [correo, setCorreo] = useState("")
 
-    useEffect( function () {
-        const correo_contra = localStorage.getItem("correo_restablecer")
-        if (correo_contra) {
-            setCorreo(correo_contra)
+    useEffect(function() {
+        const correoGuardado = localStorage.getItem("CorreoRecuperar")
+        if(correoGuardado){
+            setCorreo(correoGuardado)
         }
-    }, [] )
+    }, [])
 
     return <div className="grid md:grid-cols-[30%_70%]">
         {/* imagen izq */}
@@ -22,7 +23,8 @@ function RestablecerContra_2() {
         <div className="py-8 px-16">
             {/* boton regresar */}
             <div className="justify-self-end flex items-center gap-3 text-sm text-slate-600">
-                <a href="#"
+                <span className="text-gray-700 text-sm sm:text-base">¿Recordaste tu contraseña?</span>
+                <a href="#/"
                     className="inline-flex items-center justify-center rounded-full border border-indigo-400 px-5 py-2 font-medium text-indigo-600 hover:bg-indigo-50 focus:outline-none focus:ring-2 focus:ring-indigo-300">
                     Regresar
                 </a>

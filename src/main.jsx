@@ -5,12 +5,14 @@ import './main.css'
 import InicioSesionPage from './pages/InicioSesionPage'
 import AdminPage from './pages/AdminPage'
 import EditarUsuarioPage from './pages/EditarUsuarioPage'
-import CrearUsuarioPage from './pages/CrearUsuarioPage'
+import CrearUsuarioAdminPage from './pages/CrearUsuarioAdminPage'
+import SeguridadUsuarioPage from './pages/SeguridadUsuarioPage'
 import RestableceContra from './pages/RestableceContra'
 import RestablecerContra_2 from './pages/RestablecerContra_2'
 import RestablecerContra_3 from './pages/RestablecerContra_3'
 import RestablecerContra_correo from './pages/RestablecerContra_correo'
 import EgresosPage from './pages/EgresosPage'
+import EditarEgresoPage from './pages/EditarEgresoPage'
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>
@@ -20,11 +22,13 @@ createRoot(document.getElementById('root')).render(
       <Route path="/admin" element={<AdminPage />} />
       <Route path="/user" element={<EgresosPage />} />
       <Route path="/editarUsuario" element={<EditarUsuarioPage />} />
-      <Route path="/crearUsuario" element={<CrearUsuarioPage />} />
+      <Route path="/crearUsuario" element={<CrearUsuarioAdminPage />} />
+      <Route path="/seguridadUsuario" element={<SeguridadUsuarioPage />} />
       <Route path="/restablecer" element={<RestableceContra />} />
       <Route path="/restablecer/mensaje" element={<RestablecerContra_2/>} />
       <Route path="/restablecer/correo" element={<RestablecerContra_correo/>} />
       <Route path="/restablecer/form" element={<RestablecerContra_3/>} />
+      <Route path="/editarEgreso" element={<EditarEgresoPage/>} />
     </Routes>
   </HashRouter>
   </StrictMode>,

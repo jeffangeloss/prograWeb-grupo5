@@ -36,7 +36,7 @@ function EditarUsuarioForm() {
                 <div className="flex gap-4">
                     <button className="px-4 py-2 rounded-xl bg-gray-300 text-gray-700 border border-gray-300 hover:bg-gray-50/30 transition"
                     onClick={function() {navigate("/admin")}}>Cancelar</button>
-                    <button className="px-4 py-2 rounded-xl bg-blue-600 text-white border border-blue-900 hover:bg-blue-700/30 shadow-md transition"
+                    <button className="px-4 py-2 rounded-xl bg-blue-600 text-white border border-blue-900 hover:bg-blue-700/30 transition"
                     onClick={function() {navigate("/admin")}}>Guardar cambios</button>
                 </div>
             </div>
