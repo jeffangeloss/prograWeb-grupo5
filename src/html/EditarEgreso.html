@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Editar egreso</title>
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+</head>
+
+<body class="place-self-center">
+    <h1 class="text-2xl font-bold text-center mb-0-5">Editar egreso</h1>
+    <span class="text-center">Modifique la información del egreso seleccionado</span>
+    <form class="grid grid-cols-1 mt-3 mb-2">
+            <label class="mb-2">Monto</label>
+            <input type="number" class="border border-gray-400 mb-3 rounded-sm"/>
+            <label class="mb-2">Categoría</label>
+            <select class="border border-gray-400 mb-3 rounded-sm">
+                <option>Categoría 1</option>
+                <option>Categoría 2</option>
+            </select>
+            <label class="mb-2">Fecha</label>
+            <input type="date" class="border border-gray-400 mb-3 rounded-sm"/>
+            <label class="mb-2">Nota</label>
+            <textarea class="border border-gray-400 rounded-sm mb-7"></textarea>
+            <button type="submit" class="rounded-2xl bg-blue-500 py-1 text-white font-semibold mb-2">Guardar cambios</button>  
+            <button type="button" class="text-gray-500 underline">Cancelar</button>
+    </form>
+</body>
+</html>
