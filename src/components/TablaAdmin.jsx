@@ -21,9 +21,7 @@ function TablaAdmin({ usuarios }) {
                     <CargarTablaAdmin listaUsuarios={usuarios} />
                 </tbody>
             </table>
-
         </div>
-
         <span className="px-4 py-2 text-xs flex bg-indigo-50 text-[#6c64a6] justify-end overflow-x-auto">Usuarios: {usuarios.length}</span>
     </div>
 }
