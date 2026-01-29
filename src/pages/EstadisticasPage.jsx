@@ -23,6 +23,7 @@ function EstadisticasPage() {
   const data = {
     labels: ["Ene", "Feb", "Mar", "Abr", "May", "Jun"],
     datasets: [{
+      label: "Usuarios nuevos mensuales",
       data: [50, 80, 65, 120, 90, 140],
       borderColor: "#3b82f6",
       backgroundColor: "rgba(59,130,246,0.2)",
