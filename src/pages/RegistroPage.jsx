@@ -32,7 +32,7 @@ function RegistroPage() {
                     {/* <!-- CARD --> */}
                     <div className="w-full max-w-xl">
                         <header className="mb-8">
-                            <h1 className="text-3xl sm:text-4xl font-extrabold tracking-tight text-slate-700">
+                            <h1 className="text-3xl sm:text-4xl md:text-5xl font-extrabold tracking-tight text-slate-700 ">
                                 {/* <!-- tracking-tight apachurra las letras --> */}
                                 CREA TU CUENTA
                             </h1>
