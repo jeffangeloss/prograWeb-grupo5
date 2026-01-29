@@ -1,5 +1,5 @@
 import NavBarAdmin from "../components/NavBarAdmin";
-import { useNavigate, useLocation } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 import { useState } from "react"
 import UserCard from "../components/UserCard"
 import FilterHistorial from "../components/FilterHistorial";
@@ -45,9 +45,7 @@ function SeguridadUsuarioPage() {
                 <p className="text-sm text-slate-500 mt-1">
                     Auditar accesos de un usuario específico.
                 </p>
-
                 <UserCard usuario={usuario} imgSrc={img} label={label} />
-
                 <FilterHistorial onFiltro={aplicarFiltro} />
                 <TablaHistorial logs={filtrarLogs()} />
             </div>
