@@ -67,7 +67,6 @@ function InicioSesionPage() {
             </div>
         </div>
     </div>
-    </div>
 }
 
 export default InicioSesionPage
