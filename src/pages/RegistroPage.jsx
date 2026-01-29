@@ -6,8 +6,6 @@ import FormRegistro from "../components/auth/FormRegistro";
 
 function RegistroPage() {
     return <div>
-        
-
         <div className="min-h-screen bg-white text-slate-800">
             {/* <!-- 20% de la primera col, 80% de la segunda siempre q sea md size o más --> */}
             <main className="min-h-screen grid grid-cols-1 md:grid-cols-[20%_80%]">
