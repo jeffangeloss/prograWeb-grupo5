@@ -109,7 +109,11 @@ function EgresosPage() {
                 </section>
             </div>
         </main>
-        <button type="button" className="fixed bottom-4 left-4 z-50 bg-indigo-600 text-white font-semibold px-4 py-2 rounded-full shadow-lg hover:bg-indigo-700">
+        <button type="button"
+        className="fixed bottom-4 left-4 z-50 bg-indigo-600 text-white font-semibold px-4 py-2 rounded-full shadow-lg hover:bg-indigo-700"
+        onClick={function() {
+            navigate("/chatbot")
+        }}>
             Prueba Chatbot
         </button>
     </div>
