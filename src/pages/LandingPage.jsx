@@ -246,7 +246,7 @@ function LandingPage() {
                             <li className="font-semibold">Mariel Casolda - 20230622</li>
                             <li className="font-semibold">Gabriela Garay - 20233903</li>
                             <li className="font-semibold">Rafael Lau - 20231576</li>
-                            <li className="font-semibold">Rafel Pérez - 20232222</li>
+                            <li className="font-semibold">Rafael Pérez - 20232222</li>
                             <li className="font-semibold">Jefferson Sanchez - 20235218</li>
                         </ul>
                         <p className="mt-6 text-xs text-blue-200">
