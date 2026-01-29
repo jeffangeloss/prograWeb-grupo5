@@ -35,6 +35,23 @@ function FiltroPopUp({ visible, onClose }) {
 
                                 </div>
 
+                                <div className="space-y-4">
+                                        <label className="text-sm font-medium text-slate-700">Monto</label>
+                                        <div className="mt-3 mb-2 flex items-center">
+
+                                                <label className="ml-2 mr-3 text-sm font-medium text-slate-700">Desde:</label>
+                                                <input type="number"
+                                                        className="w-full rounded-md border border-slate-200 bg-white px-3 py-2 text-slate-700 shadow-sm focus:border-indigo-400 focus:ring-2 focus:ring-indigo-200"
+                                                        required />
+                                        </div>
+                                        <div className="mb-2 flex items-center">
+                                                <label className="ml-2 mr-4 text-sm font-medium text-slate-700">Hasta:</label>
+                                                <input type="number"
+                                                        className="w-full rounded-md border border-slate-200 bg-white px-3 py-2 text-slate-700 shadow-sm focus:border-indigo-400 focus:ring-2 focus:ring-indigo-200"
+                                                        required />
+                                        </div>
+                                </div>
+
                                 <div className="flex flex-col gap-3 mt-3">
                                         <button
                                                 onClick={onClose}
