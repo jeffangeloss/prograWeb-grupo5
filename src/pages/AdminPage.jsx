@@ -23,8 +23,13 @@ function AdminPage() {
         }
     ]
 
+    function logout() {
+        localStorage.clear()
+        navigate("/")
+    }
+
     return <div className="bg-slate-50">
-        <NavBarAdmin />
+        <NavBarAdmin onLogout={logout}/>
         <div className="grid grid-cols-1 md:flex md:justify-center">
             <div className="px-6 py-6">
                 <h1 className="ml-6 object-left text-3xl font-semibold">Usuarios</h1>
