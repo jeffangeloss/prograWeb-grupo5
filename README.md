@@ -3,7 +3,8 @@
 - Admin: ejemplo@admin.com / admin1234
 - User: ejemplo@user.com / user1234
 
-> Nota: credenciales solo para pruebas locales. La carpeta src/hmtl son los primeros borradores antes de desplegarlo en react.
+> Nota: credenciales solo para pruebas locales.
+> La carpeta src/hmtl son los primeros borradores antes de desplegarlo en react.
 
 # React + Vite
 
