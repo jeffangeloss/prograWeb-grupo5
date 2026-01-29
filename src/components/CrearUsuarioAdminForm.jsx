@@ -58,11 +58,10 @@ function CrearUsuarioForm() {
 
             <div className="flex justify-end gap-4 pt-4">
                 <button
-                    className="px-4 py-2 rounded-xl bg-gray-300 text-gray-700 border border-gray-300 hover:bg-gray-50/30 transition"
+                    className="rounded-2xl bg-gray-400 px-4 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-gray-500 transition"
                     onClick={function () { navigate("/admin") }}>Cancelar</button>
-
                 <button
-                    className="px-4 py-2 rounded-xl bg-blue-600 text-white border border-blue-900 hover:bg-blue-700/30 transition"
+                    className="rounded-2xl bg-indigo-600 px-4 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-indigo-700 transition"
                     onClick={function () {formatearUsuarioNuevo(), navigate("/admin") }}>Crear usuario</button>
             </div>
         </div>

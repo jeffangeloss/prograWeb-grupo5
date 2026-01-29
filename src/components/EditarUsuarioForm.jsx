@@ -31,12 +31,12 @@ function EditarUsuarioForm() {
             </div>
 
             <div className="flex justify-between pt-4">
-                <button className="px-4 py-2 rounded-xl bg-red-700 text-white border border-red-400/40 hover:bg-red-700/30 transition">Eliminar</button>
+                <button className="rounded-2xl bg-red-600 px-4 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-red-700 transition">Eliminar</button>
 
                 <div className="flex gap-4">
-                    <button className="px-4 py-2 rounded-xl bg-gray-300 text-gray-700 border border-gray-300 hover:bg-gray-50/30 transition"
+                    <button className="rounded-2xl bg-gray-400 px-4 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-gray-500 transition"
                     onClick={function() {navigate("/admin")}}>Cancelar</button>
-                    <button className="px-4 py-2 rounded-xl bg-blue-600 text-white border border-blue-900 hover:bg-blue-700/30 transition"
+                    <button className="rounded-2xl bg-indigo-600 px-4 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-indigo-700 transition"
                     onClick={function() {navigate("/admin")}}>Guardar cambios</button>
                 </div>
             </div>
