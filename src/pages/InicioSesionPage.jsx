@@ -2,6 +2,7 @@ import { useEffect, useState } from "react"
 import { useNavigate } from "react-router-dom"
 import Mensaje from "../components/Mensaje"
 import LoginForm from "../components/LoginForm"
+import Azul from "../components/auth/Azul"
 
 function InicioSesionPage() {
 
@@ -36,10 +37,7 @@ function InicioSesionPage() {
 
     return <div className="grid md:grid-cols-[20%_80%]">
         {/*imagen izq*/}
-        <div className="h-20 md:h-screen">
-            <img className="w-full h-full"
-                src="https://images.unsplash.com/photo-1614850523011-8f49ffc73908?fm=jpg&q=60&w=3000&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8Ymx1ZSUyMGJhY2tncm91bmR8ZW58MHx8MHx8fDA%3D" />
-        </div>
+        <Azul />
 
         {/* contenido derecha */}
         <div className="py-8 px-16">
@@ -68,6 +66,7 @@ function InicioSesionPage() {
                 />
             </div>
         </div>
+    </div>
     </div>
 }
 
