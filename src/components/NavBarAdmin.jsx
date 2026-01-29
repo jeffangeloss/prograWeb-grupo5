@@ -7,7 +7,7 @@ function NavBarAdmin() {
     const enEstadisticas = location.pathname === "/estadisticas"
     const enDashboard = location.pathname === "/admin"
 
-    return <div className="bg-slate-100 px-4 py-3 gap-3 shadow-md justify-between flex flex-col sm:flex-row">
+    return <div className="bg-slate-100 px-4 py-3 sm:px-6 sm:py-4 shadow-md flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
         <div className="flex items-center gap-3">
             <img
                 src="/public/img/admin.jpg"
