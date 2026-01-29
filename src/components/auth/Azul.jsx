@@ -1,4 +1,5 @@
 function Azul() {
+    {/* <!-- A partir de md size se considera un bloque (menos de eso y se oculta)--> */}
     return (
         <section
             className="h-20 md:h-[100svh] w-full"
@@ -7,7 +8,6 @@ function Azul() {
                 backgroundSize: "cover",
                 backgroundPosition: "center",
             }}
-            aria-hidden="true"
         />
     )
 }
