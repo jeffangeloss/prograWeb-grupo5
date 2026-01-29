@@ -4,7 +4,7 @@ import CargarTablaAdmin from "./CargarTablaAdmin"
 function TablaAdmin({ usuarios }) {
     const navigate = useNavigate()
 
-    return <div className="mt-10 mx-8 rounded-2xl shadow-2xl overflow-hidden w-fit">
+    return <div className="mt-10 mx-4 rounded-2xl shadow-2xl overflow-hidden w-fit">
         <table className="text-xs bg-[#7d7493]/25 text-slate-600 text-left">
             <thead className="text-sm text-white bg-[#4d447e]">
                 <tr>

@@ -20,8 +20,8 @@ function CrearUsuarioForm() {
         console.log(usuarioNuevo)
     }
 
-    return (<div>
-        <div className="rounded-2xl shadow-xl p-8 min-w-xl lg:min-w-2xl place-self-center">
+    return (<div className="flex justify-center p-4">
+        <div className="rounded-2xl shadow-xl p-8 max-w-full">
 
             <div className="mb-6">
                 <label className="text-slate-700 mb-2 ml-1">Nombre completo</label>
