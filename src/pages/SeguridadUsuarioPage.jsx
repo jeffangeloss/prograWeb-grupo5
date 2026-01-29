@@ -6,14 +6,29 @@ import FilterHistorial from "../components/FilterHistorial";
 import TablaHistorial from "../components/TablaHistorial"
 
 function SeguridadUsuarioPage() {
-    const navigate = useNavigate()
     const { state: usuario } = useLocation()
     const [accion, setAccion] = useState("TODAS")
+    const navigate = useNavigate()
+
     const logs = [
-        { navegador: "Chrome", fecha: "25/01/2025", hora: "08:14", accion: "LOGIN_SUCCESS", resultado: "OK" },
-        { navegador: "Edge", fecha: "25/01/2025", hora: "08:10", accion: "LOGIN_FAIL", resultado: "FAIL" },
-        { navegador: "Firefox", fecha: "24/01/2025", hora: "22:50", accion: "LOGOUT", resultado: "OK" }
+        {
+            navegador: "Chrome",
+            fecha: usuario?.ultimoAcceso || "—",
+            hora: "—",
+            accion: "LOGIN_SUCCESS"
+        },
+        { navegador: "Edge", fecha: "25/01/2025", hora: "08:10", accion: "LOGIN_FAIL" },
+        { navegador: "Firefox", fecha: "24/01/2025", hora: "22:50", accion: "LOGOUT" }
     ]
+
+    const rol = usuario?.rol || "Usuario"
+    const img = rol === "Administrador" ? "/img/admin.jpg" : "/img/user.jpg"
+    const label = rol === "Administrador" ? "Administrador" : "Usuario"
+
+
+    function aplicarFiltro(accionSeleccionada) {
+        setAccion(accionSeleccionada)
+    }
 
     function filtrarLogs() {
         if (accion === "TODAS") return logs
@@ -22,22 +37,21 @@ function SeguridadUsuarioPage() {
         })
     }
 
+    function logout() {
+        localStorage.clear()
+        navigate("/")
+    }
+
     return <div className="bg-slate-50 text-slate-800 min-h-screen">
-        <NavBarAdmin />
+        <NavBarAdmin onLogout={logout} />
         <div className="p-6">
             <div className="max-w-6xl mx-auto">
                 <h2 className="text-2xl font-bold text-slate-800">Historial de acceso</h2>
                 <p className="text-sm text-slate-500 mt-1">
                     Auditar accesos de un usuario específico.
                 </p>
-
-                <UserCard usuario={usuario} />
-
-                <FilterHistorial
-                    accion={accion}
-                    onChange={function (e) { setAccion(e.target.value) }}
-                    onRefresh={function () { }}
-                />
+                <UserCard usuario={usuario} imgSrc={img} label={label} />
+                <FilterHistorial onFiltro={aplicarFiltro} />
                 <TablaHistorial logs={filtrarLogs()} />
             </div>
         </div>

@@ -9,8 +9,13 @@ function EgresosPage() {
     const navigate = useNavigate()
     const [openFiltro, setOpenFiltro] = useState(false)
 
+    function logout() {
+        localStorage.clear()
+        navigate("/")
+    }
+
     return <div className="bg-slate-50 text-slate-800 min-h-screen">
-        <NavBarUser />
+        <NavBarUser onLogout={logout} />
 
         <main className="lg:h-screen lg:flex lg:items-start lg:justify-center p-2 sm:p-4 md:p-6">
             <div className="w-full max-w-6xl mx-auto grid gap-4 grid-cols-1 lg:grid-cols-[340px_1fr]">
@@ -59,10 +64,10 @@ function EgresosPage() {
                                 />
                             </button>
 
-                            <FiltroPopUp 
-                            visible={openFiltro} onClose={function () {
-                                setOpenFiltro(false)
-                            }} />
+                            <FiltroPopUp
+                                visible={openFiltro} onClose={function () {
+                                    setOpenFiltro(false)
+                                }} />
 
                             <span className="rounded-full border border-slate-200 bg-white/70 px-3 py-1 text-xs font-semibold text-slate-700">
                                 1 registro
@@ -110,10 +115,10 @@ function EgresosPage() {
             </div>
         </main>
         <button type="button"
-        className="fixed bottom-4 left-4 z-50 bg-indigo-600 text-white font-semibold px-4 py-2 rounded-full shadow-lg hover:bg-indigo-700"
-        onClick={function() {
-            navigate("/chatbot")
-        }}>
+            className="fixed bottom-4 left-4 z-50 bg-indigo-600 text-white font-semibold px-4 py-2 rounded-full shadow-lg hover:bg-indigo-700"
+            onClick={function () {
+                navigate("/chatbot")
+            }}>
             Prueba Chatbot
         </button>
     </div>
