@@ -35,7 +35,7 @@ function InicioSesionPage() {
         setMensajeVisible(true)
     }
 
-
+    
     return <div className="min-h-screen bg-white text-slate-800">
         <div className="md:min-h-screen grid grid-cols-1 md:grid-cols-[20%_80%]">
         {/*imagen izq*/}
@@ -52,8 +52,7 @@ function InicioSesionPage() {
                 </a>
             </div>
 
-
-            <div className="">
+            <div>
                 {/* header */}
                 <div className="my-10">
                     <h1 className="text-5xl font-extrabold tracking-tight text-slate-700">INICIAR SESIÓN</h1>
@@ -68,8 +67,6 @@ function InicioSesionPage() {
                     visible={mensajeVisible}
                 />
             </div>
-
-
         </div>
     </div>
     </div>
