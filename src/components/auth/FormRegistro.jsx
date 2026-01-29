@@ -1,4 +1,26 @@
+import { useState } from "react";
+
 function FormRegistro() {
+    {/* para corroborar correo; “Desde el inicio hasta el final del texto, debe haber algo sin espacios + @ + algo sin espacios + . + algo sin espacios (ej. x@y.z”*/}
+    const EMAIL_REGEX = /^\S+@\S+\.\S+$/; 
+    {/* Para detectar si hay algún caracter especial (no letra no número); marcará true en SIMBOLO_REGEX.test(password) */}
+    const SIMBOLO_REGEX = /[^A-Za-z0-9]/;
+    {/* El form inicia vacio, var estado*/}
+    const [form, setForm] = useState({
+        nombre: "",
+        apellido: "",
+        correo: "",
+        password: "",
+        confirm: "",
+    });
+    {/* Para el checkbox de términos y condiciones - falso hasta ser marcado*/}
+    const [acepta, setAcepta] = useState(false);
+    {/* Para los errores - inicia como array vacío */}
+    const [errores, setErrores] = useState([]);
+    {/* Para que los errores solo aparezcan cuando se intente enviar (no todo el tiempo)*/}
+    const [intentoEnviar, setIntentoEnviar] = useState(false);
+
+
     return (
         <form className="space-y-5"> {/* <!-- como un margin automatico para cada seccion --> */}
             {/* <!-- GRID PRINCIPAL --> */}
