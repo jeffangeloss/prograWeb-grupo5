@@ -5,19 +5,19 @@ function EditarUsuarioForm() {
 
     return <div>
 
-        <div className="bg-gray-800/50 rounded-2xl shadow-xl p-8 min-w-xl lg:min-w-2xl place-self-center">
+        <div className="rounded-2xl shadow-xl p-8 min-w-xl lg:min-w-2xl place-self-center">
             <div className="mb-6">
-                <label className="text-white mb-2 ml-1">Nombre completo</label>
+                <label className="text-slate-700 mb-2 ml-1">Nombre completo</label>
                 <input type="text" placeholder="Nombre del usuario" className="w-full mt-2 px-4 py-2 rounded-xl shadow-md bg-white text-black" />
             </div>
 
             <div className="mb-6">
-                <label className="text-white mb-2 ml-1">Correo electrónico</label>
+                <label className="text-slate-700 mb-2 ml-1">Correo electrónico</label>
                 <input type="email" placeholder="correo@ejemplo.com" className="w-full mt-2 px-4 py-2 rounded-xl shadow-md bg-white text-black" />
             </div>
 
             <div className="mb-6">
-                <label className="text-white mb-2 ml-1">Rol</label>
+                <label className="text-slate-700mb-2 ml-1">Rol</label>
                 <select className="w-full mt-2 px-4 py-2 rounded-xl shadow-md bg-white text-black">
                     <option>Usuario</option>
                     <option>Administrador</option>
@@ -25,7 +25,7 @@ function EditarUsuarioForm() {
             </div>
 
             <div className="mb-8">
-                <label className="text-white mb-2 ml-1">Último acceso</label>
+                <label className="text-slate-700 mb-2 ml-1">Último acceso</label>
                 <input type="text" placeholder="Fecha último acceso" disabled className="w-full mt-2 px-4 py-2 rounded-xl shadow-md bg-gray-300 text-gray-600"
                 />
             </div>

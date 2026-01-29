@@ -21,34 +21,34 @@ function CrearUsuarioForm() {
     }
 
     return (<div>
-        <div className="bg-gray-800/50 rounded-2xl shadow-xl p-8 min-w-xl lg:min-w-2xl place-self-center">
+        <div className="rounded-2xl shadow-xl p-8 min-w-xl lg:min-w-2xl place-self-center">
 
             <div className="mb-6">
-                <label className="text-white mb-2 ml-1">Nombre completo</label>
+                <label className="text-slate-700 mb-2 ml-1">Nombre completo</label>
                 <input type="text" className="w-full mt-2 px-4 py-2 rounded-xl shadow-md bg-white text-black"
                     value={nombre} onChange={function (ev) { setNombre(ev.target.value) }} />
             </div>
 
             <div className="mb-6">
-                <label className="text-white mb-2 ml-1">Correo electrónico</label>
+                <label className="text-slate-700 mb-2 ml-1">Correo electrónico</label>
                 <input type="email" placeholder="correo@ejemplo.com" className="w-full mt-2 px-4 py-2 rounded-xl shadow-md bg-white text-black"
                     value={email} onChange={function (ev) { setEmail(ev.target.value) }} />
             </div>
 
             <div className="mb-6">
-                <label className="text-white mb-2 ml-1">Contraseña</label>
+                <label className="text-slate-700 mb-2 ml-1">Contraseña</label>
                 <input type="password" className="w-full mt-2 px-4 py-2 rounded-xl shadow-md bg-white text-black"
                     value={contra} onChange={function (ev) { setContra(ev.target.value) }} />
             </div>
 
             <div className="mb-6">
-                <label className="text-white mb-2 ml-1">Confirmar Contraseña</label>
+                <label className="text-slate-700 mb-2 ml-1">Confirmar Contraseña</label>
                 <input type="password" className="w-full mt-2 px-4 py-2 rounded-xl shadow-md bg-white text-black"
                     value={confirmarContra} onChange={function (ev) { setConfirmarContra(ev.target.value) }} />
             </div>
 
             <div className="mb-8">
-                <label className="text-white mb-2 ml-1">Rol</label>
+                <label className="text-slate-700 mb-2 ml-1">Rol</label>
                 <select className="w-full mt-2 px-4 py-2 rounded-xl shadow-md bg-white text-black"
                     value={rol} onChange={function (ev) { setRol(ev.target.value) }}>
                     <option>Usuario</option>
