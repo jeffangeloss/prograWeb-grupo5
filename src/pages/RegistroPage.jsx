@@ -1,3 +1,5 @@
+import Azul from "../components/auth/Azul";
+
 function RegistroPage() {
     return <div>
         {/* Por ahora tenemos: */}
@@ -11,13 +13,7 @@ function RegistroPage() {
             <main className="min-h-screen grid grid-cols-1 md:grid-cols-[20%_80%]">
                 {/* <!-- PANEL AZUL (IMAGEN) --> */}
                 {/* <!-- A partir de md size se considera un bloque (menos de eso y se oculta)--> */}
-                <section
-                    className="hidden md:block"
-                    style={{ backgroundImage: "url('/img/azul.png')",
-                        backgroundSize: "cover",
-                        backgroundPosition: "center",
-                    }}
-                ></section>
+                <Azul />
 
                 {/* <!-- CONTENIDO --> */}
                 {/* <!-- relative para que el absolute de abajo se pueda mover con respecto a --> */}
@@ -26,7 +22,7 @@ function RegistroPage() {
                     <div className="absolute top-6 right-6 flex items-center gap-3 text-sm text-slate-600">
                         <span className="hidden sm:inline">¿Ya tienes una cuenta?</span>
                         <a
-                            href="#"
+                            href="/"
                             className="inline-flex items-center justify-center rounded-full border border-indigo-400 px-5 py-2 font-medium text-indigo-600 hover:bg-indigo-50 focus:outline-none focus:ring-2 focus:ring-indigo-300"
                         >
                             Iniciar sesión
@@ -36,7 +32,7 @@ function RegistroPage() {
                     {/* <!-- CARD --> */}
                     <div className="w-full max-w-xl">
                         <header className="mb-8">
-                            <h1 className="text-3xl sm:text-4xl font-extrabold tracking-tight text-slate-700">
+                            <h1 className="text-3xl sm:text-4xl md:text-5xl font-extrabold tracking-tight text-slate-700 ">
                                 {/* <!-- tracking-tight apachurra las letras --> */}
                                 CREA TU CUENTA
                             </h1>

@@ -32,7 +32,7 @@ function EgresosPage() {
                             <h2 className="text-xl font-extrabold tracking-tight text-slate-700">
                                 MIS EGRESOS
                             </h2>
-                            <p className="text-sm text-slate-500">Total registrado: S/ 0.00</p>
+                            <p className="text-sm text-slate-500">Total registrado: S/ 85.50</p>
                         </div>
 
                         <div className="flex flex-wrap items-center gap-2 mt-2 sm:mt-0 relative">
@@ -109,6 +109,13 @@ function EgresosPage() {
                 </section>
             </div>
         </main>
+        <button type="button"
+        className="fixed bottom-4 left-4 z-50 bg-indigo-600 text-white font-semibold px-4 py-2 rounded-full shadow-lg hover:bg-indigo-700"
+        onClick={function() {
+            navigate("/chatbot")
+        }}>
+            Prueba Chatbot
+        </button>
     </div>
 }
 
