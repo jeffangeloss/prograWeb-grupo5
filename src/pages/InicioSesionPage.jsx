@@ -60,7 +60,6 @@ function InicioSesionPage() {
                 </div>
 
                 <LoginForm onLogin={login} />
-
                 {/* mensaje de error */}
                 <Mensaje
                     msg={mensaje}

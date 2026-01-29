@@ -1,25 +1,13 @@
-import { useNavigate } from "react-router-dom";
+import NavBarAdmin from "../components/NavBarAdmin";
+import { useNavigate, useLocation } from "react-router-dom";
 
 function SeguridadUSuariosPage() {
-    const navigate = useNavigate();
+    const navigate = useNavigate()
+    const { state: usuario } = useLocation()
 
     return <div className="bg-slate-50 text-slate-800 min-h-screen">
-        <div className="bg-slate-100 px-6 py-4 shadow-md flex items-center justify-between">
-            <div className="flex items-center gap-3">
-                <img src="/public/img/admin.jpg" alt="Admin" className="h-10 w-10 rounded-full object-cover border border-blue-200" />
-                <h1 className="text-lg font-semibold text-slate-700">Administrador</h1>
-            </div>
-            <div className="flex items-center gap-4">
-                <button className="px-6 py-2.5 rounded-full border border-blue-300 text-blue-700 hover:bg-blue-50 transition">
-                    Usuarios
-                </button>
-                <button className="px-6 py-2.5 rounded-full border border-blue-300 text-blue-700 hover:bg-blue-50 transition" onClick={function() {navigate("/")}}>
-                    Cerrar sesión
-                </button>
-            </div>
-        </div>
-
-        <main className="p-6">
+        <NavBarAdmin />
+        <div className="p-6">
             <div className="max-w-6xl mx-auto">
                 <h2 className="text-2xl font-bold text-slate-800">Historial de acceso</h2>
                 <p className="text-sm text-slate-500 mt-1">
@@ -31,8 +19,8 @@ function SeguridadUSuariosPage() {
                         className="h-12 w-12 rounded-full object-cover border border-blue-200" />
                     <div>
                         <p className="text-sm text-slate-500">Usuario</p>
-                        <h3 className="text-lg font-semibold text-slate-800">Isabella Stanley</h3>
-                        <p className="text-sm text-slate-500">ejemplo@usuario.com</p>
+                        <h3 className="text-lg font-semibold text-slate-800">{usuario?.nombre}</h3>
+                        <p className="text-sm text-slate-500">{usuario?.email}</p>
                     </div>
                 </div>
 
@@ -91,7 +79,7 @@ function SeguridadUSuariosPage() {
                     </div>
                 </div>
             </div>
-        </main>
+        </div>
     </div>
 }
 
