@@ -24,7 +24,7 @@ function CargarTablaAdmin({ listaUsuarios }) {
                     <td className="px-6 py-4 text-right">
                         <button className="px-3 py-1.5 text-xs rounded-xl bg-orange-300/30 text-orange-300 border border-orange-500/30 hover:bg-orange-500/30 transition"
                             onClick={function () {
-                                navigate("/seguridadUsuario", { state: usuario })
+                                navigate("/editarUsuario", { state: usuario })
                             }}
                         >Editar</button>
                     </td>
