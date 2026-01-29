@@ -39,7 +39,7 @@ function EgresosPage() {
                             {/* boton estadistica usuario */}
                             <button
                                 onClick={function () {
-                                    setOpenFiltro(true)
+                                    navigate("/GraficosUsuario")
                                 }}
                                 className="peer focus:border-indigo-400 focus:ring-2 focus:ring-indigo-200 hover:bg-slate-200 rounded-md p-0.5" type="button">
                                 <img

@@ -15,6 +15,8 @@ import EgresosPage from './pages/EgresosPage'
 import EditarEgresoPage from './pages/EditarEgresoPage'
 import RegistroPage from './pages/RegistroPage'
 import EstadisticasPage from './pages/EstadisticasPage'
+import ChatBotPage from './pages/ChatBotPage'
+import GraficosUsuarioPage from './pages/GraficosUsuarioPage'
 
 
 createRoot(document.getElementById('root')).render(
@@ -34,6 +36,8 @@ createRoot(document.getElementById('root')).render(
       <Route path="/restablecer/form" element={<RestablecerContra_3/>} />
       <Route path="/editarEgreso" element={<EditarEgresoPage/>} />
       <Route path="/estadisticas" element={<EstadisticasPage/>} />
+      <Route path="/chatbot" element={<ChatBotPage/>} />
+      <Route path="/GraficosUsuario" element={<GraficosUsuarioPage/>}/>
     </Routes>
   </HashRouter>
   </StrictMode>,
