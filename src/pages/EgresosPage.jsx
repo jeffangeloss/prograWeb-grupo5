@@ -78,7 +78,7 @@ function EgresosPage() {
                     </div>
 
                     <div className="mt-4 overflow-x-auto lg:max-h-[50vh] lg:overflow-y-auto">
-                        <table className="min-w-[720px] text-left text-sm text-slate-700">
+                        <table className="min-w-max text-left text-sm text-slate-700">
                             <thead className="border-b border-slate-200/80 text-xs uppercase tracking-wide text-slate-500">
                                 <tr>
                                     <th className="px-4 py-3">Fecha</th>
