@@ -1,15 +1,18 @@
 import { useState } from "react"
 
-function ContraForm({onContinue}) {
+function ContraForm({ onContinue }) {
 
     const [pass, setPass] = useState("")
     const [passConfirm, setPassConfirm] = useState("")
 
-    function passOnChange(ev){
+    function passOnChange(ev) {
         setPass(ev.target.value)
     }
-    function passConfirmOnChange(ev){
+    function passConfirmOnChange(ev) {
         setPassConfirm(ev.target.value)
+    }
+    function logout() {
+        localStorage.clear()
     }
 
     return <div className="mb-5">
@@ -30,11 +33,12 @@ function ContraForm({onContinue}) {
                 type="password" placeholder="******">
             </input>
             <button
-                onClick={function(){
-                    onContinue(pass, passConfirm)
+                onClick={function () {
+                        logout(),
+                        onContinue(pass, passConfirm)
                 }}
                 className="mt-4 w-min rounded-full bg-indigo-600 px-16 py-3 font-semibold text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-300 active:scale-[0.99] transition"
-                type="submit">Continuar
+                type="submit" >Continuar
             </button>
         </form>
     </div>

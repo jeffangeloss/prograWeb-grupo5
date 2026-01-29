@@ -41,7 +41,7 @@ function InicioSesionPage() {
                 correo: correo,
                 rol: "admin"
             }
-            localStorage.setItem("DATOS:LOGIN", JSON.stringify(datosLogin))
+            localStorage.setItem("DATOS_LOGIN", JSON.stringify(datosLogin))
             navigate("/admin")
             return
         }
@@ -52,7 +52,7 @@ function InicioSesionPage() {
 
             const datosLogin = {
                 ingreso: true,
-                correo: correo,
+                correo: correo, 
                 rol: "user"
             }
             localStorage.setItem("DATOS_LOGIN", JSON.stringify(datosLogin))
