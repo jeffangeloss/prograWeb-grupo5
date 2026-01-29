@@ -1,24 +1,25 @@
-import { useNavigate } from "react-router-dom"
+import { useLocation, useNavigate } from "react-router-dom"
 
 function EditarUsuarioForm() {
     const navigate = useNavigate()
+    const {state: usuario} = useLocation()
 
     return <div className="flex justify-center p-4">
 
         <div className="rounded-2xl shadow-xl p-8 max-w-full">
             <div className="mb-6">
                 <label className="text-slate-700 mb-2 ml-1">Nombre completo</label>
-                <input type="text" placeholder="Nombre del usuario" className="w-full mt-2 px-4 py-2 rounded-xl shadow-md bg-white text-black" />
+                <input type="text" className="w-full mt-2 px-4 py-2 rounded-xl shadow-md bg-white text-black" value={usuario.nombre}/>
             </div>
 
             <div className="mb-6">
                 <label className="text-slate-700 mb-2 ml-1">Correo electrónico</label>
-                <input type="email" placeholder="correo@ejemplo.com" className="w-full mt-2 px-4 py-2 rounded-xl shadow-md bg-white text-black" />
+                <input type="email" placeholder="correo@ejemplo.com" className="w-full mt-2 px-4 py-2 rounded-xl shadow-md bg-white text-black" value={usuario.email}/>
             </div>
 
             <div className="mb-6">
                 <label className="text-slate-700mb-2 ml-1">Rol</label>
-                <select className="w-full mt-2 px-4 py-2 rounded-xl shadow-md bg-white text-black">
+                <select className="w-full mt-2 px-4 py-2 rounded-xl shadow-md bg-white text-black" value={usuario.rol}>
                     <option>Usuario</option>
                     <option>Administrador</option>
                 </select>
@@ -26,8 +27,7 @@ function EditarUsuarioForm() {
 
             <div className="mb-8">
                 <label className="text-slate-700 mb-2 ml-1">Último acceso</label>
-                <input type="text" placeholder="Fecha último acceso" disabled className="w-full mt-2 px-4 py-2 rounded-xl shadow-md bg-gray-300 text-gray-600"
-                />
+                <input type="text" placeholder="Fecha último acceso" disabled className="w-full mt-2 px-4 py-2 rounded-xl shadow-md bg-gray-300 text-gray-600" value={usuario.ultimoAcceso}/>
             </div>
 
             <div className="flex justify-between pt-4">
