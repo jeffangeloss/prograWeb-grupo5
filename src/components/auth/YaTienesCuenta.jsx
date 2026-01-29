@@ -4,7 +4,7 @@ function YaTienesCuenta() {
     const navigate = useNavigate()
     
     return (
-        <div className="absolute top-6 right-6 flex items-center gap-3 text-sm text-slate-600">
+        <div className="flex items-center gap-3 text-sm text-slate-600">
             <span className="hidden sm:inline">¿Ya tienes una cuenta?</span>
             <button
                 onClick={function () { navigate("/sesion") }}
