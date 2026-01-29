@@ -1,10 +1,14 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+
 /* para corroborar correo; “Desde el inicio hasta el final del texto, debe haber algo sin espacios + @ + algo sin espacios + . + algo sin espacios (ej. x@y.z”*/ 
 const EMAIL_REGEX = /^\S+@\S+\.\S+$/;
 /* Para detectar si hay algún caracter especial (no letra no número); marcará true en SIMBOLO_REGEX.test(password) */
 const SIMBOLO_REGEX = /[^A-Za-z0-9]/;
 
 function FormRegistro() {
+    const navigate = useNavigate();
+
     /* El form inicia vacio, var estado*/ 
     const [form, setForm] = useState({
         nombre: "",
@@ -75,17 +79,21 @@ function FormRegistro() {
         }
     }
 
-    function onSubmit(e) {
+    async function onSubmit(e) {
         e.preventDefault();
         setIntentoEnviar(true);
 
         const errs = validar(form, acepta);
         setErrores(errs);
 
-        if (errs.length === 0) {
-            // Por ahora solo demo:
-            console.log("Registro OK:", { ...form, acepta });
-        }
+        // si hay al menos 1 error, NO se crea cuenta ni se redirige
+        if (errs.length > 0) return;
+
+        // "crea" la cuenta (hasta que usemos backend)
+        console.log("Registro OK:", { ...form, acepta });
+
+        // redirige a /user
+        navigate("/user");
     }
 
 
