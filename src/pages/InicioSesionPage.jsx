@@ -34,7 +34,6 @@ function InicioSesionPage() {
         setMensajeVisible(true)
     }
 
-
     return <div className="grid md:grid-cols-[20%_80%]">
         {/*imagen izq*/}
         <div className="h-20 md:h-screen">
@@ -62,15 +61,12 @@ function InicioSesionPage() {
                 </div>
 
                 <LoginForm onLogin={login} />
-
                 {/* mensaje de error */}
                 <Mensaje
                     msg={mensaje}
                     visible={mensajeVisible}
                 />
             </div>
-
-
         </div>
     </div>
 }
