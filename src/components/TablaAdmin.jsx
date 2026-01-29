@@ -4,9 +4,9 @@ import CargarTablaAdmin from "./CargarTablaAdmin"
 function TablaAdmin({ usuarios }) {
     const navigate = useNavigate()
 
-    return <div className="border border-blue-900/50 mt-10 mx-8 rounded-2xl shadow-xl overflow-hidden min-w-full">
-        <table className="text-xs bg-gray-800/50 text-gray-200 text-left min-w-full">
-            <thead className="text-sm text-gray-200 bg-blue-900">
+    return <div className="mt-10 mx-8 rounded-2xl shadow-2xl overflow-hidden w-fit">
+        <table className="text-xs bg-[#7d7493]/25 text-slate-600 text-left">
+            <thead className="text-sm text-white bg-[#4d447e]">
                 <tr>
                     <th className="font-medium px-4 py-3">NOMBRE</th>
                     <th className="font-medium px-4 py-3">EMAIL</th>
@@ -16,11 +16,11 @@ function TablaAdmin({ usuarios }) {
                     <th className="font-medium px-4 py-3"></th>
                 </tr>
             </thead>
-            <tbody className="divide-y divide-blue-900/50 text-gray-200">
+            <tbody className="divide-y divide-slate-200">
                 <CargarTablaAdmin listaUsuarios={usuarios}/>
             </tbody>
         </table>
-        <span className="px-4 py-2 text-xs flex bg-gray-400/20 text-gray-200 justify-end">Usuarios: {usuarios.length}</span>
+        <span className="px-4 py-2 text-xs flex bg-indigo-50 text-[#6c64a6] justify-end">Usuarios: {usuarios.length}</span>
     </div>
 }
 
