@@ -1,5 +1,5 @@
 import NavBarAdmin from "../components/NavBarAdmin";
-import { useLocation } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import { useState } from "react"
 import UserCard from "../components/UserCard"
 import FilterHistorial from "../components/FilterHistorial";
@@ -8,6 +8,7 @@ import TablaHistorial from "../components/TablaHistorial"
 function SeguridadUsuarioPage() {
     const { state: usuario } = useLocation()
     const [accion, setAccion] = useState("TODAS")
+    const navigate = useNavigate()
 
     const logs = [
         {
@@ -19,7 +20,6 @@ function SeguridadUsuarioPage() {
         { navegador: "Edge", fecha: "25/01/2025", hora: "08:10", accion: "LOGIN_FAIL" },
         { navegador: "Firefox", fecha: "24/01/2025", hora: "22:50", accion: "LOGOUT" }
     ]
-
 
     const rol = usuario?.rol || "Usuario"
     const img = rol === "Administrador" ? "/img/admin.jpg" : "/img/user.jpg"
@@ -37,8 +37,13 @@ function SeguridadUsuarioPage() {
         })
     }
 
+    function logout() {
+        localStorage.clear()
+        navigate("/")
+    }
+
     return <div className="bg-slate-50 text-slate-800 min-h-screen">
-        <NavBarAdmin />
+        <NavBarAdmin onLogout={logout} />
         <div className="p-6">
             <div className="max-w-6xl mx-auto">
                 <h2 className="text-2xl font-bold text-slate-800">Historial de acceso</h2>

@@ -103,9 +103,13 @@ function GraficosUsuarioPage() {
         },
     };
 
+    function logout() {
+        localStorage.clear()
+        navigate("/")
+    }
 
     return <div className="h-screen bg-slate-50 text-slate-800 overflow-x-hidden">
-        <NavBarUser />
+        <NavBarUser onLogout={logout} />
 
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
 

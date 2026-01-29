@@ -48,7 +48,6 @@ function LoginForm({ onLogin }) {
             >
                 Iniciar sesión
             </button>
-
         </form>
     </div >
 }
