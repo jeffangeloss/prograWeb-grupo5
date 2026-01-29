@@ -13,7 +13,7 @@ import {
 
 import { Bar, Doughnut, Line } from "react-chartjs-2";
 import NavBarUser from "../components/NavBarUser";
-import { Navigate } from "react-router-dom";
+import { Navigate, useNavigate } from "react-router-dom";
 
 
 ChartJS.register(
@@ -30,6 +30,7 @@ ChartJS.register(
 
 
 function GraficosUsuarioPage() {
+    const navigate = useNavigate()
     const data = {
         labels: ["Ene", "Feb", "Mar", "Abr", "May", "Jun"],
         datasets: [{
@@ -131,7 +132,7 @@ function GraficosUsuarioPage() {
                 <button
                     type="button"
                     className="w-min sm:w-auto px-6 py-2.5 rounded-full border border-blue-900/30 text-blue-900 hover:bg-blue-900/10 transition"
-                    onClick={function () { Navigate("/user") }}>Regresar
+                    onClick={function () { navigate("/user") }}>Regresar
                 </button>
 
             </div>
