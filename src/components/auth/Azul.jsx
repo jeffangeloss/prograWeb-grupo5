@@ -1,7 +1,7 @@
 function Azul() {
     return (
         <section
-            className="hidden md:block"
+            className="h-20 md:h-screen w-full"
             style={{
                 backgroundImage: "url('/img/azul.png')",
                 backgroundSize: "cover",
