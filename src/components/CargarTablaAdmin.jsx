@@ -5,6 +5,9 @@ function CargarTablaAdmin({ listaUsuarios }) {
 
     return (
         listaUsuarios.map(function (usuario) {
+            if (!usuario) {
+                return null
+            }
             return (
                 <tr key={usuario.id} className="hover:bg-gray-500/20 transition">
                     <td className="px-4 py-4">{usuario.nombre}</td>
