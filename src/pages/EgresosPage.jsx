@@ -99,13 +99,16 @@ function EgresosPage() {
                                     <td className="px-4 py-3 text-slate-500">
                                         Hoy
                                     </td>
-                                    <td className="px-4 py-3 text-center">
+                                    <td className="px-4 py-3 text-center flex gap-3">
                                         <button className="rounded-full border border-slate-200 px-3 py-1 text-xs font-semibold text-slate-700 hover:bg-slate-100 transition"
                                             onClick={function () {
                                                 navigate("/editarEgreso")
                                             }}>
                                             Editar egreso
                                         </button>
+
+                                        <button className="rounded-full border border-red-200 bg-red-50 px-3 py-1 text-xs font-medium text-red-600 hover:bg-red-100 hover:border-red-300 transition"
+                                        >🗑️</button>
                                     </td>
                                 </tr>
                             </tbody>
