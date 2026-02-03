@@ -25,38 +25,69 @@ function InicioSesionPage() {
         }
     }, [])
 
-    function login(correo, password) {
+    async function loginHTTP(correo, password) {
+        const resp = await fetch("http://127.0.0.1:8000/login", {
+            method: "post",
+            body: JSON.stringify({
+                correo: correo,
+                password: password
+            }),
+            headers: {
+                "content-type": "application/json"
+            }
+        })
+
+        if (resp.status != 200) {
+            // Error en el login
+            const data = await resp.json()
+            console.error("ERROR:", data)
+            return {
+                valido: false,
+                error: data.detail || "Error en login"
+            }
+        }
+
+        const data = await resp.json()
+        if (data.msg == "Acceso concedido") {
+            return {
+                valido: true,
+                rol: data.rol // se obtiene admin o usuario
+            }
+        } else {
+            console.error(data.detail)
+            return {
+                valido: false,
+                error: data.detail || "Respuesta inesperada del servidor"
+            }
+        }
+    }
+
+    async function login(correo, password) {
         if (!correo || !password) {
             setMensaje("Debe completar todos los campos para continuar")
             setMensajeVisible(true)
             return
         }
 
-        if (correo === "ejemplo@admin.com" && password === "admin1234") {
+        const resultadoLogin = await loginHTTP(correo, password)
+        
+        if (resultadoLogin.valido) {
             setMensaje("")
             setMensajeVisible(false)
 
             const datosLogin = {
                 ingreso: true,
                 correo: correo,
-                rol: "admin"
+                rol: resultadoLogin.rol,
+                cantidadIntentos: 0
             }
             localStorage.setItem("DATOS_LOGIN", JSON.stringify(datosLogin))
-            navigate("/admin")
-            return
-        }
 
-        if (correo === "ejemplo@user.com" && password === "user1234") {
-            setMensaje("")
-            setMensajeVisible(false)
-
-            const datosLogin = {
-                ingreso: true,
-                correo: correo, 
-                rol: "user"
+            if (resultadoLogin.rol == "admin") {
+                navigate("/admin")
+            } else {
+                navigate("/user")
             }
-            localStorage.setItem("DATOS_LOGIN", JSON.stringify(datosLogin))
-            navigate("/user")
             return
         }
 
@@ -72,7 +103,6 @@ function InicioSesionPage() {
             localStorage.setItem("DATOS_LOGIN", JSON.stringify(login))
         }
     }
-
 
     return <div className="min-h-screen bg-white text-slate-800">
         <div className="md:min-h-screen grid grid-cols-1 md:grid-cols-[20%_80%]">
