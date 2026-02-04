@@ -1,13 +1,7 @@
 import { useNavigate} from "react-router-dom"
 
-function NavBarUser() {
+function NavBarUser({onLogout}) {
     const navigate = useNavigate()
-
-    function cerrarSesion() {
-        const datosLogin = { ingreso: false }
-        localStorage.setItem("DATOS_LOGIN", JSON.stringify(datosLogin))
-        navigate("/")
-    }
     function cambiarContraseña() {
         navigate("/restablecer")
     }
@@ -31,7 +25,9 @@ function NavBarUser() {
             <button
                 type="button"
                 className="w-full sm:w-auto px-6 py-2.5 rounded-full border border-blue-900/30 text-blue-900 hover:bg-blue-900/10 transition"
-                onClick={function () { cerrarSesion() }}>Cerrar sesión
+                onClick={function (){
+                    onLogout()
+                }}>Cerrar sesión
             </button>
         </div>
     </div>

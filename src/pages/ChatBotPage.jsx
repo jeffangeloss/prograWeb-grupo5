@@ -4,9 +4,14 @@ import NavBarUser from "../components/NavBarUser"
 function ChatBotPage() {
     const navigate = useNavigate()
 
+    function logout() {
+        localStorage.clear()
+        navigate("/")
+    }
+
     return (
         <div className="bg-slate-50 min-h-screen text-slate-800">
-            <NavBarUser />
+            <NavBarUser onLogout={logout}/>
 
             <main className="p-4 flex justify-center">
                 <div className="w-full max-w-3xl">

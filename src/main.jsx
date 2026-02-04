@@ -17,13 +17,15 @@ import RegistroPage from './pages/RegistroPage'
 import EstadisticasPage from './pages/EstadisticasPage'
 import ChatBotPage from './pages/ChatBotPage'
 import GraficosUsuarioPage from './pages/GraficosUsuarioPage'
+import LandingPage from './pages/LandingPage'
 
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>
   <HashRouter>
     <Routes>
-      <Route path="/" element={<InicioSesionPage />} />
+      <Route path="/" element={<LandingPage />} />
+      <Route path="/sesion" element={<InicioSesionPage />} />
       <Route path="/admin" element={<AdminPage />} />
       <Route path="/user" element={<EgresosPage />} />
       <Route path="/registro" element={<RegistroPage />} />

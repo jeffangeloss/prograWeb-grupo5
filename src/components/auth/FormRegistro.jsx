@@ -1,6 +1,104 @@
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+
+/* para corroborar correo; “Desde el inicio hasta el final del texto, debe haber algo sin espacios + @ + algo sin espacios + . + algo sin espacios (ej. x@y.z”*/ 
+const EMAIL_REGEX = /^\S+@\S+\.\S+$/;
+/* Para detectar si hay algún caracter especial (no letra no número); marcará true en SIMBOLO_REGEX.test(password) */
+const SIMBOLO_REGEX = /[^A-Za-z0-9]/;
+
 function FormRegistro() {
+    const navigate = useNavigate();
+
+    /* El form inicia vacio, var estado*/ 
+    const [form, setForm] = useState({
+        nombre: "",
+        apellido: "",
+        correo: "",
+        password: "",
+        confirm: "",
+    });
+    /* Para el checkbox de términos y condiciones - falso hasta ser marcado*/ 
+    const [acepta, setAcepta] = useState(false);
+    /* Para los errores - inicia como array vacío */ 
+    const [errores, setErrores] = useState([]);
+    /* Para que los errores solo aparezcan cuando se intente enviar (no todo el tiempo)*/ 
+    const [intentoEnviar, setIntentoEnviar] = useState(false);
+
+    function validar(valores, aceptaTerminos) {
+        const errs = [];
+
+        const faltanCampos =
+            !valores.nombre ||
+            !valores.apellido ||
+            !valores.correo ||
+            !valores.password ||
+            !valores.confirm;
+
+        if (faltanCampos) {
+            errs.push("Debe completar todos los campos para continuar");
+        }
+        if (valores.correo && !EMAIL_REGEX.test(valores.correo)) {
+            errs.push("El correo ingresado es inválido");
+            /* si el correo no tiene el formato declarado en EMAIL_REGEX */ 
+        }
+        if (valores.password) {
+            const min8 = valores.password.length >= 8;
+            const tieneSimbolo = SIMBOLO_REGEX.test(valores.password);
+
+            if (!min8 || !tieneSimbolo) {
+                errs.push(
+                    "La contraseña debe tener mínimo 8 caracteres y un símbolo"
+                );
+            }
+        }
+        if (!aceptaTerminos) errs.push("Debe aceptar los términos y condiciones.");
+        if (valores.password && valores.confirm && valores.password !== valores.confirm) {
+            errs.push("Las contraseñas no coinciden");
+        }
+        return errs;
+    }
+
+    function onChange(e) {
+        const { name, value } = e.target;
+
+        const siguiente = { ...form, [name]: value };
+        setForm(siguiente);
+
+        // Si ya intentó enviar, revalidamos para que se actualicen mensajes al escribir
+        if (intentoEnviar) {
+            setErrores(validar(siguiente, acepta));
+        }
+    }
+
+    function onChangeAcepta(e) {
+        const checked = e.target.checked;
+        setAcepta(checked);
+
+        if (intentoEnviar) {
+            setErrores(validar(form, checked));
+        }
+    }
+
+    async function onSubmit(e) {
+        e.preventDefault();
+        setIntentoEnviar(true);
+
+        const errs = validar(form, acepta);
+        setErrores(errs);
+
+        // si hay al menos 1 error, NO se crea cuenta ni se redirige
+        if (errs.length > 0) return;
+
+        // "crea" la cuenta (hasta que usemos backend)
+        console.log("Registro OK:", { ...form, acepta });
+
+        // redirige a /user
+        navigate("/user");
+    }
+
+
     return (
-        <form className="space-y-5"> {/* <!-- como un margin automatico para cada seccion --> */}
+        <form className="space-y-5" onSubmit={onSubmit}> {/* <!-- como un margin automatico para cada seccion --> */}
             {/* <!-- GRID PRINCIPAL --> */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 {/* <!-- NOMBRE --> */}
@@ -12,6 +110,8 @@ function FormRegistro() {
                         type="text"
                         placeholder="Nombre"
                         className="w-full rounded-md border border-slate-200 bg-white px-3 py-2 text-slate-700 placeholder:text-slate-400 outline-none shadow-sm focus:border-[#bb88ee] focus:ring-4 focus:ring-[#bb88ee] focus:ring-offset-2 focus:ring-offset-white"
+                        value={form.nombre}
+                        onChange={onChange}
                     />
                 </div>
 
@@ -24,6 +124,8 @@ function FormRegistro() {
                         type="text"
                         placeholder="Apellido"
                         className="w-full rounded-md border border-slate-200 bg-white px-3 py-2 text-slate-700 placeholder:text-slate-400 outline-none shadow-sm focus:border-[#bb88ee] focus:ring-4 focus:ring-[#bb88ee] focus:ring-offset-2 focus:ring-offset-white"
+                        value={form.apellido}
+                        onChange={onChange}
                     />
                 </div>
 
@@ -36,6 +138,8 @@ function FormRegistro() {
                         type="email"
                         placeholder="hello@reallygreatsite.com"
                         className="w-full rounded-md border border-slate-200 bg-white px-3 py-2 text-slate-700 placeholder:text-slate-400 outline-none shadow-sm focus:border-[#bb88ee] focus:ring-4 focus:ring-[#bb88ee] focus:ring-offset-2 focus:ring-offset-white"
+                        value={form.correo}
+                        onChange={onChange}
                     />
                 </div>
 
@@ -48,6 +152,8 @@ function FormRegistro() {
                         type="password"
                         placeholder="••••••••"
                         className="w-full rounded-md border border-slate-200 bg-white px-3 py-2 text-slate-700 placeholder:text-slate-400 outline-none shadow-sm focus:border-[#bb88ee] focus:ring-4 focus:ring-[#bb88ee] focus:ring-offset-2 focus:ring-offset-white"
+                        value={form.password}
+                        onChange={onChange}
                     />
                 </div>
 
@@ -60,6 +166,8 @@ function FormRegistro() {
                         type="password"
                         placeholder="••••••••"
                         className="w-full rounded-md border border-slate-200 bg-white px-3 py-2 text-slate-700 placeholder:text-slate-400 outline-none shadow-sm focus:border-[#bb88ee] focus:ring-4 focus:ring-[#bb88ee] focus:ring-offset-2 focus:ring-offset-white"
+                        value={form.confirm}
+                        onChange={onChange}
                     />
                 </div>
             </div>
@@ -68,6 +176,8 @@ function FormRegistro() {
             <label className="flex items-center gap-2 text-sm text-slate-600">
                 <input
                     type="checkbox"
+                    checked={acepta}
+                    onChange={onChangeAcepta}
                     className="h-4 w-4 rounded border-slate-300 text-indigo-600 focus:ring-indigo-200"
                 />
                 <span>Acepto los términos y condiciones.</span>
@@ -82,11 +192,13 @@ function FormRegistro() {
             </button>
 
             {/* <!-- ERRORES --> */}
-            <div className="pt-2 space-y-1 text-sm text-red-500">
-                <p>Debe completar todos los campos para continuar</p>
-                <p>El correo ingresado es inválido</p>
-                <p>La contraseña debe tener mínimo 8 caracteres y un símbolo (quizá mayúscula o número)</p>
-            </div>
+            {errores.length > 0 && (
+                <div className="pt-2 space-y-1 text-sm text-red-500">
+                    {errores.map((msg) => (
+                        <p key={msg}>{msg}</p>
+                    ))}
+                </div>
+            )}
         </form>
     )
 }

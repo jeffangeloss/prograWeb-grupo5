@@ -1,4 +1,5 @@
 import NavBarAdmin from "../components/NavBarAdmin";
+import { useNavigate } from "react-router-dom";
 
 import {
   Chart as ChartJS,
@@ -19,10 +20,12 @@ ChartJS.register(
 );
 
 function EstadisticasPage() {
+  const navigate = useNavigate()
 
   const data = {
     labels: ["Ene", "Feb", "Mar", "Abr", "May", "Jun"],
     datasets: [{
+      label: "Usuarios nuevos mensuales",
       data: [50, 80, 65, 120, 90, 140],
       borderColor: "#3b82f6",
       backgroundColor: "rgba(59,130,246,0.2)",
@@ -31,9 +34,14 @@ function EstadisticasPage() {
     }]
   };
 
+  function logout() {
+    localStorage.clear()
+    navigate("/")
+  }
+
   return (
     <div className="bg-cover bg-center min-h-screen">
-      <NavBarAdmin />
+      <NavBarAdmin onLogout={logout}/>
       <div className="px-5 py-5 flex flex-col items-center">
         <h1 className="text-2xl font-extrabold tracking-tight text-slate-700 mb-3">
           Total de usuarios registrados
