@@ -2,11 +2,10 @@ function FiltroPopUp({ visible, onClose }) {
 
         return visible ?
                 <div
-                        className="fixed inset-0 z-50 flex items-center justify-end mr-10"
+                        className="absolute top-full mt-2 right-0 z-50 items-center justify-end hidden peer-focus:block"
                         onClick={onClose}>
                         <div
-                                onClick={(e) => e.stopPropagation()}
-                                className="right-0 top-10 z-50 w-72 rounded-xl bg-white p-4 shadow-xl border border-slate-200">
+                                className="top-10 z-50 w-72 rounded-xl bg-white p-4 shadow-xl border border-slate-200">
                                 <div className="space-y-4">
                                         <label className="text-sm font-medium text-slate-700">Categoría</label>
                                         <select className="w-full rounded-md border border-slate-200 bg-white px-3 py-2 text-slate-700 shadow-sm focus:border-indigo-400 focus:ring-2 focus:ring-indigo-200">

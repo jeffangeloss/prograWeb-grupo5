@@ -57,7 +57,7 @@ function EgresosPage() {
                                 onClick={function () {
                                     setOpenFiltro(true)
                                 }}
-                                className="peer focus:border-indigo-400 focus:ring-2 focus:ring-indigo-200 hover:bg-slate-200 rounded-md p-0.5" type="button">
+                                className="relative peer focus:border-indigo-400 focus:ring-2 focus:ring-indigo-200 hover:bg-slate-200 rounded-md p-0.5" type="button">
                                 <img
                                     className="w-7"
                                     src="https://cdn-icons-png.flaticon.com/256/11462/11462900.png" alt="Filtro"
