@@ -67,22 +67,15 @@ function EditarEgresoPage() {
 
                     <button
                         type="submit"
-                        className="mt-2 rounded-full bg-blue-500 py-2 text-sm font-semibold text-white hover:bg-blue-600 transition"
-                    >
+                        className="mt-2 rounded-full bg-blue-500 py-2 text-sm font-semibold text-white hover:bg-blue-600 transition">
                         Guardar cambios
-                    </button>
-
-                    <button
-                        type="button"
-                        className="mt-2 rounded-full bg-red-500 py-2 text-sm font-semibold text-white hover:bg-red-600 transition">Eliminar
                     </button>
 
                     <button
                         type="button"
                         className="mt-2 text-sm text-slate-500 underline text-center hover:text-slate-700"
                         onClick={function () {
-                            navigate("/user")
-                        }}>
+                            navigate("/user") }}>
                         Cancelar
                     </button>
                 </form>
