@@ -3,11 +3,13 @@ import EgresosForm from "../components/EgresosForm"
 import NavBarUser from "../components/NavBarUser"
 import { useNavigate } from "react-router-dom"
 import FiltroPopUp from "../components/FiltroPopUp"
+import EditarEgresoModal from "../components/EditarEgresoModal"
 
 function EgresosPage() {
 
     const navigate = useNavigate()
     const [openFiltro, setOpenFiltro] = useState(false)
+    const [openEditar, setOpenEditar] = useState(false)
 
     function logout() {
         localStorage.clear()
@@ -102,13 +104,18 @@ function EgresosPage() {
                                     <td className="px-4 py-3 text-center flex gap-3">
                                         <button className="rounded-full border border-slate-200 px-3 py-1 text-xs font-semibold text-slate-700 hover:bg-slate-100 transition"
                                             onClick={function () {
-                                                navigate("/editarEgreso")
+                                                setOpenEditar(true)
                                             }}>
                                             Editar egreso
                                         </button>
 
-                                        <button className="rounded-full border border-red-200 bg-red-50 px-3 py-1 text-xs font-medium text-red-600 hover:bg-red-100 hover:border-red-300 transition"
-                                        >🗑️</button>
+                                        <button className="rounded-full border border-red-200 bg-red-50 px-3 py-1 text-xs font-medium text-red-600 hover:bg-red-100 hover:border-red-300 transition">
+                                            <img
+                                                src="/img/trashbin.png"
+                                                alt="Eliminar"
+                                                className="w-4 h-4"
+                                            />
+                                        </button>
                                     </td>
                                 </tr>
                             </tbody>
@@ -117,6 +124,14 @@ function EgresosPage() {
                 </section>
             </div>
         </main>
+
+        {openEditar && (
+            <EditarEgresoModal onClose={function () {
+                setOpenEditar(false)
+            }}
+            />
+        )}
+
         <button type="button"
             className="fixed bottom-4 left-4 z-50 bg-indigo-600 text-white font-semibold px-4 py-2 rounded-full shadow-lg hover:bg-indigo-700"
             onClick={function () {
