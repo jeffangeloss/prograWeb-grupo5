@@ -12,17 +12,17 @@ function AdminPage() {
 
     const usuarios = [
         {
-            id: 1,
+            id: 100,
             nombre: "Isabella Stanley",
             email: "ejemplo@usuario.com",
-            rol: "Usuario",
+            rol: "User",
             ultimoAcceso: "25/01/2025"
         },
         {
-            id: 2,
+            id: 200,
             nombre: "Jose Blake",
             email: "ejemplo@admin.com",
-            rol: "Administrador",
+            rol: "Admin",
             ultimoAcceso: "21/01/2025"
         }
     ]

@@ -12,21 +12,21 @@ function CrearUsuarioForm() {
 
     function formatearUsuarioNuevo() {
         const usuarioNuevo = {
-            full_name: nombre,
+            nombre: nombre,
             email: email,
             password: contra,
-            type: rol
+            type: parseInt(rol)
         }
         return usuarioNuevo
     }
 
     async function enviarUsuarioNuevo() {
-        if (contra != confirmarContra) {
+        if (contra !== confirmarContra) {
             alert("Las contraseñas no coinciden.")
             return
         }
+
         const usuarioNuevo = formatearUsuarioNuevo()
-        console.log(usuarioNuevo)
 
         const URL = "http://127.0.0.1:8000/admin"
         const response = await fetch(URL,
