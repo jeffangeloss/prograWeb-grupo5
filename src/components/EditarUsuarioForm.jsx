@@ -4,18 +4,18 @@ import { useLocation, useNavigate } from "react-router-dom"
 function EditarUsuarioForm() {
     const navigate = useNavigate()
     const { state: usuario } = useLocation()
-    const [nombre, setNombre] = useState(usuario.nombre)
+    const [nombre, setNombre] = useState(usuario.full_name)
     const [email, setEmail] = useState(usuario.email)
-    const [rol, setRol] = useState(usuario.rol == "admin" ? "2" : "1")
+    const [rol, setRol] = useState(usuario.role == "admin" ? "2" : "1")
 
     async function guardarCambios() {
         const usuarioEditado = {
-            nombre: nombre,
+            full_name: nombre,
             email: email,
             type: parseInt(rol)
         }
 
-        const URL = `http://127.0.0.1:8000/admin/${usuario.id}`
+        const URL = `http://127.0.0.1:8000/admin/${usuario.id}/`
         const response = await fetch(URL, {
             method: "PATCH",
             body: JSON.stringify(usuarioEditado),
