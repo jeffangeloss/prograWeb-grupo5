@@ -28,7 +28,7 @@ function CrearUsuarioForm() {
 
         const usuarioNuevo = formatearUsuarioNuevo()
 
-        const URL = "http://127.0.0.1:8000/admin"
+        const URL = "http://127.0.0.1:8000/admin/"
         const response = await fetch(URL,
             {
                 method: "PUT",

@@ -12,8 +12,8 @@ function AdminPage() {
 
     async function cargarListaUsuarios(rol) {
         let filtroRol = ""
-        if (rol == 1) filtroRol = "user_type=1"
-        if (rol == 2) filtroRol = "user_type=2"
+        if (rol == "1") filtroRol = "user_type=1"
+        if (rol == "2") filtroRol = "user_type=2"
 
         const URL = "http://127.0.0.1:8000/admin/?" + filtroRol
         const resp = await fetch(URL,
@@ -34,6 +34,29 @@ function AdminPage() {
             }
         }
         setListaUsuarios(data.data)
+    }
+
+    async function borrarUsuario(user_id) {
+        if (!window.confirm("¿Estás seguro de eliminar este usuario?")) return;
+
+        const URL = `http://127.0.0.1:8000/admin/${user_id}/`
+        const response = await fetch(URL, {
+            method: "DELETE",
+            headers: {
+                "content-type": "application/json",
+                "x-token": localStorage.getItem("TOKEN")
+            }
+        })
+
+        const data = await response.json()
+
+        if (!response.ok) {
+            alert("Error al borrar: " + data.detail)
+            return
+        }
+
+        alert("Usuario borrado correctamente")
+        cargarListaUsuarios()
     }
 
     function logout() {
@@ -62,7 +85,7 @@ function AdminPage() {
                         onClick={function () { navigate("/crearUsuario") }}>Añadir Usuario</button>
                 </div>
                 <FiltradoAdmin rolSeleccionado={rolSeleccionado} onFiltro={onFiltro} />
-                <TablaAdmin usuarios={listaUsuarios} />
+                <TablaAdmin usuarios={listaUsuarios} borrarUsuario={borrarUsuario} />
             </div>
         </div>
     </div>
