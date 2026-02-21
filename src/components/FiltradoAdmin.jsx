@@ -4,8 +4,8 @@ function FiltradoAdmin({ rolSeleccionado, onFiltro }) {
         <select className="py-1 bg-white sm:w-48 px-4 rounded-xl shadow-xl"
             value={rolSeleccionado} onChange={function (ev) { onFiltro(ev.target.value) }}>
             <option value="">Todos</option>
-            <option value="Usuario">Usuario</option>
-            <option value="Administrador">Administrador</option>
+            <option value="1">Usuario</option>
+            <option value="2">Administrador</option>
         </select>
     </div>
 }

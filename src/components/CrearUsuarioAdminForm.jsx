@@ -12,7 +12,7 @@ function CrearUsuarioForm() {
 
     function formatearUsuarioNuevo() {
         const usuarioNuevo = {
-            nombre: nombre,
+            full_name: nombre,
             email: email,
             password: contra,
             type: parseInt(rol)
