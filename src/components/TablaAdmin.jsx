@@ -1,8 +1,6 @@
-import { useNavigate } from "react-router-dom"
 import CargarTablaAdmin from "./CargarTablaAdmin"
 
 function TablaAdmin({ usuarios }) {
-    const navigate = useNavigate()
 
     return <div className="mt-10 mx-4">
         <div className="overflow-x-auto scroll rounded-lr-2xl rounded-t-2xl shadow-2xl">
