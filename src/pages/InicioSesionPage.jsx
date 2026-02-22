@@ -51,7 +51,10 @@ function InicioSesionPage() {
         if (data.msg == "Acceso concedido") {
             return {
                 valido: true,
-                rol: data.rol // se obtiene admin o usuario
+                rol: data.rol, // se obtiene admin o usuario
+                token: data.access_token || data.token || "",
+                nombre: data.name || "",
+                correo: data.email || correo,
             }
         } else {
             console.error(data.detail)
@@ -77,11 +80,16 @@ function InicioSesionPage() {
 
             const datosLogin = {
                 ingreso: true,
-                correo: correo,
+                correo: resultadoLogin.correo || correo,
+                nombre: resultadoLogin.nombre || "",
                 rol: resultadoLogin.rol,
-                cantidadIntentos: 0
+                token: resultadoLogin.token || "",
+                cantidadIntentos: 0,
             }
             localStorage.setItem("DATOS_LOGIN", JSON.stringify(datosLogin))
+            if (resultadoLogin.token) {
+                localStorage.setItem("TOKEN", resultadoLogin.token)
+            }
 
             if (resultadoLogin.rol == "admin") {
                 navigate("/admin")
