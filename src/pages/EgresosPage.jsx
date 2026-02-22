@@ -1,23 +1,146 @@
-import { useState } from "react"
+import { useEffect, useMemo, useState } from "react"
 import EgresosForm from "../components/EgresosForm"
 import NavBarUser from "../components/NavBarUser"
 import { useNavigate } from "react-router-dom"
 import FiltroPopUp from "../components/FiltroPopUp"
-import EditarEgresoModal from "../components/EditarEgresoModal"
+
+const API_URL = "http://127.0.0.1:8000"
 
 function EgresosPage() {
     const navigate = useNavigate()
     const [openCrear, setOpenCrear] = useState(false)
     const [openFiltro, setOpenFiltro] = useState(false)
-    const [openEditar, setOpenEditar] = useState(false)
+    const [egresos, setEgresos] = useState([])
+    const [cargando, setCargando] = useState(true)
+    const [errorApi, setErrorApi] = useState("")
+
+    function obtenerSesion() {
+        try {
+            const raw = localStorage.getItem("DATOS_LOGIN")
+            return raw ? JSON.parse(raw) : null
+        } catch {
+            return null
+        }
+    }
+
+    function obtenerToken() {
+        const sesion = obtenerSesion()
+        return sesion?.token || ""
+    }
 
     function logout() {
         localStorage.clear()
         navigate("/")
     }
 
-    function handleCrearEgreso() {
-        setOpenCrear(false)
+    function formatearFecha(isoDate) {
+        const parsed = new Date(isoDate)
+        if (Number.isNaN(parsed.getTime())) {
+            return "-"
+        }
+        return parsed.toLocaleDateString("es-PE")
+    }
+
+    function formatearMonto(value) {
+        const monto = Number(value)
+        if (!Number.isFinite(monto)) {
+            return "S/ 0.00"
+        }
+        return `S/ ${monto.toFixed(2)}`
+    }
+
+    const totalRegistrado = useMemo(function () {
+        return egresos.reduce(function (acc, item) {
+            return acc + Number(item.amount || 0)
+        }, 0)
+    }, [egresos])
+
+    async function cargarEgresos() {
+        const token = obtenerToken()
+        if (!token) {
+            setCargando(false)
+            setEgresos([])
+            setErrorApi("No hay sesion activa. Inicia sesion nuevamente.")
+            return
+        }
+
+        setCargando(true)
+        setErrorApi("")
+
+        try {
+            const resp = await fetch(`${API_URL}/expenses`, {
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                },
+            })
+
+            const data = await resp.json().catch(function () {
+                return {}
+            })
+
+            if (!resp.ok) {
+                setEgresos([])
+                setErrorApi(data.detail || "No se pudieron cargar los egresos")
+                return
+            }
+
+            setEgresos(Array.isArray(data.data) ? data.data : [])
+        } catch {
+            setEgresos([])
+            setErrorApi("No se pudo conectar con el backend")
+        } finally {
+            setCargando(false)
+        }
+    }
+
+    useEffect(function () {
+        cargarEgresos()
+    }, [])
+
+    async function handleCrearEgreso(fecha, monto, categoria, descripcion) {
+        const token = obtenerToken()
+        if (!token) {
+            return {
+                ok: false,
+                error: "Sesion expirada. Inicia sesion nuevamente.",
+            }
+        }
+
+        try {
+            const resp = await fetch(`${API_URL}/expenses`, {
+                method: "POST",
+                headers: {
+                    "content-type": "application/json",
+                    Authorization: `Bearer ${token}`,
+                },
+                body: JSON.stringify({
+                    amount: Number(monto),
+                    expense_date: fecha,
+                    category_name: categoria,
+                    description: descripcion,
+                }),
+            })
+
+            const data = await resp.json().catch(function () {
+                return {}
+            })
+
+            if (!resp.ok) {
+                return {
+                    ok: false,
+                    error: data.detail || "No se pudo registrar el egreso",
+                }
+            }
+
+            setOpenCrear(false)
+            await cargarEgresos()
+            return { ok: true }
+        } catch {
+            return {
+                ok: false,
+                error: "No se pudo conectar con el backend",
+            }
+        }
     }
 
     return (
@@ -30,7 +153,7 @@ function EgresosPage() {
                         <div className="flex flex-col gap-1 sm:flex-row sm:items-center sm:justify-between">
                             <div>
                                 <h2 className="text-xl font-extrabold tracking-tight text-slate-700">MIS EGRESOS</h2>
-                                <p className="text-sm text-slate-500">Total registrado: S/ 85.50</p>
+                                <p className="text-sm text-slate-500">Total registrado: {formatearMonto(totalRegistrado)}</p>
                             </div>
 
                             <div className="flex flex-wrap items-center gap-2 mt-3 sm:mt-0 relative">
@@ -39,9 +162,10 @@ function EgresosPage() {
                                     onClick={function () {
                                         setOpenCrear(true)
                                     }}
-                                    className="rounded-full bg-emerald-600 px-4 py-2 text-sm font-semibold text-white shadow-sm transition hover:bg-emerald-700 focus:outline-none focus:ring-2 focus:ring-emerald-300"
+                                    className="inline-flex items-center gap-2 rounded-full bg-emerald-600 px-5 py-2.5 text-base font-bold text-white shadow-sm transition hover:bg-emerald-700 focus:outline-none focus:ring-2 focus:ring-emerald-300"
                                 >
-                                    Crear egreso
+                                    <span className="text-lg leading-none">+</span>
+                                    <span>Crear gasto</span>
                                 </button>
 
                                 {/* boton estadistica usuario */}
@@ -82,10 +206,16 @@ function EgresosPage() {
                                 />
 
                                 <span className="rounded-full border border-slate-200 bg-white/70 px-3 py-1 text-xs font-semibold text-slate-700">
-                                    1 registro
+                                    {egresos.length} {egresos.length === 1 ? "registro" : "registros"}
                                 </span>
                             </div>
                         </div>
+
+                        {errorApi && (
+                            <p className="mt-3 rounded-md border border-red-200 bg-red-50 px-3 py-2 text-sm text-red-700">
+                                {errorApi}
+                            </p>
+                        )}
 
                         <div className="mt-5 rounded-xl border border-slate-200 bg-white overflow-x-auto">
                             <table className="w-full min-w-[860px] table-fixed text-left text-base text-slate-700">
@@ -99,32 +229,50 @@ function EgresosPage() {
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <tr className="border-b border-slate-100">
-                                        <td className="px-4 py-5">27/01/2026</td>
-                                        <td className="px-4 py-5">Alimentacion</td>
-                                        <td className="px-4 py-5">Compra supermercado</td>
-                                        <td className="px-4 py-5 text-right font-semibold">S/ 85.50</td>
-                                        <td className="px-4 py-5">
-                                            <div className="flex items-center justify-end gap-3">
-                                                <button
-                                                    className="rounded-full border border-slate-200 px-4 py-2 text-sm font-semibold text-slate-700 hover:bg-slate-100 transition"
-                                                    onClick={function () {
-                                                        navigate("/editarEgreso")
-                                                    }}
-                                                >
-                                                    Editar egreso
-                                                </button>
+                                    {cargando ? (
+                                        <tr className="border-b border-slate-100">
+                                            <td className="px-4 py-5 text-slate-500" colSpan={5}>
+                                                Cargando egresos...
+                                            </td>
+                                        </tr>
+                                    ) : egresos.length === 0 ? (
+                                        <tr className="border-b border-slate-100">
+                                            <td className="px-4 py-5 text-slate-500" colSpan={5}>
+                                                Aun no tienes egresos registrados.
+                                            </td>
+                                        </tr>
+                                    ) : (
+                                        egresos.map(function (egreso) {
+                                            return (
+                                                <tr key={egreso.id} className="border-b border-slate-100">
+                                                    <td className="px-4 py-5">{formatearFecha(egreso.expense_date)}</td>
+                                                    <td className="px-4 py-5">{egreso.category_name || "-"}</td>
+                                                    <td className="px-4 py-5">{egreso.description || "-"}</td>
+                                                    <td className="px-4 py-5 text-right font-semibold">{formatearMonto(egreso.amount)}</td>
+                                                    <td className="px-4 py-5">
+                                                        <div className="flex items-center justify-end gap-3">
+                                                            <button
+                                                                className="rounded-full border border-slate-200 px-4 py-2 text-sm font-semibold text-slate-700 hover:bg-slate-100 transition"
+                                                                onClick={function () {
+                                                                    navigate("/editarEgreso")
+                                                                }}
+                                                            >
+                                                                Editar egreso
+                                                            </button>
 
-                                                <button
-                                                    type="button"
-                                                    aria-label="Eliminar egreso"
-                                                    className="rounded-full border border-red-200 bg-red-50 px-3 py-2 text-sm font-medium text-red-600 hover:bg-red-100 hover:border-red-300 transition"
-                                                >
-                                                    <img src="/img/trashbin.png" alt="Eliminar" className="w-4 h-4" />
-                                                </button>
-                                            </div>
-                                        </td>
-                                    </tr>
+                                                            <button
+                                                                type="button"
+                                                                aria-label="Eliminar egreso"
+                                                                className="rounded-full border border-red-200 bg-red-50 px-3 py-2 text-sm font-medium text-red-600 hover:bg-red-100 hover:border-red-300 transition"
+                                                            >
+                                                                <img src="/img/trashbin.png" alt="Eliminar" className="w-4 h-4" />
+                                                            </button>
+                                                        </div>
+                                                    </td>
+                                                </tr>
+                                            )
+                                        })
+                                    )}
                                 </tbody>
                             </table>
                         </div>
