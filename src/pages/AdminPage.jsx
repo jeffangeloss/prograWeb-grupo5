@@ -2,6 +2,7 @@ import { useNavigate } from "react-router-dom";
 import FiltradoAdmin from "../components/FiltradoAdmin";
 import NavBarAdmin from "../components/NavBarAdmin";
 import TablaAdmin from "../components/TablaAdmin";
+import PopUp_BorrarUsuario from "../components/PopUp_BorrarUsuarioConfirm";
 import { useEffect, useState } from "react";
 
 function AdminPage() {
@@ -9,6 +10,8 @@ function AdminPage() {
 
     const [rolSeleccionado, setRolSeleccionado] = useState("")
     const [listaUsuarios, setListaUsuarios] = useState([])
+    const [modalVisible, setModalVisible] = useState(false);
+    const [usuarioSeleccionado, setUsuarioSeleccionado] = useState(null);
 
     async function cargarListaUsuarios(rol) {
         let filtroRol = ""
@@ -36,10 +39,13 @@ function AdminPage() {
         setListaUsuarios(data.data)
     }
 
-    async function borrarUsuario(user_id) {
-        if (!window.confirm("¿Estás seguro de eliminar este usuario?")) return;
+    function handleOpenModal(usuario) {
+        setUsuarioSeleccionado(usuario);
+        setModalVisible(true);
+    }
 
-        const URL = `http://127.0.0.1:8000/admin/${user_id}/`
+    async function borrarUsuario() {
+        const URL = `http://127.0.0.1:8000/admin/${usuarioSeleccionado.id}/`
         const response = await fetch(URL, {
             method: "DELETE",
             headers: {
@@ -54,8 +60,7 @@ function AdminPage() {
             alert("Error al borrar: " + data.detail)
             return
         }
-
-        alert("Usuario borrado correctamente")
+        setModalVisible(false)
         cargarListaUsuarios()
     }
 
@@ -85,7 +90,8 @@ function AdminPage() {
                         onClick={function () { navigate("/crearUsuario") }}>Añadir Usuario</button>
                 </div>
                 <FiltradoAdmin rolSeleccionado={rolSeleccionado} onFiltro={onFiltro} />
-                <TablaAdmin usuarios={listaUsuarios} borrarUsuario={borrarUsuario} />
+                <TablaAdmin usuarios={listaUsuarios} borrarUsuario={handleOpenModal} />
+                <PopUp_BorrarUsuario visible={modalVisible} userName={usuarioSeleccionado?.full_name} onCancel={function() {setModalVisible(false)}} onConfirm={borrarUsuario} />
             </div>
         </div>
     </div>
