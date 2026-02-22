@@ -1,8 +1,6 @@
-import { useNavigate } from "react-router-dom"
 import CargarTablaAdmin from "./CargarTablaAdmin"
 
-function TablaAdmin({ usuarios }) {
-    const navigate = useNavigate()
+function TablaAdmin({ usuarios, borrarUsuario}) {
 
     return <div className="mt-10 mx-4">
         <div className="overflow-x-auto scroll rounded-lr-2xl rounded-t-2xl shadow-2xl">
@@ -19,7 +17,7 @@ function TablaAdmin({ usuarios }) {
                     </tr>
                 </thead>
                 <tbody className="divide-y divide-slate-200">
-                    <CargarTablaAdmin listaUsuarios={usuarios} />
+                    <CargarTablaAdmin listaUsuarios={usuarios} borrarUsuario={borrarUsuario}/>
                 </tbody>
             </table>
 

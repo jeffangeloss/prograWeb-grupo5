@@ -10,22 +10,54 @@ function AdminPage() {
     const [rolSeleccionado, setRolSeleccionado] = useState("")
     const [listaUsuarios, setListaUsuarios] = useState([])
 
-    const usuarios = [
-        {
-            id: 100,
-            nombre: "Isabella Stanley",
-            email: "ejemplo@usuario.com",
-            rol: "User",
-            ultimoAcceso: "25/01/2025"
-        },
-        {
-            id: 200,
-            nombre: "Jose Blake",
-            email: "ejemplo@admin.com",
-            rol: "Admin",
-            ultimoAcceso: "21/01/2025"
+    async function cargarListaUsuarios(rol) {
+        let filtroRol = ""
+        if (rol == "1") filtroRol = "user_type=1"
+        if (rol == "2") filtroRol = "user_type=2"
+
+        const URL = "http://127.0.0.1:8000/admin/?" + filtroRol
+        const resp = await fetch(URL,
+            {
+                method: "GET",
+                headers: {
+                    "x-token": localStorage.getItem("TOKEN")
+                }
+            }
+        )
+
+        const data = await resp.json()
+
+        if (!resp.ok) {
+            console.error("Error al obtener usuarios", data.detail)
+            if (resp.status == 403) {
+                logout()
+            }
         }
-    ]
+        setListaUsuarios(data.data)
+    }
+
+    async function borrarUsuario(user_id) {
+        if (!window.confirm("¿Estás seguro de eliminar este usuario?")) return;
+
+        const URL = `http://127.0.0.1:8000/admin/${user_id}/`
+        const response = await fetch(URL, {
+            method: "DELETE",
+            headers: {
+                "content-type": "application/json",
+                "x-token": localStorage.getItem("TOKEN")
+            }
+        })
+
+        const data = await response.json()
+
+        if (!response.ok) {
+            alert("Error al borrar: " + data.detail)
+            return
+        }
+
+        alert("Usuario borrado correctamente")
+        cargarListaUsuarios()
+    }
 
     function logout() {
         localStorage.clear()
@@ -33,25 +65,13 @@ function AdminPage() {
     }
 
     useEffect(function () {
-        setListaUsuarios(usuarios)
+        cargarListaUsuarios()
     }, [])
 
 
-    function filtradoAdmin(rol) {
+    function onFiltro(rol) {
         setRolSeleccionado(rol)
-
-        const listaUsuariosFiltrada = usuarios.map(function (usuario) {
-            if (rol == "") {
-                return usuario
-            }
-            else if (usuario.rol == rol) {
-                return usuario
-            }
-            else {
-                return null
-            }
-        })
-        setListaUsuarios(listaUsuariosFiltrada)
+        cargarListaUsuarios(rol)
     }
 
 
@@ -64,8 +84,8 @@ function AdminPage() {
                     <button type="button" className="w-64 rounded-full bg-indigo-600 px-4 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-300"
                         onClick={function () { navigate("/crearUsuario") }}>Añadir Usuario</button>
                 </div>
-                <FiltradoAdmin rolSeleccionado={rolSeleccionado} onFiltro={filtradoAdmin} />
-                <TablaAdmin usuarios={listaUsuarios} />
+                <FiltradoAdmin rolSeleccionado={rolSeleccionado} onFiltro={onFiltro} />
+                <TablaAdmin usuarios={listaUsuarios} borrarUsuario={borrarUsuario} />
             </div>
         </div>
     </div>
