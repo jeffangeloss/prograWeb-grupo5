@@ -3,11 +3,13 @@ import EgresosForm from "../components/EgresosForm"
 import NavBarUser from "../components/NavBarUser"
 import { useNavigate } from "react-router-dom"
 import FiltroPopUp from "../components/FiltroPopUp"
+import EditarEgresoModal from "../components/EditarEgresoModal"
 
 function EgresosPage() {
     const navigate = useNavigate()
     const [openCrear, setOpenCrear] = useState(false)
     const [openFiltro, setOpenFiltro] = useState(false)
+    const [openEditar, setOpenEditar] = useState(false)
 
     function logout() {
         localStorage.clear()

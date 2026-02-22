@@ -2,6 +2,7 @@ import { useNavigate } from "react-router-dom";
 import FiltradoAdmin from "../components/FiltradoAdmin";
 import NavBarAdmin from "../components/NavBarAdmin";
 import TablaAdmin from "../components/TablaAdmin";
+import PopUp_BorrarUsuario from "../components/PopUp_BorrarUsuarioConfirm";
 import { useEffect, useState } from "react";
 
 function AdminPage() {
@@ -9,23 +10,59 @@ function AdminPage() {
 
     const [rolSeleccionado, setRolSeleccionado] = useState("")
     const [listaUsuarios, setListaUsuarios] = useState([])
+    const [modalVisible, setModalVisible] = useState(false);
+    const [usuarioSeleccionado, setUsuarioSeleccionado] = useState(null);
 
-    const usuarios = [
-        {
-            id: 1,
-            nombre: "Isabella Stanley",
-            email: "ejemplo@usuario.com",
-            rol: "Usuario",
-            ultimoAcceso: "25/01/2025"
-        },
-        {
-            id: 2,
-            nombre: "Jose Blake",
-            email: "ejemplo@admin.com",
-            rol: "Administrador",
-            ultimoAcceso: "21/01/2025"
+    async function cargarListaUsuarios(rol) {
+        let filtroRol = ""
+        if (rol == "1") filtroRol = "user_type=1"
+        if (rol == "2") filtroRol = "user_type=2"
+
+        const URL = "http://127.0.0.1:8000/admin/?" + filtroRol
+        const resp = await fetch(URL,
+            {
+                method: "GET",
+                headers: {
+                    "x-token": localStorage.getItem("TOKEN")
+                }
+            }
+        )
+
+        const data = await resp.json()
+
+        if (!resp.ok) {
+            console.error("Error al obtener usuarios", data.detail)
+            if (resp.status == 403) {
+                logout()
+            }
         }
-    ]
+        setListaUsuarios(data.data)
+    }
+
+    function handleOpenModal(usuario) {
+        setUsuarioSeleccionado(usuario);
+        setModalVisible(true);
+    }
+
+    async function borrarUsuario() {
+        const URL = `http://127.0.0.1:8000/admin/${usuarioSeleccionado.id}/`
+        const response = await fetch(URL, {
+            method: "DELETE",
+            headers: {
+                "content-type": "application/json",
+                "x-token": localStorage.getItem("TOKEN")
+            }
+        })
+
+        const data = await response.json()
+
+        if (!response.ok) {
+            alert("Error al borrar: " + data.detail)
+            return
+        }
+        setModalVisible(false)
+        cargarListaUsuarios()
+    }
 
     function logout() {
         localStorage.clear()
@@ -33,25 +70,13 @@ function AdminPage() {
     }
 
     useEffect(function () {
-        setListaUsuarios(usuarios)
+        cargarListaUsuarios()
     }, [])
 
 
-    function filtradoAdmin(rol) {
+    function onFiltro(rol) {
         setRolSeleccionado(rol)
-
-        const listaUsuariosFiltrada = usuarios.map(function (usuario) {
-            if (rol == "") {
-                return usuario
-            }
-            else if (usuario.rol == rol) {
-                return usuario
-            }
-            else {
-                return null
-            }
-        })
-        setListaUsuarios(listaUsuariosFiltrada)
+        cargarListaUsuarios(rol)
     }
 
 
@@ -64,8 +89,9 @@ function AdminPage() {
                     <button type="button" className="w-64 rounded-full bg-indigo-600 px-4 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-300"
                         onClick={function () { navigate("/crearUsuario") }}>Añadir Usuario</button>
                 </div>
-                <FiltradoAdmin rolSeleccionado={rolSeleccionado} onFiltro={filtradoAdmin} />
-                <TablaAdmin usuarios={listaUsuarios} />
+                <FiltradoAdmin rolSeleccionado={rolSeleccionado} onFiltro={onFiltro} />
+                <TablaAdmin usuarios={listaUsuarios} borrarUsuario={handleOpenModal} />
+                <PopUp_BorrarUsuario visible={modalVisible} userName={usuarioSeleccionado?.full_name} onCancel={function() {setModalVisible(false)}} onConfirm={borrarUsuario} />
             </div>
         </div>
     </div>
