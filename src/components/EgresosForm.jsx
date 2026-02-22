@@ -4,6 +4,7 @@ import Mensaje from "./Mensaje"
 function EgresosForm({ onComplete }) {
     const [mensajeVisible, setMensajeVisible] = useState(false)
     const [mensaje, setMensaje] = useState("")
+    const [guardando, setGuardando] = useState(false)
 
     const [fecha, setFecha] = useState("")
     const [monto, setMonto] = useState("")
@@ -31,16 +32,26 @@ function EgresosForm({ onComplete }) {
         setMensajeVisible(false)
     }
 
-    function guardarEgreso() {
+    async function guardarEgreso() {
         if (!validarCampos()) {
             return
         }
 
-        if (typeof onComplete === "function") {
-            onComplete(fecha, monto, categoria, descripcion)
-        }
+        setGuardando(true)
+        try {
+            if (typeof onComplete === "function") {
+                const result = await onComplete(fecha, monto, categoria, descripcion)
+                if (result && result.ok === false) {
+                    setMensaje(result.error || "No se pudo registrar el egreso")
+                    setMensajeVisible(true)
+                    return
+                }
+            }
 
-        limpiarFormulario()
+            limpiarFormulario()
+        } finally {
+            setGuardando(false)
+        }
     }
 
     return (
@@ -116,8 +127,9 @@ function EgresosForm({ onComplete }) {
                         type="button"
                         className="flex-1 rounded-full bg-indigo-600 px-4 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-300"
                         onClick={guardarEgreso}
+                        disabled={guardando}
                     >
-                        Guardar egreso
+                        {guardando ? "Guardando..." : "Guardar egreso"}
                     </button>
 
                     <button

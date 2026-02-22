@@ -10,6 +10,36 @@ function InicioSesionPage() {
     const [mensaje, setMensaje] = useState("")
     const navigate = useNavigate()
 
+    function detectarNavegador() {
+        if (typeof navigator === "undefined") {
+            return "Desconocido"
+        }
+
+        const uaData = navigator.userAgentData
+        if (uaData && Array.isArray(uaData.brands)) {
+            const brands = uaData.brands
+                .map(function (item) {
+                    return (item?.brand || "").toLowerCase()
+                })
+
+            if (brands.some(function (brand) { return brand.includes("brave") })) return "Brave"
+            if (brands.some(function (brand) { return brand.includes("edge") })) return "Edge"
+            if (brands.some(function (brand) { return brand.includes("opera") })) return "Opera"
+            if (brands.some(function (brand) { return brand.includes("firefox") })) return "Firefox"
+            if (brands.some(function (brand) { return brand.includes("safari") })) return "Safari"
+            if (brands.some(function (brand) { return brand.includes("chrom") })) return "Chrome"
+        }
+
+        const ua = (navigator.userAgent || "").toLowerCase()
+        if (ua.includes("brave")) return "Brave"
+        if (ua.includes("edg/")) return "Edge"
+        if (ua.includes("opr/") || ua.includes("opera")) return "Opera"
+        if (ua.includes("firefox")) return "Firefox"
+        if (ua.includes("safari") && !ua.includes("chrome")) return "Safari"
+        if (ua.includes("chrome")) return "Chrome"
+        return "Desconocido"
+    }
+
     useEffect(function () {
         const datosLogin = localStorage.getItem("DATOS_LOGIN")
         if (datosLogin != null) {
@@ -26,6 +56,7 @@ function InicioSesionPage() {
     }, [])
 
     async function loginHTTP(correo, password) {
+        const navegadorActual = detectarNavegador()
         const resp = await fetch("http://127.0.0.1:8000/login", {
             method: "post",
             body: JSON.stringify({
@@ -33,7 +64,8 @@ function InicioSesionPage() {
                 password: password
             }),
             headers: {
-                "content-type": "application/json"
+                "content-type": "application/json",
+                "x-browser-name": navegadorActual
             }
         })
 
