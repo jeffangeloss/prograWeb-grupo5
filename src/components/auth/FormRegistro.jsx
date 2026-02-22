@@ -23,6 +23,7 @@ function FormRegistro() {
     const [errores, setErrores] = useState([]);
     /* Para que los errores solo aparezcan cuando se intente enviar (no todo el tiempo)*/ 
     const [intentoEnviar, setIntentoEnviar] = useState(false);
+    const [enviando, setEnviando] = useState(false);
 
     function validar(valores, aceptaTerminos) {
         const errs = [];
@@ -79,6 +80,35 @@ function FormRegistro() {
         }
     }
 
+    async function registrarHTTP(payload) {
+        const respuesta = await fetch("http://127.0.0.1:8000/register", {
+            method: "POST",
+            headers: {
+                "content-type": "application/json",
+            },
+            body: JSON.stringify(payload),
+        });
+
+        let data = null;
+        try {
+            data = await respuesta.json();
+        } catch {
+            data = null;
+        }
+
+        if (!respuesta.ok) {
+            if (typeof data?.detail === "string") {
+                return { ok: false, error: data.detail };
+            }
+            if (typeof data?.detail?.msg === "string") {
+                return { ok: false, error: data.detail.msg };
+            }
+            return { ok: false, error: "No se pudo crear la cuenta" };
+        }
+
+        return { ok: true, data };
+    }
+
     async function onSubmit(e) {
         e.preventDefault();
         setIntentoEnviar(true);
@@ -89,11 +119,22 @@ function FormRegistro() {
         // si hay al menos 1 error, NO se crea cuenta ni se redirige
         if (errs.length > 0) return;
 
-        // "crea" la cuenta (hasta que usemos backend)
-        console.log("Registro OK:", { ...form, acepta });
+        const payload = {
+            full_name: `${form.nombre.trim()} ${form.apellido.trim()}`.trim(),
+            email: form.correo.trim().toLowerCase(),
+            password: form.password,
+        };
 
-        // redirige a /user
-        navigate("/user");
+        setEnviando(true);
+        const resultado = await registrarHTTP(payload);
+        setEnviando(false);
+
+        if (!resultado.ok) {
+            setErrores([resultado.error]);
+            return;
+        }
+
+        navigate("/sesion");
     }
 
 
@@ -186,9 +227,10 @@ function FormRegistro() {
             {/* <!-- BOTÓN --> */}
             <button
                 type="submit"
-                className="w-full rounded-full bg-indigo-600 px-6 py-3 font-semibold text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-300 active:scale-[0.99] transition"
+                disabled={enviando}
+                className="w-full rounded-full bg-indigo-600 px-6 py-3 font-semibold text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-300 active:scale-[0.99] transition disabled:cursor-not-allowed disabled:opacity-70"
             >
-                Crear cuenta
+                {enviando ? "Creando cuenta..." : "Crear cuenta"}
             </button>
 
             {/* <!-- ERRORES --> */}

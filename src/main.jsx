@@ -17,6 +17,7 @@ import EstadisticasPage from './pages/EstadisticasPage'
 import ChatBotPage from './pages/ChatBotPage'
 import GraficosUsuarioPage from './pages/GraficosUsuarioPage'
 import LandingPage from './pages/LandingPage'
+import CambiarContrasenaPage from './pages/CambiarContrasenaPage'
 
 
 createRoot(document.getElementById('root')).render(
@@ -38,6 +39,7 @@ createRoot(document.getElementById('root')).render(
       <Route path="/estadisticas" element={<EstadisticasPage/>} />
       <Route path="/chatbot" element={<ChatBotPage/>} />
       <Route path="/GraficosUsuario" element={<GraficosUsuarioPage/>}/>
+      <Route path="/mi-contrasena" element={<CambiarContrasenaPage />} />
     </Routes>
   </HashRouter>
   </StrictMode>,

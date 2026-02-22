@@ -4,7 +4,7 @@ function NavBarUser({ onLogout }) {
     const navigate = useNavigate()
 
     function cambiarContrasena() {
-        navigate("/restablecer")
+        navigate("/mi-contrasena")
     }
 
     function obtenerDatosSesion() {
