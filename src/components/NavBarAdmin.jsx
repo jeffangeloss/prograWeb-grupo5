@@ -1,39 +1,371 @@
-import { useNavigate, useLocation } from "react-router-dom"
+import { useEffect, useRef, useState } from "react"
+import { useLocation, useNavigate } from "react-router-dom"
+import RoleBadge from "./RoleBadge"
+import { normalizeRoleValue, roleLabel } from "../utils/roles"
 
-function NavBarAdmin({onLogout}) {
+const API_URL = "http://127.0.0.1:8000"
+const MAX_AVATAR_BYTES = 5 * 1024 * 1024
+
+function leerSesion() {
+    try {
+        const rawSesion = localStorage.getItem("DATOS_LOGIN")
+        const rawPerfil = localStorage.getItem("PERFIL_LOCAL")
+        const sesion = rawSesion ? JSON.parse(rawSesion) : {}
+        const perfil = rawPerfil ? JSON.parse(rawPerfil) : {}
+        return {
+            ...perfil,
+            ...sesion,
+        }
+    } catch {
+        return {}
+    }
+}
+
+function NavBarAdmin({ onLogout }) {
     const navigate = useNavigate()
     const location = useLocation()
+    const [openMenu, setOpenMenu] = useState(false)
+    const [sesion, setSesion] = useState(function () {
+        return leerSesion()
+    })
+    const [avatarError, setAvatarError] = useState("")
+    const [subiendoAvatar, setSubiendoAvatar] = useState(false)
+    const menuRef = useRef(null)
+    const avatarInputRef = useRef(null)
+
+    function resolverAvatarSrc(rawAvatar) {
+        if (!rawAvatar) {
+            return "/img/user.jpg"
+        }
+
+        if (rawAvatar.startsWith("data:image")) {
+            return rawAvatar
+        }
+
+        if (rawAvatar.startsWith("http://") || rawAvatar.startsWith("https://")) {
+            return rawAvatar
+        }
+
+        if (rawAvatar.startsWith("/uploads/")) {
+            return `${API_URL}${rawAvatar}`
+        }
+
+        return rawAvatar
+    }
+
+    function obtenerToken() {
+        const tokenLegacy = localStorage.getItem("TOKEN")
+        if (tokenLegacy) {
+            return tokenLegacy
+        }
+        return leerSesion()?.token || ""
+    }
+
+    function refrescarSesion() {
+        setSesion(leerSesion())
+    }
+
+    function persistirUsuarioEnStorage(user) {
+        if (!user) {
+            return
+        }
+
+        let sesionActual = {}
+        let perfilActual = {}
+
+        try {
+            sesionActual = JSON.parse(localStorage.getItem("DATOS_LOGIN") || "{}")
+        } catch {
+            sesionActual = {}
+        }
+
+        try {
+            perfilActual = JSON.parse(localStorage.getItem("PERFIL_LOCAL") || "{}")
+        } catch {
+            perfilActual = {}
+        }
+
+        const merged = {
+            ...perfilActual,
+            ...sesionActual,
+            id: user.id || sesionActual.id || perfilActual.id,
+            name: user.name || sesionActual.name || perfilActual.name,
+            nombre: user.name || sesionActual.nombre || perfilActual.nombre,
+            email: user.email || sesionActual.email || perfilActual.email,
+            correo: user.email || sesionActual.correo || perfilActual.correo,
+            rol: user.rol || sesionActual.rol || perfilActual.rol,
+            avatar_url: user.avatar_url || "",
+            updated_at: user.updated_at || sesionActual.updated_at || perfilActual.updated_at,
+        }
+
+        localStorage.setItem("DATOS_LOGIN", JSON.stringify({ ...sesionActual, ...merged }))
+        localStorage.setItem("PERFIL_LOCAL", JSON.stringify({ ...perfilActual, ...merged }))
+
+        if (merged.updated_at) {
+            localStorage.setItem("PERFIL_UPDATED_AT", merged.updated_at)
+        }
+
+        window.dispatchEvent(new Event("user-profile-updated"))
+        refrescarSesion()
+    }
+
+    async function subirAvatarDesdeDropdown(file) {
+        if (!file) {
+            return
+        }
+
+        if (!file.type.startsWith("image/")) {
+            setAvatarError("El archivo seleccionado no es una imagen.")
+            return
+        }
+
+        if (file.size > MAX_AVATAR_BYTES) {
+            setAvatarError("La imagen supera el limite de 5MB.")
+            return
+        }
+
+        const token = obtenerToken()
+        if (!token) {
+            setAvatarError("Sesion expirada. Inicia sesion nuevamente.")
+            return
+        }
+
+        setSubiendoAvatar(true)
+        setAvatarError("")
+        try {
+            const formData = new FormData()
+            formData.append("file", file)
+
+            const resp = await fetch(`${API_URL}/me/avatar`, {
+                method: "POST",
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                },
+                body: formData,
+            })
+
+            const data = await resp.json().catch(function () {
+                return {}
+            })
+
+            if (!resp.ok) {
+                setAvatarError(data.detail || "No se pudo actualizar la imagen.")
+                return
+            }
+
+            persistirUsuarioEnStorage(data.user || { avatar_url: data.avatar_url })
+        } catch {
+            setAvatarError("No se pudo conectar con el backend.")
+        } finally {
+            setSubiendoAvatar(false)
+        }
+    }
+
+    useEffect(function () {
+        function refrescar() {
+            setSesion(leerSesion())
+        }
+
+        function cerrarMenuFuera(event) {
+            if (menuRef.current && !menuRef.current.contains(event.target)) {
+                setOpenMenu(false)
+            }
+        }
+
+        document.addEventListener("mousedown", cerrarMenuFuera)
+        window.addEventListener("storage", refrescar)
+        window.addEventListener("user-profile-updated", refrescar)
+        return function () {
+            document.removeEventListener("mousedown", cerrarMenuFuera)
+            window.removeEventListener("storage", refrescar)
+            window.removeEventListener("user-profile-updated", refrescar)
+        }
+    }, [])
 
     const enEstadisticas = location.pathname === "/estadisticas"
     const enDashboard = location.pathname === "/admin"
+    const enAuditoriaAdmin = location.pathname === "/auditoriaAdmin"
+    const enPerfil = location.pathname === "/perfil"
 
-    return <div className="bg-slate-100 px-4 py-3 sm:px-6 sm:py-4 shadow-md flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
-        <div className="flex items-center gap-3">
-            <img
-                src="/img/admin.jpg"
-                alt="Administrador"
-                className="h-10 w-10 rounded-full object-cover border border-blue-900/20" />
-            <h1 className="text-lg font-semibold text-slate-700">Administrador</h1>
-        </div>
-        <div className="flex gap-4 flex-wrap items-center sm:w-auto">
-            {!enEstadisticas && (
-                <button type="button"
-                    className="px-6 py-2.5 rounded-full border border-blue-900/30 text-blue-900 hover:bg-blue-900/10 transition"
-                    onClick={function () { navigate("/estadisticas") }}>Estadísticas de usuarios</button>
-            )}
-            {!enDashboard && (
-                <button type="button"
-                    className="px-6 py-2.5 rounded-full border border-blue-900/30 text-blue-900 hover:bg-blue-900/10 transition"
-                    onClick={function () { navigate("/admin") }}>Dashboard</button>
-            )}
-            <button type="button"
-                className="px-6 py-2.5 rounded-full border border-blue-900/30 text-blue-900 hover:bg-blue-900/10 transition"
-                onClick={function (){
-                    onLogout()
-                }}>Cerrar sesión</button>
-        </div>
+    const roleValue = normalizeRoleValue(sesion?.rol || "admin")
+    const nombre = sesion?.nombre || sesion?.name || `${roleLabel(roleValue)} Demo`
+    const correo = sesion?.correo || sesion?.email || ""
+    const avatarUsuario = resolverAvatarSrc(sesion?.avatar_url || sesion?.avatar || "")
+    const puedeVerAuditoriaAdmin = roleValue === "owner" || roleValue === "auditor"
 
-    </div>
+    function navegar(path) {
+        setOpenMenu(false)
+        navigate(path)
+    }
+
+    return (
+        <header className="border-b border-slate-200/80 bg-gradient-to-r from-[#96c7ef] to-[#cfe6f2] shadow-md">
+            <div className="mx-auto flex w-full max-w-[1400px] flex-col gap-3 px-4 py-3 sm:flex-row sm:items-center sm:justify-between sm:px-6 sm:py-4">
+                <button
+                    type="button"
+                    onClick={function () {
+                        navigate("/admin")
+                    }}
+                    className="flex min-w-0 items-center"
+                >
+                    <img
+                        src="/img/logotemp.png"
+                        alt="Grupo 5"
+                        className="h-10 w-auto object-contain sm:h-11"
+                    />
+                    <span className="ml-2 text-xl font-extrabold tracking-tight text-slate-900 sm:text-2xl">
+                        GRUPO 5
+                    </span>
+                </button>
+
+                <div className="flex flex-wrap items-center justify-end gap-2 sm:gap-3">
+                    <div ref={menuRef} className="relative">
+                        <input
+                            ref={avatarInputRef}
+                            type="file"
+                            className="hidden"
+                            accept=".tiff,.jfif,.bmp,.pjp,.apng,.jpeg,.jpg,.png,.webp,.svg,.heic,.gif,.ico,.xbm,.xjl,.dib,.tif,.pjpeg,.avif"
+                            onChange={function (ev) {
+                                const file = ev.target.files && ev.target.files[0] ? ev.target.files[0] : null
+                                subirAvatarDesdeDropdown(file)
+                                ev.target.value = ""
+                            }}
+                        />
+
+                        <button
+                            type="button"
+                            className="inline-flex items-center gap-2 px-1 py-1 text-slate-700 transition"
+                            onClick={function () {
+                                setOpenMenu(!openMenu)
+                            }}
+                            aria-label="Abrir menu de usuario"
+                            aria-expanded={openMenu}
+                        >
+                            <div className="min-w-0 leading-tight text-right">
+                                <div className="flex items-center justify-end gap-2">
+                                    <h1 className="truncate text-sm font-semibold sm:text-base">{nombre}</h1>
+                                    <RoleBadge role={roleValue} />
+                                </div>
+                                {correo && <p className="truncate text-[11px] text-slate-500 sm:text-xs">{correo}</p>}
+                            </div>
+
+                            <span className="inline-flex h-9 w-9 items-center justify-center rounded-full border border-blue-900/20 bg-white">
+                                <img
+                                    src={avatarUsuario}
+                                    alt={roleLabel(roleValue)}
+                                    className="h-8 w-8 rounded-full object-cover"
+                                    onError={function (ev) {
+                                        ev.currentTarget.src = "/img/user.jpg"
+                                    }}
+                                />
+                            </span>
+                            <svg
+                                viewBox="0 0 20 20"
+                                fill="none"
+                                stroke="currentColor"
+                                strokeWidth="1.8"
+                                className={`h-4 w-4 text-slate-600 transition-transform ${openMenu ? "rotate-180" : ""}`}
+                                aria-hidden="true"
+                            >
+                                <path d="M5 8l5 5 5-5" />
+                            </svg>
+                        </button>
+
+                        {openMenu && (
+                            <div className="absolute right-0 z-50 mt-2 w-72 overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-xl">
+                                <div className="border-b border-slate-100 px-4 py-4 text-center">
+                                    <img
+                                        src={avatarUsuario}
+                                        alt={roleLabel(roleValue)}
+                                        className="mx-auto h-14 w-14 rounded-full border border-blue-900/20 object-cover"
+                                        onError={function (ev) {
+                                            ev.currentTarget.src = "/img/user.jpg"
+                                        }}
+                                    />
+                                    <p className="mt-2 truncate text-sm font-semibold text-slate-700">{nombre}</p>
+                                    {correo && <p className="truncate text-xs text-slate-500">{correo}</p>}
+                                    <div className="mt-2">
+                                        <RoleBadge role={roleValue} />
+                                    </div>
+                                </div>
+
+                                <div className="space-y-1 p-2">
+                                    <button
+                                        type="button"
+                                        className="w-full rounded-lg px-3 py-2.5 text-left text-sky-600 transition hover:bg-sky-50"
+                                        onClick={function () {
+                                            if (avatarInputRef.current) {
+                                                avatarInputRef.current.click()
+                                            }
+                                        }}
+                                    >
+                                        {subiendoAvatar ? "Subiendo imagen..." : "Cambiar imagen"}
+                                    </button>
+                                    {!enDashboard && (
+                                        <button
+                                            type="button"
+                                            className="w-full rounded-lg px-3 py-2.5 text-left text-slate-700 transition hover:bg-slate-100"
+                                            onClick={function () {
+                                                navegar("/admin")
+                                            }}
+                                        >
+                                            Dashboard
+                                        </button>
+                                    )}
+                                    {!enEstadisticas && (
+                                        <button
+                                            type="button"
+                                            className="w-full rounded-lg px-3 py-2.5 text-left text-slate-700 transition hover:bg-slate-100"
+                                            onClick={function () {
+                                                navegar("/estadisticas")
+                                            }}
+                                        >
+                                            Estadisticas de usuarios
+                                        </button>
+                                    )}
+                                    {puedeVerAuditoriaAdmin && !enAuditoriaAdmin && (
+                                        <button
+                                            type="button"
+                                            className="w-full rounded-lg px-3 py-2.5 text-left text-slate-700 transition hover:bg-slate-100"
+                                            onClick={function () {
+                                                navegar("/auditoriaAdmin")
+                                            }}
+                                        >
+                                            Auditoria admin
+                                        </button>
+                                    )}
+                                    {!enPerfil && (
+                                        <button
+                                            type="button"
+                                            className="w-full rounded-lg px-3 py-2.5 text-left text-slate-700 transition hover:bg-slate-100"
+                                            onClick={function () {
+                                                navegar("/perfil")
+                                            }}
+                                        >
+                                            Perfil
+                                        </button>
+                                    )}
+                                    <button
+                                        type="button"
+                                        className="w-full rounded-lg px-3 py-2.5 text-left text-rose-600 transition hover:bg-rose-50"
+                                        onClick={function () {
+                                            setOpenMenu(false)
+                                            onLogout()
+                                        }}
+                                    >
+                                        Cerrar sesion
+                                    </button>
+                                </div>
+                                {avatarError && (
+                                    <p className="px-4 pb-3 text-xs font-medium text-rose-600">{avatarError}</p>
+                                )}
+                            </div>
+                        )}
+                    </div>
+                </div>
+            </div>
+        </header>
+    )
 }
 
 export default NavBarAdmin
