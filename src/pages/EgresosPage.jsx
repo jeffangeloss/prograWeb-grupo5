@@ -18,6 +18,11 @@ function EgresosPage() {
     const [openEditar, setOpenEditar] = useState(false)
     const [egresoSeleccionado, setEgresoSeleccionado] = useState(null)
     const [categories, setCategories] = useState([])
+    const [ordenFecha, setOrdenFecha] = useState("desc")
+
+    useEffect(function () {
+        cargarEgresos()
+    }, [ordenFecha])
 
     function obtenerSesion() {
         try {
@@ -73,7 +78,7 @@ function EgresosPage() {
         setErrorApi("")
 
         try {
-            const resp = await fetch(`${API_URL}/expenses`, {
+            const resp = await fetch(`${API_URL}/expenses?order=${ordenFecha}`, {
                 headers: {
                     Authorization: `Bearer ${token}`,
                 },
@@ -274,7 +279,18 @@ function EgresosPage() {
                             <table className="w-full min-w-[860px] table-fixed text-left text-base text-slate-700">
                                 <thead className="border-b border-slate-200/80 bg-slate-50 text-[13px] uppercase tracking-wide text-slate-500">
                                     <tr>
-                                        <th className="px-4 py-5">Fecha</th>
+                                        <th className="px-4 py-5">Fecha
+                                            <button
+                                                type="button"
+                                                onClick={function () {
+                                                    const nuevoOrden = ordenFecha === "desc" ? "asc" : "desc"
+                                                    setOrdenFecha(nuevoOrden)
+                                                }}
+                                                className="ml-3 rounded-md px-3 py-1 border border-slate-300 text-sm font-semibold hover:bg-slate-200"
+                                            >
+                                                {ordenFecha === "desc" ? "↓" : "↑"}
+                                            </button>
+                                        </th>
                                         <th className="px-4 py-5">Categoria</th>
                                         <th className="px-4 py-5">Descripcion</th>
                                         <th className="px-4 py-5 text-right">Monto</th>
