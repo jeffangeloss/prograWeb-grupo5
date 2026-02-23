@@ -1,5 +1,6 @@
 import { useState } from "react"
 import { useNavigate } from "react-router-dom"
+import { toast } from "sonner"
 
 function CrearUsuarioForm() {
     const navigate = useNavigate()
@@ -12,8 +13,8 @@ function CrearUsuarioForm() {
 
     function formatearUsuarioNuevo() {
         const usuarioNuevo = {
-            full_name: nombre,
-            email: email,
+            full_name: nombre.trim(),
+            email: email.trim(),
             password: contra,
             type: parseInt(rol)
         }
@@ -21,32 +22,44 @@ function CrearUsuarioForm() {
     }
 
     async function enviarUsuarioNuevo() {
-        if (contra !== confirmarContra) {
-            alert("Las contraseñas no coinciden.")
+        if (!nombre || !email || !contra) {
+            toast.error("Por favor, completa todos los campos obligatorios")
             return
         }
 
+        if (contra !== confirmarContra) {
+            toast.error("Las contraseñas no coinciden")
+            return
+        }
+
+        const toastCrear = toast.loading("Creando usuario...")
         const usuarioNuevo = formatearUsuarioNuevo()
 
-        const URL = "http://127.0.0.1:8000/admin/"
-        const response = await fetch(URL,
-            {
+        try {
+            const URL = "http://127.0.0.1:8000/admin/"
+            const response = await fetch(URL, {
                 method: "POST",
                 body: JSON.stringify(usuarioNuevo),
                 headers: {
                     "content-type": "application/json",
                     "x-token": localStorage.getItem("TOKEN")
                 }
+            })
+
+            const data = await response.json()
+
+            if (!response.ok) {
+                toast.error("Error al crear usuario"+data.detail, { id: toastCrear })
+                return
             }
-        )
-        const data = await response.json()
-        if (!response.ok) {
-            console.error("Error de peticion" + data.status)
-            alert("Error al crear usuario:" + data.detail)
-            return
+
+            toast.success("Usuario creado correctamente", { id: toastCrear })
+            navigate("/admin")
+
+        } catch (error) {
+            toast.error("Fallo de conexión con el servidor", { id: toastCrear })
+            console.error(error)
         }
-        alert("Usuario creado correctamente.")
-        navigate("/admin")
     }
 
     return (

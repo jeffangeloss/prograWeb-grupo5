@@ -32,7 +32,7 @@ function AdminPage() {
         const data = await resp.json()
 
         if (!resp.ok) {
-            toast.error("Error al cargarr usuarios", data.detail)
+            toast.error("Error al cargar usuarios", data.detail)
             if (resp.status == 403) {
                 logout()
                 toast.error("No se encuentra logueado como admin")
@@ -64,7 +64,7 @@ function AdminPage() {
             const data = await response.json()
 
             if (!response.ok) {
-                toast.error("No se pudo eliminar: " + data.msg)
+                toast.error("No se pudo eliminar: " + data.detail)
                 return
             }
 
@@ -73,7 +73,7 @@ function AdminPage() {
             toast.success("Usuario eliminado correctamente", { id: toastBorrado })
 
         } catch (error) {
-            toast.error("Error del servidor", { id: toastBorrado })
+            toast.error("Fallo de conexión con el servidor", { id: toastBorrado })
             console.error(error)
         }
     }
