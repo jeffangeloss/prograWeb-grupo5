@@ -16,6 +16,7 @@ function EgresosPage() {
     const [errorApi, setErrorApi] = useState("")
     const [openEditar, setOpenEditar] = useState(false)
     const [egresoSeleccionado, setEgresoSeleccionado] = useState(null)
+    const [categories, setCategories] = useState([])
 
     function obtenerSesion() {
         try {
@@ -96,8 +97,32 @@ function EgresosPage() {
         }
     }
 
+    async function cargarCategorias() {
+    const token = obtenerToken()
+    if (!token) return
+
+    try {
+        const resp = await fetch(`${API_URL}/categories`, {
+            headers: {
+                Authorization: `Bearer ${token}`,
+            },
+        })
+
+        const data = await resp.json().catch(function () {
+            return []
+        })
+
+        if (!resp.ok) return
+
+        setCategories(Array.isArray(data) ? data : [])
+    } catch {
+        console.error("Error cargando categorias")
+    }
+}
+
     useEffect(function () {
         cargarEgresos()
+        cargarCategorias()
     }, [])
 
     async function handleCrearEgreso(fecha, monto, categoria, descripcion) {
@@ -144,6 +169,17 @@ function EgresosPage() {
                 error: "No se pudo conectar con el backend",
             }
         }
+    }
+
+    async function actualizarEgresoEditado(egresoActualizado) {
+        setEgresos(function (prev) {
+            return prev.map(function (item) {
+                if (item.id === egresoActualizado.id) {
+                    return egresoActualizado
+                }
+                return item
+            })
+        })
     }
 
     return (
@@ -330,6 +366,8 @@ function EgresosPage() {
             {openEditar && (
                 <EditarEgresoModal
                     egreso={egresoSeleccionado}
+                    categories={categories}
+                    onUpdated={actualizarEgresoEditado}
                     onClose={function () {
                         setOpenEditar(false)
                         setEgresoSeleccionado(null)

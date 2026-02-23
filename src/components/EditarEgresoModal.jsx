@@ -1,9 +1,61 @@
-function EditarEgresoModal({ onClose }) {
+import { useState } from "react"
 
-    function handleSubmit(e) {
+function EditarEgresoModal({ onClose, egreso, categories, onUpdated }) {
+
+    const [amount, setAmount] = useState(egreso.amount)
+    const [categoryId, setCategoryId] = useState(egreso.category_id)
+    const [date, setDate] = useState(egreso.expense_date.slice(0, 10))
+    const [description, setDescription] = useState(egreso.description)
+
+    async function handleSubmit(e) {
         e.preventDefault()
-        // logica para actualizar egreso
-        onClose()
+
+        const URL = `http://127.0.0.1:8000/expenses/${egreso.id}`
+
+        const body = {}
+
+        if (amount !== "" && amount !== null) {
+            body.amount = Number(amount)
+        }
+
+        if (categoryId) {
+            body.category_id = categoryId
+        }
+
+        if (date) {
+            body.expense_date = new Date(date).toISOString()
+        }
+
+        if (description !== undefined) {
+            body.description = description
+        }
+
+        try {
+            const resp = await fetch(URL, {
+                method: "PUT",
+                headers: {
+                    "Content-Type": "application/json",
+                    "x-token": localStorage.getItem("TOKEN")
+                },
+                body: JSON.stringify(body)
+            })
+
+            const data = await resp.json()
+
+            if (!resp.ok) {
+                throw new Error(data.detail || "Error actualizando")
+            }
+
+            if (onUpdated) {
+                onUpdated(data.data)
+            }
+
+            onClose()
+
+        } catch (err) {
+            console.error(err)
+            alert("Error editando egreso")
+        }
     }
 
     return (
@@ -22,6 +74,7 @@ function EditarEgresoModal({ onClose }) {
                         Modifica la información del egreso seleccionado.
                     </p>
                 </div>
+
                 <form onSubmit={handleSubmit} className="grid grid-cols-1 gap-3">
 
                     <div>
@@ -30,26 +83,30 @@ function EditarEgresoModal({ onClose }) {
                         </label>
                         <input
                             type="number"
+                            value={amount}
+                            onChange={(e) => setAmount(e.target.value)}
                             className="w-full rounded-lg border border-slate-300 px-3 py-2 text-sm focus:border-indigo-500 focus:outline-none"
                             placeholder="250.00"
                             required
                         />
                     </div>
+
                     <div>
                         <label className="block text-sm font-medium text-slate-600 mb-1">
                             Categoría
                         </label>
                         <select
+                            value={categoryId}
+                            onChange={(e) => setCategoryId(e.target.value)}
                             className="w-full rounded-lg border border-slate-300 px-3 py-2 text-sm focus:border-indigo-500 focus:outline-none"
                             required
                         >
                             <option value="">Seleccione</option>
-                            <option>Alimentación</option>
-                            <option>Transporte</option>
-                            <option>Servicios</option>
-                            <option>Salud</option>
-                            <option>Educación</option>
-                            <option>Otros</option>
+                            {categories.map(cat => (
+                                <option key={cat.id} value={cat.id}>
+                                    {cat.name}
+                                </option>
+                            ))}
                         </select>
                     </div>
 
@@ -59,6 +116,8 @@ function EditarEgresoModal({ onClose }) {
                         </label>
                         <input
                             type="date"
+                            value={date}
+                            onChange={(e) => setDate(e.target.value)}
                             className="w-full rounded-lg border border-slate-300 px-3 py-2 text-sm focus:border-indigo-500 focus:outline-none"
                             required
                         />
@@ -69,11 +128,14 @@ function EditarEgresoModal({ onClose }) {
                             Nota
                         </label>
                         <textarea
+                            value={description}
+                            onChange={(e) => setDescription(e.target.value)}
                             rows="3"
                             className="w-full rounded-lg border border-slate-300 px-3 py-2 text-sm focus:border-indigo-500 focus:outline-none"
                             placeholder="Ej: Compra de ropa"
                         />
                     </div>
+
                     <div className="flex gap-2 mt-2">
                         <button
                             type="submit"
@@ -81,6 +143,7 @@ function EditarEgresoModal({ onClose }) {
                         >
                             Guardar cambios
                         </button>
+
                         <button
                             type="button"
                             onClick={onClose}
@@ -89,6 +152,7 @@ function EditarEgresoModal({ onClose }) {
                             Cancelar
                         </button>
                     </div>
+
                 </form>
             </section>
         </div>
