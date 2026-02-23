@@ -4,6 +4,7 @@ import NavBarAdmin from "../components/NavBarAdmin";
 import TablaAdmin from "../components/TablaAdmin";
 import PopUp_BorrarUsuario from "../components/PopUp_BorrarUsuarioConfirm";
 import { useEffect, useState } from "react";
+import { Toaster, toast } from "sonner";
 
 function AdminPage() {
     const navigate = useNavigate()
@@ -31,9 +32,10 @@ function AdminPage() {
         const data = await resp.json()
 
         if (!resp.ok) {
-            console.error("Error al obtener usuarios", data.detail)
+            toast.error("Error al cargarr usuarios", data.detail)
             if (resp.status == 403) {
                 logout()
+                toast.error("No se encuentra logueado como admin")
             }
         }
         setListaUsuarios(data.data)
@@ -45,23 +47,35 @@ function AdminPage() {
     }
 
     async function borrarUsuario() {
-        const URL = `http://127.0.0.1:8000/admin/${usuarioSeleccionado.id}/`
-        const response = await fetch(URL, {
-            method: "DELETE",
-            headers: {
-                "content-type": "application/json",
-                "x-token": localStorage.getItem("TOKEN")
+        if (!usuarioSeleccionado) return
+
+        const toastBorrado = toast.loading("Eliminando usuario...")
+
+        try {
+            const URL = `http://127.0.0.1:8000/admin/${usuarioSeleccionado.id}/`
+            const response = await fetch(URL, {
+                method: "DELETE",
+                headers: {
+                    "content-type": "application/json",
+                    "x-token": localStorage.getItem("TOKEN")
+                }
+            })
+
+            const data = await response.json()
+
+            if (!response.ok) {
+                toast.error("No se pudo eliminar: " + data.msg)
+                return
             }
-        })
 
-        const data = await response.json()
+            setModalVisible(false)
+            cargarListaUsuarios(rolSeleccionado)
+            toast.success("Usuario eliminado correctamente", { id: toastBorrado })
 
-        if (!response.ok) {
-            alert("Error al borrar: " + data.detail)
-            return
+        } catch (error) {
+            toast.error("Error del servidor", { id: toastBorrado })
+            console.error(error)
         }
-        setModalVisible(false)
-        cargarListaUsuarios()
     }
 
     function logout() {
@@ -81,6 +95,7 @@ function AdminPage() {
 
 
     return <div className="bg-slate-50 min-h-screen">
+        <Toaster position="bottom-right" richColors closeButton />
         <NavBarAdmin onLogout={logout} />
         <div className="grid grid-cols-1 md:flex md:justify-center">
             <div className="px-6 py-6">
@@ -91,7 +106,7 @@ function AdminPage() {
                 </div>
                 <FiltradoAdmin rolSeleccionado={rolSeleccionado} onFiltro={onFiltro} />
                 <TablaAdmin usuarios={listaUsuarios} borrarUsuario={handleOpenModal} />
-                <PopUp_BorrarUsuario visible={modalVisible} userName={usuarioSeleccionado?.full_name} onCancel={function() {setModalVisible(false)}} onConfirm={borrarUsuario} />
+                <PopUp_BorrarUsuario visible={modalVisible} userName={usuarioSeleccionado?.full_name} onCancel={function () { setModalVisible(false) }} onConfirm={borrarUsuario} />
             </div>
         </div>
     </div>

@@ -31,7 +31,7 @@ function CrearUsuarioForm() {
         const URL = "http://127.0.0.1:8000/admin/"
         const response = await fetch(URL,
             {
-                method: "PUT",
+                method: "POST",
                 body: JSON.stringify(usuarioNuevo),
                 headers: {
                     "content-type": "application/json",
