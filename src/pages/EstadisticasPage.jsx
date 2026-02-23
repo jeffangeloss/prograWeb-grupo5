@@ -24,6 +24,7 @@ function EstadisticasPage() {
   const navigate = useNavigate();
   const [totalUsers, setTotalUsers] = useState(0);
   const [chartData, setChartData] = useState({ labels: [], datasets: [] });
+  
 
   function getSesion() {
     try {
@@ -40,15 +41,15 @@ function EstadisticasPage() {
     return getSesion()?.token || "";
   }
 
-  const URL = "http://127.0.0.1:8000/admin/userStats";
+  const URL = "http://127.0.0.1:8000/admin/user_stats";
   const token = getToken();
+  console.log(token)
 
   useEffect(() => {
     async function fetchStats() {
       try {
         const resp = await fetch(URL, {
           headers: {
-            Authorization: `Bearer ${token}`,
             "x-token": token
           }
         });
@@ -91,7 +92,7 @@ function EstadisticasPage() {
     }
 
     fetchStats();
-  }, [URL, token]);
+  }, []);
 
   function logout() {
     localStorage.clear();
