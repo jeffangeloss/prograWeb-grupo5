@@ -9,23 +9,39 @@ function RestableceContra() {
     const [mensaje, setMensaje] = useState("")
     const navigate = useNavigate()
 
-    function continuar(correo) {
+    async function requestHTTP(correo) {
+        try {
+            const resp = await fetch("http://127.0.0.1:8000/reset-pass/request", {
+                method: "PUT",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({ email: correo })
+
+            })
+
+            const data = await resp.json()
+
+            if (!resp.ok) {
+                throw new Error("Error en la solicitud")
+            }
+
+            localStorage.setItem("CorreoRecuperar", correo)
+            navigate('/restablecer/mensaje')
+        } catch (error) {
+            setMensaje("Error al enviar la solicitud")
+            setMensajeVisible(true)
+        }
+    }
+
+    async function continuar(correo) {
         if (!correo) {
             setMensaje("Debe completar todos los campos para continuar")
             setMensajeVisible(true)
+            return
         }
-        else if (correo == "ejemplo@admin.com" || correo == "ejemplo@user.com") {
-            console.log("correo ingresado")
-            setMensaje("")
-            setMensajeVisible(false)
-            navigate('/restablecer/mensaje')
-            localStorage.setItem("CorreoRecuperar", correo)
-        }
-        else {
-            setMensaje("El correo ingresado no tiene una cuenta asociada")
-            setMensajeVisible(true)
-
-        }
+        
+        await requestHTTP(correo)
     }
 
     return <div className="grid md:grid-cols-[20%_80%]">

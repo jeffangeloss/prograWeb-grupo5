@@ -5,6 +5,7 @@ function RestablecerContra_2() {
 
 
     const [correo, setCorreo] = useState("")
+    const [cargando, setCargando] = useState(false)
 
     useEffect(function() {
         const correoGuardado = localStorage.getItem("CorreoRecuperar")
@@ -12,6 +13,32 @@ function RestablecerContra_2() {
             setCorreo(correoGuardado)
         }
     }, [])
+
+    async function reenviarCorreo(){
+        if (!correo) return
+        try {
+            setCargando(true)
+
+            const resp = await fetch("http://127.0.0.1:8000/reset-pass/request", {
+                method: "PUT",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+                    email: correo
+                })
+            })
+
+            if (!resp.ok) {
+                throw new Error("Error reenviando correo")
+            }
+
+        } catch (error) {
+            setMensaje("Ocurrió un error al reenviar el correo.")
+        } finally {
+            setCargando(false)
+        }
+    }
 
     return <div className="grid md:grid-cols-[20%_80%]">
         {/* imagen izq */}
@@ -36,7 +63,10 @@ function RestablecerContra_2() {
 
             {/* texto */}
             
-            <TextoContra correo={correo} />
+            <TextoContra
+            onResend={reenviarCorreo}
+            cargando = {cargando}
+            correo={correo} />
         </div>
     </div>
 
