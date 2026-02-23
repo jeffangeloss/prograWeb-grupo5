@@ -3,7 +3,6 @@ import EgresosForm from "../components/EgresosForm"
 import NavBarUser from "../components/NavBarUser"
 import { useNavigate } from "react-router-dom"
 import FiltroPopUp from "../components/FiltroPopUp"
-import EditarEgresoModal from "../components/EditarEgresoModal"
 import { isAdminPanelRole, normalizeRoleValue } from "../utils/roles"
 
 const API_URL = "http://127.0.0.1:8000"
@@ -15,8 +14,6 @@ function EgresosPage() {
     const [egresos, setEgresos] = useState([])
     const [cargando, setCargando] = useState(true)
     const [errorApi, setErrorApi] = useState("")
-    const [openEditar, setOpenEditar] = useState(false)
-    const [egresoSeleccionado, setEgresoSeleccionado] = useState(null)
     const [categories, setCategories] = useState([])
     const [ordenFecha, setOrdenFecha] = useState("desc")
 
@@ -190,17 +187,6 @@ function EgresosPage() {
         }
     }
 
-    async function actualizarEgresoEditado(egresoActualizado) {
-        setEgresos(function (prev) {
-            return prev.map(function (item) {
-                if (item.id === egresoActualizado.id) {
-                    return egresoActualizado
-                }
-                return item
-            })
-        })
-    }
-
     return (
         <div className="bg-slate-100 text-slate-800 min-h-screen">
             <NavBarUser onLogout={logout} />
@@ -323,8 +309,8 @@ function EgresosPage() {
                                                             <button
                                                                 className="rounded-full border border-slate-200 px-4 py-2 text-sm font-semibold text-slate-700 hover:bg-slate-100 transition"
                                                                 onClick={function () {
-                                                                    setEgresoSeleccionado(egreso)
-                                                                    setOpenEditar(true)
+                                                                    localStorage.setItem("EGRESO_EDITAR", JSON.stringify(egreso))
+                                                                    navigate("/editarEgreso", { state: { egreso: egreso} } )
                                                                 }}
                                                             >
                                                                 Editar egreso
@@ -392,18 +378,6 @@ function EgresosPage() {
             >
                 Prueba Chatbot
             </button>
-
-            {openEditar && (
-                <EditarEgresoModal
-                    egreso={egresoSeleccionado}
-                    categories={categories}
-                    onUpdated={actualizarEgresoEditado}
-                    onClose={function () {
-                        setOpenEditar(false)
-                        setEgresoSeleccionado(null)
-                    }}
-                />
-            )}
         </div>
     )
 }
