@@ -9,31 +9,44 @@ function EditarUsuarioForm() {
     const [rol, setRol] = useState(usuario.role == "admin" ? "2" : "1")
 
     async function guardarCambios() {
-        const usuarioEditado = {
-            full_name: nombre,
-            email: email,
-            type: parseInt(rol)
-        }
-
-        const URL = `http://127.0.0.1:8000/admin/${usuario.id}/`
-        const response = await fetch(URL, {
-            method: "PATCH",
-            body: JSON.stringify(usuarioEditado),
-            headers: {
-                "content-type": "application/json",
-                "x-token": localStorage.getItem("TOKEN")
-            }
-        })
-
-        const data = await response.json()
-
-        if (!response.ok) {
-            alert("Error al actualizar: " + data.detail)
+        if (!nombre || !email) {
+            toast.error("El nombre y el correo son obligatorios")
             return
         }
 
-        alert("Usuario actualizado correctamente")
-        navigate("/admin")
+        const toastGuardar = toast.loading("Actualizando usuario...")
+
+        const usuarioEditado = {
+            full_name: nombre.trim(),
+            email: email.trim(),
+            type: parseInt(rol)
+        }
+
+        try {
+            const URL = `http://127.0.0.1:8000/admin/${usuario.id}/`
+            const response = await fetch(URL, {
+                method: "PATCH",
+                body: JSON.stringify(usuarioEditado),
+                headers: {
+                    "content-type": "application/json",
+                    "x-token": localStorage.getItem("TOKEN")
+                }
+            })
+
+            const data = await response.json()
+
+            if (!response.ok) {
+                toast.error("Error al actualizar: " + data.detail, { id: toastGuardar })
+                return
+            }
+
+            toast.success("Usuario actualizado correctamente", { id: toastGuardar })
+            navigate("/admin")
+
+        } catch (error) {
+            toast.error("Error de conexión con el servidor", { id: toastGuardar })
+            console.error(error)
+        }
     }
 
 
