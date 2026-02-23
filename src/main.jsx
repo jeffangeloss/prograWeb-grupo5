@@ -20,6 +20,7 @@ import LandingPage from './pages/LandingPage'
 import CambiarContrasenaPage from './pages/CambiarContrasenaPage'
 import PerfilUsuarioPage from './pages/PerfilUsuarioPage'
 import AuditoriaAdminPage from './pages/AuditoriaAdminPage'
+import EditarEgresoPage from './pages/EditarEgresoPage'
 
 
 createRoot(document.getElementById('root')).render(
@@ -30,6 +31,7 @@ createRoot(document.getElementById('root')).render(
       <Route path="/sesion" element={<InicioSesionPage />} />
       <Route path="/admin" element={<AdminPage />} />
       <Route path="/user" element={<EgresosPage />} />
+      <Route path="/editarEgreso" element={<EditarEgresoPage />} />
       <Route path="/registro" element={<RegistroPage />} />
       <Route path="/editarUsuario" element={<EditarUsuarioPage />} />
       <Route path="/crearUsuario" element={<CrearUsuarioAdminPage />} />
