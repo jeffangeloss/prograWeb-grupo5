@@ -19,6 +19,7 @@ import GraficosUsuarioPage from './pages/GraficosUsuarioPage'
 import LandingPage from './pages/LandingPage'
 import CambiarContrasenaPage from './pages/CambiarContrasenaPage'
 import PerfilUsuarioPage from './pages/PerfilUsuarioPage'
+import AuditoriaAdminPage from './pages/AuditoriaAdminPage'
 
 
 createRoot(document.getElementById('root')).render(
@@ -42,6 +43,7 @@ createRoot(document.getElementById('root')).render(
       <Route path="/GraficosUsuario" element={<GraficosUsuarioPage/>}/>
       <Route path="/mi-contrasena" element={<CambiarContrasenaPage />} />
       <Route path="/perfil" element={<PerfilUsuarioPage />} />
+      <Route path="/auditoriaAdmin" element={<AuditoriaAdminPage />} />
     </Routes>
   </HashRouter>
   </StrictMode>,

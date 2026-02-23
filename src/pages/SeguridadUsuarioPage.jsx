@@ -4,6 +4,7 @@ import { useEffect, useMemo, useState } from "react"
 import UserCard from "../components/UserCard"
 import FilterHistorial from "../components/FilterHistorial"
 import TablaHistorial from "../components/TablaHistorial"
+import { normalizeRoleValue, roleLabel } from "../utils/roles"
 
 function SeguridadUsuarioPage() {
     const { state: usuario } = useLocation()
@@ -14,9 +15,12 @@ function SeguridadUsuarioPage() {
     const [errorApi, setErrorApi] = useState("")
     const navigate = useNavigate()
 
-    const rol = usuarioApi?.rol || usuario?.rol || "Usuario"
-    const img = rol === "Administrador" ? "/img/admin.jpg" : "/img/user.jpg"
-    const label = rol === "Administrador" ? "Administrador" : "Usuario"
+    const roleValue = normalizeRoleValue(
+        usuarioApi?.role_value || usuarioApi?.role || usuarioApi?.rol || usuario?.role || usuario?.rol,
+        usuarioApi?.type || usuario?.type
+    )
+    const img = roleValue === "user" ? "/img/user.jpg" : "/img/admin.jpg"
+    const label = roleLabel(roleValue)
 
     const usuarioCard = usuarioApi || usuario || { nombre: "-", email: "-" }
 
@@ -58,7 +62,7 @@ function SeguridadUsuarioPage() {
         setErrorApi("")
 
         try {
-            const resp = await fetch(`http://127.0.0.1:8000/admin/auditoria/${usuario.id}`, {
+            const resp = await fetch(`http://127.0.0.1:8000/admin/auditoria/usuario/${usuario.id}`, {
                 method: "GET",
                 headers: {
                     "x-token": token,
@@ -127,7 +131,7 @@ function SeguridadUsuarioPage() {
                     <h2 className="text-2xl font-bold text-slate-800">Historial de acceso</h2>
                     <p className="text-sm text-slate-500 mt-1">Auditar accesos de un usuario especifico.</p>
 
-                    <UserCard usuario={usuarioCard} imgSrc={img} label={label} />
+                    <UserCard usuario={usuarioCard} imgSrc={img} label={label} role={roleValue} />
                     <FilterHistorial onFiltro={aplicarFiltro} />
 
                     {cargando && <p className="mt-4 text-sm text-slate-500">Cargando auditoria...</p>}

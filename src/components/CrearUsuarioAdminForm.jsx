@@ -1,101 +1,221 @@
-import { useState } from "react"
+import { useMemo, useState } from "react"
 import { useNavigate } from "react-router-dom"
+import { canCreateRole, canManageUsers, normalizeRoleValue } from "../utils/roles"
+
+const ROLE_OPTIONS = [
+    { value: "1", role: "user", label: "Usuario" },
+    { value: "2", role: "admin", label: "Administrador" },
+    { value: "3", role: "owner", label: "Owner" },
+    { value: "4", role: "auditor", label: "Auditor" },
+]
+
+function getToken() {
+    const tokenLegacy = localStorage.getItem("TOKEN")
+    if (tokenLegacy) return tokenLegacy
+
+    try {
+        const raw = localStorage.getItem("DATOS_LOGIN")
+        const sesion = raw ? JSON.parse(raw) : null
+        return sesion?.token || ""
+    } catch {
+        return ""
+    }
+}
+
+function getCurrentRole() {
+    try {
+        const raw = localStorage.getItem("DATOS_LOGIN")
+        const sesion = raw ? JSON.parse(raw) : null
+        return normalizeRoleValue(sesion?.rol || "user")
+    } catch {
+        return "user"
+    }
+}
+
+function extractError(data) {
+    if (typeof data?.detail === "string") return data.detail
+    if (typeof data?.detail?.msg === "string") return data.detail.msg
+    return "No se pudo crear el usuario."
+}
 
 function CrearUsuarioForm() {
     const navigate = useNavigate()
+
+    const actorRole = useMemo(function () {
+        return getCurrentRole()
+    }, [])
+
+    const opcionesPermitidas = ROLE_OPTIONS.filter(function (option) {
+        return canCreateRole(actorRole, option.role)
+    })
 
     const [nombre, setNombre] = useState("")
     const [email, setEmail] = useState("")
     const [contra, setContra] = useState("")
     const [confirmarContra, setConfirmarContra] = useState("")
-    const [rol, setRol] = useState("1")
-
-    function formatearUsuarioNuevo() {
-        const usuarioNuevo = {
-            full_name: nombre,
-            email: email,
-            password: contra,
-            type: parseInt(rol)
-        }
-        return usuarioNuevo
-    }
+    const [rol, setRol] = useState(opcionesPermitidas[0]?.value || "1")
+    const [error, setError] = useState("")
+    const [enviando, setEnviando] = useState(false)
 
     async function enviarUsuarioNuevo() {
-        if (contra !== confirmarContra) {
-            alert("Las contraseñas no coinciden.")
+        setError("")
+        if (!canManageUsers(actorRole)) {
+            setError("No tienes permisos para crear usuarios.")
             return
         }
 
-        const usuarioNuevo = formatearUsuarioNuevo()
+        if (!nombre.trim() || !email.trim() || !contra || !confirmarContra) {
+            setError("Completa todos los campos.")
+            return
+        }
 
-        const URL = "http://127.0.0.1:8000/admin/"
-        const response = await fetch(URL,
-            {
-                method: "PUT",
+        if (contra !== confirmarContra) {
+            setError("Las contraseñas no coinciden.")
+            return
+        }
+
+        const roleOption = ROLE_OPTIONS.find(function (opt) {
+            return opt.value === rol
+        })
+        if (!roleOption || !canCreateRole(actorRole, roleOption.role)) {
+            setError("No tienes permisos para crear ese tipo de usuario.")
+            return
+        }
+
+        const token = getToken()
+        if (!token) {
+            setError("Sesión expirada. Inicia sesión nuevamente.")
+            return
+        }
+
+        setEnviando(true)
+        try {
+            const usuarioNuevo = {
+                full_name: nombre.trim(),
+                email: email.trim().toLowerCase(),
+                password: contra,
+                type: Number(rol),
+            }
+
+            const response = await fetch("http://127.0.0.1:8000/admin/", {
+                method: "POST",
                 body: JSON.stringify(usuarioNuevo),
                 headers: {
                     "content-type": "application/json",
-                    "x-token": localStorage.getItem("TOKEN")
-                }
+                    "x-token": token,
+                },
+            })
+
+            const data = await response.json().catch(function () {
+                return {}
+            })
+
+            if (!response.ok) {
+                setError(extractError(data))
+                return
             }
-        )
-        const data = await response.json()
-        if (!response.ok) {
-            console.error("Error de peticion" + data.status)
-            alert("Error al crear usuario:" + data.detail)
-            return
+
+            navigate("/admin")
+        } catch {
+            setError("No se pudo conectar con el backend.")
+        } finally {
+            setEnviando(false)
         }
-        alert("Usuario creado correctamente.")
-        navigate("/admin")
+    }
+
+    if (!canManageUsers(actorRole)) {
+        return (
+            <div className="max-w-xl rounded-2xl border border-amber-200 bg-amber-50 px-4 py-3 text-sm font-medium text-amber-700">
+                Este rol no puede crear usuarios.
+            </div>
+        )
     }
 
     return (
         <div className="flex justify-center p-4">
-            <div className="rounded-2xl shadow-xl p-8 max-w-full">
-
+            <div className="w-full max-w-2xl rounded-2xl shadow-xl p-8">
                 <div className="mb-6">
                     <label className="text-slate-700 mb-2 ml-1">Nombre completo</label>
-                    <input type="text" className="w-full mt-2 px-4 py-2 rounded-xl shadow-md bg-white text-black"
-                        value={nombre} onChange={function (ev) { setNombre(ev.target.value) }} />
+                    <input
+                        type="text"
+                        className="w-full mt-2 px-4 py-2 rounded-xl shadow-md bg-white text-black"
+                        value={nombre}
+                        onChange={function (ev) { setNombre(ev.target.value) }}
+                    />
                 </div>
 
                 <div className="mb-6">
                     <label className="text-slate-700 mb-2 ml-1">Correo electrónico</label>
-                    <input type="email" placeholder="correo@ejemplo.com" className="w-full mt-2 px-4 py-2 rounded-xl shadow-md bg-white text-black"
-                        value={email} onChange={function (ev) { setEmail(ev.target.value) }} />
+                    <input
+                        type="email"
+                        placeholder="correo@ejemplo.com"
+                        className="w-full mt-2 px-4 py-2 rounded-xl shadow-md bg-white text-black"
+                        value={email}
+                        onChange={function (ev) { setEmail(ev.target.value) }}
+                    />
                 </div>
 
                 <div className="mb-6">
                     <label className="text-slate-700 mb-2 ml-1">Contraseña</label>
-                    <input type="password" className="w-full mt-2 px-4 py-2 rounded-xl shadow-md bg-white text-black"
-                        value={contra} onChange={function (ev) { setContra(ev.target.value) }} />
+                    <input
+                        type="password"
+                        className="w-full mt-2 px-4 py-2 rounded-xl shadow-md bg-white text-black"
+                        value={contra}
+                        onChange={function (ev) { setContra(ev.target.value) }}
+                    />
                 </div>
 
                 <div className="mb-6">
-                    <label className="text-slate-700 mb-2 ml-1">Confirmar Contraseña</label>
-                    <input type="password" className="w-full mt-2 px-4 py-2 rounded-xl shadow-md bg-white text-black"
-                        value={confirmarContra} onChange={function (ev) { setConfirmarContra(ev.target.value) }} />
+                    <label className="text-slate-700 mb-2 ml-1">Confirmar contraseña</label>
+                    <input
+                        type="password"
+                        className="w-full mt-2 px-4 py-2 rounded-xl shadow-md bg-white text-black"
+                        value={confirmarContra}
+                        onChange={function (ev) { setConfirmarContra(ev.target.value) }}
+                    />
                 </div>
 
                 <div className="mb-8">
                     <label className="text-slate-700 mb-2 ml-1">Rol</label>
-                    <select className="w-full mt-2 px-4 py-2 rounded-xl shadow-md bg-white text-black"
-                        value={rol} onChange={function (ev) { setRol(ev.target.value) }}>
-                        <option value="1">Usuario</option>
-                        <option value="2">Administrador</option>
+                    <select
+                        className="w-full mt-2 px-4 py-2 rounded-xl shadow-md bg-white text-black"
+                        value={rol}
+                        onChange={function (ev) { setRol(ev.target.value) }}
+                    >
+                        {opcionesPermitidas.map(function (option) {
+                            return (
+                                <option key={option.value} value={option.value}>
+                                    {option.label}
+                                </option>
+                            )
+                        })}
                     </select>
                 </div>
+
+                {error && (
+                    <p className="mb-4 rounded-lg border border-rose-200 bg-rose-50 px-3 py-2 text-sm text-rose-700">
+                        {error}
+                    </p>
+                )}
 
                 <div className="flex justify-end gap-4 pt-4">
                     <button
                         className="rounded-2xl bg-gray-400 px-4 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-gray-500 transition"
-                        onClick={function () { navigate("/admin") }}>Cancelar</button>
+                        onClick={function () { navigate("/admin") }}
+                    >
+                        Cancelar
+                    </button>
                     <button
-                        className="rounded-2xl bg-indigo-600 px-4 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-indigo-700 transition"
-                        onClick={function () { enviarUsuarioNuevo() }}>Crear usuario</button>
+                        className="rounded-2xl bg-indigo-600 px-4 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-indigo-700 transition disabled:cursor-not-allowed disabled:opacity-70"
+                        onClick={enviarUsuarioNuevo}
+                        disabled={enviando}
+                    >
+                        {enviando ? "Creando..." : "Crear usuario"}
+                    </button>
                 </div>
             </div>
-        </div>)
+        </div>
+    )
 }
 
 export default CrearUsuarioForm

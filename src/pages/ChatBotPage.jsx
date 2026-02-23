@@ -1,13 +1,38 @@
+import { useEffect } from "react"
 import { useNavigate } from "react-router-dom"
 import NavBarUser from "../components/NavBarUser"
+import { isAdminPanelRole, normalizeRoleValue } from "../utils/roles"
 
 function ChatBotPage() {
     const navigate = useNavigate()
+
+    function obtenerSesion() {
+        try {
+            const raw = localStorage.getItem("DATOS_LOGIN")
+            return raw ? JSON.parse(raw) : null
+        } catch {
+            return null
+        }
+    }
 
     function logout() {
         localStorage.clear()
         navigate("/")
     }
+
+    useEffect(function () {
+        const sesion = obtenerSesion()
+        const role = normalizeRoleValue(sesion?.rol || "user")
+
+        if (isAdminPanelRole(role)) {
+            navigate("/admin")
+            return
+        }
+
+        if (role !== "user") {
+            navigate("/sesion")
+        }
+    }, [navigate])
 
     return (
         <div className="bg-slate-50 min-h-screen text-slate-800">
