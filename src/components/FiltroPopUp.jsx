@@ -2,11 +2,12 @@ function FiltroPopUp({ visible, onClose }) {
 
         return visible ?
                 <div
-                        className="absolute top-full mt-2 right-0 z-50 items-center justify-end hidden peer-focus:block"
+                        className="fixed inset-0 z-50 flex items-center justify-center"
                         onClick={onClose}>
                         <div
-                                className="top-10 z-50 w-72 rounded-xl bg-white p-4 shadow-xl border border-slate-200">
-                                <div className="space-y-4">
+                                onClick={(e) => e.stopPropagation()}
+                                className="relative right-0 top-10 z-50 w-72 rounded-xl bg-white p-4 shadow-xl border border-slate-200">
+                                <div className="my-1">
                                         <label className="text-sm font-medium text-slate-700">Categoría</label>
                                         <select className="w-full rounded-md border border-slate-200 bg-white px-3 py-2 text-slate-700 shadow-sm focus:border-indigo-400 focus:ring-2 focus:ring-indigo-200">
                                                 <option>Cosa 1</option>
@@ -16,10 +17,9 @@ function FiltroPopUp({ visible, onClose }) {
                                 </div>
 
 
-                                <div className="space-y-4">
-
-                                        <div className="mt-3 mb-2 flex items-center">
-
+                                <div className="my-1">
+                                        <label className="text-sm font-medium text-slate-700">Fecha del egreso</label>
+                                        <div className="mt-1 mb-2 flex items-center">
                                                 <label className="ml-2 mr-3 text-sm font-medium text-slate-700">Desde:</label>
                                                 <input type="date"
                                                         className="w-full rounded-md border border-slate-200 bg-white px-3 py-2 text-slate-700 shadow-sm focus:border-indigo-400 focus:ring-2 focus:ring-indigo-200"
@@ -34,43 +34,18 @@ function FiltroPopUp({ visible, onClose }) {
 
                                 </div>
 
-                                <div className="space-y-4">
-                                        <label className="text-sm font-medium text-slate-700">Monto</label>
-                                        <div className="mt-3 mb-2 flex items-center">
-
-                                                <label className="ml-2 mr-3 text-sm font-medium text-slate-700">Desde:</label>
-                                                <input type="number"
-                                                        className="w-full rounded-md border border-slate-200 bg-white px-3 py-2 text-slate-700 shadow-sm focus:border-indigo-400 focus:ring-2 focus:ring-indigo-200"
-                                                        required />
-                                        </div>
-                                        <div className="mb-2 flex items-center">
-                                                <label className="ml-2 mr-4 text-sm font-medium text-slate-700">Hasta:</label>
-                                                <input type="number"
-                                                        className="w-full rounded-md border border-slate-200 bg-white px-3 py-2 text-slate-700 shadow-sm focus:border-indigo-400 focus:ring-2 focus:ring-indigo-200"
-                                                        required />
-                                        </div>
-                                </div>
-
-                                <div className="flex flex-col gap-3 mt-3">
-                                        <button
-                                                onClick={onClose}
-                                                className="w-full rounded-full bg-indigo-600 px-4 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-indigo-800 focus:outline-none focus:ring-2 focus:ring-indigo-300"
-                                        >
-                                                Aplicar filtros
-                                        </button>
-
-                                        <button
-                                                onClick={onClose}
-                                                className="w-full rounded-full bg-red-700 px-4 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-red-900 focus:outline-none focus:ring-2 focus:ring-indigo-300"
-                                        >
-                                                Eliminar filtros
-                                        </button>
-                                </div>
-
+                                <button
+                                        onClick={onClose}
+                                        className="w-full rounded-full bg-indigo-600 px-4 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-300"
+                                >
+                                        Aplicar filtros
+                                </button>
 
                         </div>
 
                 </div> : null
+
+
 }
 
 export default FiltroPopUp

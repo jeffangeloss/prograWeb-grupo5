@@ -46,7 +46,7 @@ function EgresosPage() {
         if (!Number.isFinite(monto)) {
             return "S/ 0.00"
         }
-        return S/ ${monto.toFixed(2)}
+        return `S/ ${monto.toFixed(2)}`
     }
 
     const totalRegistrado = useMemo(function () {
@@ -68,9 +68,9 @@ function EgresosPage() {
         setErrorApi("")
 
         try {
-            const resp = await fetch(${API_URL}/expenses, {
+            const resp = await fetch(`${API_URL}/expenses`, {
                 headers: {
-                    Authorization: Bearer ${token},
+                    Authorization: `Bearer ${token}`,
                 },
             })
 
@@ -107,11 +107,11 @@ function EgresosPage() {
         }
 
         try {
-            const resp = await fetch(${API_URL}/expenses, {
+            const resp = await fetch(`${API_URL}/expenses`, {
                 method: "POST",
                 headers: {
                     "content-type": "application/json",
-                    Authorization: Bearer ${token},
+                    Authorization: `Bearer ${token}`,
                 },
                 body: JSON.stringify({
                     amount: Number(monto),
