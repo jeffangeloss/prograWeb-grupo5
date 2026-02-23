@@ -1,4 +1,4 @@
-import { useEffect } from "react"
+import { useEffect, useState } from "react"
 import {
     Chart as ChartJS,
     LineElement,
@@ -31,6 +31,26 @@ ChartJS.register(
 
 function GraficosUsuarioPage() {
     const navigate = useNavigate()
+    const [stats, setStats] = useState(null)
+    const [loading, setLoading] = useState(true)
+    const [selectedMonth, setSelectedMonth] = useState(-1)
+
+    const monthLabels = [
+        "Ene", "Feb", "Mar", "Abr", "May", "Jun",
+        "Jul", "Ago", "Sep", "Oct", "Nov", "Dic"
+    ]
+
+    const monthlyMap = {}
+    stats?.monthly?.forEach(function (item) {
+        monthlyMap[item.month] = item.total
+    })
+
+    const monthlyData = monthLabels.map(function (_, index) {
+        return monthlyMap[index + 1] || 0
+    })
+
+    const categoryLabels = stats?.by_category?.map(c => c.category) || []
+    const categoryValues = stats?.by_category?.map(c => c.total) || []
 
     function obtenerSesion() {
         try {
@@ -40,6 +60,45 @@ function GraficosUsuarioPage() {
             return null
         }
     }
+
+    function obtenerToken() {
+        const sesion = obtenerSesion()
+        return sesion?.token || ""
+    }
+
+    useEffect(function () {
+        async function statsHTTP() {
+            const raw = localStorage.getItem("DATOS_LOGIN")
+            const sesion = raw ? JSON.parse(raw) : null
+            const token = sesion?.token
+
+            if (!token) return
+
+            let url = "http://127.0.0.1:8000/expenses/stats"
+
+            if (selectedMonth != -1) {
+                url = url + "?month=" + selectedMonth
+            }
+
+            try {
+                const resp = await fetch(url, {
+                    headers: {
+                        Authorization: `Bearer ${token}`
+                    }
+                })
+
+                const data = await resp.json()
+                if (resp.ok) {
+                    setStats(data)
+                }
+            } catch (err) {
+                console.error(err)
+            } finally {
+                setLoading(false)
+            }
+        }
+        statsHTTP()
+    }, [selectedMonth])
 
     useEffect(function () {
         const sesion = obtenerSesion()
@@ -55,11 +114,11 @@ function GraficosUsuarioPage() {
         }
     }, [navigate])
 
-    const data = {
-        labels: ["Ene", "Feb", "Mar", "Abr", "May", "Jun"],
+    const dataLine = {
+        labels: monthLabels,
         datasets: [{
             label: "Egresos mensuales",
-            data: [50, 80, 65, 120, 90, 140],
+            data: monthlyData,
             borderColor: "#3b82f6",
             backgroundColor: "rgba(59,130,246,0.2)",
             tension: 0.4,
@@ -67,11 +126,11 @@ function GraficosUsuarioPage() {
         }]
     }
     const dataBar = {
-        labels: ["Ene", "Feb", "Mar", "Abr", "May", "Jun"],
+        labels: monthLabels,
         datasets: [
             {
                 label: "Egresos mensuales",
-                data: [50, 80, 65, 120, 90, 140],
+                data: monthlyData,
                 backgroundColor: [
                     "rgba(99, 102, 241, 0.8)",
                     "rgba(16, 185, 129, 0.8)",
@@ -86,11 +145,11 @@ function GraficosUsuarioPage() {
     };
 
     const dataDoughnut = {
-        labels: ["Alquiler", "Comida", "Transporte", "Entretenimiento", "Otros"],
+        labels: categoryLabels,
         datasets: [
             {
                 label: "Egresos por categoría",
-                data: [30, 25, 15, 10, 20],
+                data: categoryValues,
                 backgroundColor: [
                     "rgba(99, 102, 241, 0.8)",
                     "rgba(16, 185, 129, 0.8)",
@@ -140,20 +199,26 @@ function GraficosUsuarioPage() {
             <div className="my-3 flex justify-between items-center">
                 <div className="flex items-center gap-4">
                     <h1 className="whitespace-nowrap text-xl font-extrabold tracking-tight text-slate-700">Egresos del mes</h1>
-                    <select className="mb-2 w-full rounded-md border border-slate-200 bg-white px-3 py-2 text-slate-700 shadow-sm focus:border-indigo-400 focus:ring-2 focus:ring-indigo-200">
-                        <option value="-1">Filtrar mes</option>
-                        <option>Enero</option>
-                        <option>Febrero</option>
-                        <option>Marzo</option>
-                        <option>Abril</option>
-                        <option>Mayo</option>
-                        <option>Junio</option>
-                        <option>Julio</option>
-                        <option>Agosto</option>
-                        <option>Septiembre</option>
-                        <option>Octubre</option>
-                        <option>Noviembre</option>
-                        <option>Diciembre</option>
+                    <select
+                        value={selectedMonth}
+                        onChange={function (e) {
+                            setSelectedMonth(Number(e.target.value))
+                        }}
+                        className="mb-2 w-full rounded-md border border-slate-200 bg-white px-3 py-2 text-slate-700 shadow-sm focus:border-indigo-400 focus:ring-2 focus:ring-indigo-200"
+                    >
+                        <option value={-1}>Todos los meses</option>
+                        <option value={1}>Enero</option>
+                        <option value={2}>Febrero</option>
+                        <option value={3}>Marzo</option>
+                        <option value={4}>Abril</option>
+                        <option value={5}>Mayo</option>
+                        <option value={6}>Junio</option>
+                        <option value={7}>Julio</option>
+                        <option value={8}>Agosto</option>
+                        <option value={9}>Septiembre</option>
+                        <option value={10}>Octubre</option>
+                        <option value={11}>Noviembre</option>
+                        <option value={12}>Diciembre</option>
                     </select>
                 </div>
 
@@ -168,24 +233,14 @@ function GraficosUsuarioPage() {
 
             <div className="grid grid-cols-1 justify-items-center lg:grid-cols-2 xl:grid-cols-3 gap-4 m-3 ">
                 <div className="bg-white rounded-2xl shadow-xl border border-slate-200 p-6 w-min">
-                    <Line data={data} />
+                    {stats && <Line data={dataLine} />}
                 </div>
                 <div className="bg-white rounded-2xl shadow-xl border border-slate-200 p-6 w-min">
-                    <Doughnut data={dataDoughnut} options={doughnutOptions} />
+                    {stats && <Doughnut data={dataDoughnut} options={doughnutOptions} />}
                 </div>
                 <div className="bg-white rounded-2xl shadow-xl border border-slate-200 p-6 w-min">
-                    <Bar data={dataBar} options={barOptions} />
+                    {stats && <Bar data={dataBar} options={barOptions} />}
                 </div>
-                <div className="bg-white rounded-2xl shadow-xl border border-slate-200 p-6 w-min">
-                    <Line data={data} />
-                </div>
-                <div className="bg-white rounded-2xl shadow-xl border border-slate-200 p-6 w-min">
-                    <Doughnut data={dataDoughnut} options={doughnutOptions} />
-                </div>
-                <div className="bg-white rounded-2xl shadow-xl border border-slate-200 p-6 w-min">
-                    <Bar data={dataBar} options={barOptions} />
-                </div>
-
             </div>
 
         </div>
