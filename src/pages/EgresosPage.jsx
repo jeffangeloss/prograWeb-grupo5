@@ -3,6 +3,7 @@ import EgresosForm from "../components/EgresosForm"
 import NavBarUser from "../components/NavBarUser"
 import { useNavigate } from "react-router-dom"
 import FiltroPopUp from "../components/FiltroPopUp"
+import { isAdminPanelRole, normalizeRoleValue } from "../utils/roles"
 
 const API_URL = "http://127.0.0.1:8000"
 
@@ -94,8 +95,21 @@ function EgresosPage() {
     }
 
     useEffect(function () {
+        const sesion = obtenerSesion()
+        const role = normalizeRoleValue(sesion?.rol || "user")
+
+        if (isAdminPanelRole(role)) {
+            navigate("/admin")
+            return
+        }
+
+        if (role !== "user") {
+            navigate("/sesion")
+            return
+        }
+
         cargarEgresos()
-    }, [])
+    }, [navigate])
 
     async function handleCrearEgreso(fecha, monto, categoria, descripcion) {
         const token = obtenerToken()

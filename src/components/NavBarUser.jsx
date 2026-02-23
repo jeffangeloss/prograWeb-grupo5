@@ -1,11 +1,14 @@
 import { useEffect, useRef, useState } from "react"
-import { useNavigate } from "react-router-dom"
+import { useLocation, useNavigate } from "react-router-dom"
+import RoleBadge from "./RoleBadge"
+import { isAdminPanelRole, normalizeRoleValue } from "../utils/roles"
 
 const API_URL = "http://127.0.0.1:8000"
 const MAX_AVATAR_BYTES = 5 * 1024 * 1024
 
 function NavBarUser({ onLogout }) {
     const navigate = useNavigate()
+    const location = useLocation()
     const [openMenu, setOpenMenu] = useState(false)
     const [sesionData, setSesionData] = useState(null)
     const [avatarError, setAvatarError] = useState("")
@@ -16,6 +19,16 @@ function NavBarUser({ onLogout }) {
     function abrirPerfil() {
         setOpenMenu(false)
         navigate("/perfil")
+    }
+
+    function abrirEgresos() {
+        setOpenMenu(false)
+        navigate("/user")
+    }
+
+    function abrirDashboard() {
+        setOpenMenu(false)
+        navigate("/admin")
     }
 
     function obtenerDatosSesion() {
@@ -214,22 +227,31 @@ function NavBarUser({ onLogout }) {
     const correoUsuario = sesion?.correo || sesion?.email || "usuario@correo.com"
     const nombreUsuario = sesion?.nombre || sesion?.name || nombreDesdeCorreo(correoUsuario)
     const avatarUsuario = resolverAvatarSrc(sesion?.avatar_url || sesion?.avatar || "")
+    const roleValue = normalizeRoleValue(sesion?.rol || "user")
+    const esAdminPanel = isAdminPanelRole(roleValue)
 
     return (
-        <div className="bg-slate-100 px-4 py-3 sm:px-6 sm:py-4 shadow-md flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
-            <div className="flex items-center min-w-0">
-                <img
-                    src="/img/logotemp.png"
-                    alt="Grupo 5"
-                    className="h-10 sm:h-11 w-auto object-contain"
-                />
-                <span className="ml-2 text-xl sm:text-2xl font-extrabold tracking-tight text-slate-900">
-                    GRUPO 5
-                </span>
-            </div>
+        <header className="border-b border-slate-200/80 bg-gradient-to-r from-[#96c7ef] to-[#cfe6f2] shadow-md">
+            <div className="mx-auto flex w-full max-w-[1400px] flex-col gap-3 px-4 py-3 sm:flex-row sm:items-center sm:justify-between sm:px-6 sm:py-4">
+                <button
+                    type="button"
+                    onClick={function () {
+                        navigate(esAdminPanel ? "/admin" : "/user")
+                    }}
+                    className="flex min-w-0 items-center"
+                >
+                    <img
+                        src="/img/logotemp.png"
+                        alt="Grupo 5"
+                        className="h-10 w-auto object-contain sm:h-11"
+                    />
+                    <span className="ml-2 text-xl font-extrabold tracking-tight text-slate-900 sm:text-2xl">
+                        GRUPO 5
+                    </span>
+                </button>
 
-            <div className="flex flex-wrap items-center justify-end gap-2 sm:gap-3">
-                <div ref={menuRef} className="relative">
+                <div className="flex flex-wrap items-center justify-end gap-2 sm:gap-3">
+                    <div ref={menuRef} className="relative">
                     <input
                         ref={avatarInputRef}
                         type="file"
@@ -242,95 +264,120 @@ function NavBarUser({ onLogout }) {
                         }}
                     />
 
-                    <button
-                        type="button"
-                        className="inline-flex items-center gap-2 px-1 py-1 text-slate-700 transition"
-                        onClick={function () {
-                            setOpenMenu(!openMenu)
-                        }}
-                        aria-label="Abrir menu de usuario"
-                        aria-expanded={openMenu}
-                    >
-                        <div className="min-w-0 leading-tight text-right">
-                            <h1 className="text-sm sm:text-base font-semibold truncate">{nombreUsuario}</h1>
-                            <p className="text-[11px] sm:text-xs text-slate-500 truncate">{correoUsuario}</p>
-                        </div>
-
-                        <span className="inline-flex h-9 w-9 items-center justify-center rounded-full border border-blue-900/20 bg-white">
-                            <img
-                                src={avatarUsuario}
-                                alt="Menu usuario"
-                                className="h-8 w-8 rounded-full object-cover"
-                                onError={function (ev) {
-                                    ev.currentTarget.src = "/img/user.jpg"
-                                }}
-                            />
-                        </span>
-                        <svg
-                            viewBox="0 0 20 20"
-                            fill="none"
-                            stroke="currentColor"
-                            strokeWidth="1.8"
-                            className={`h-4 w-4 text-slate-600 transition-transform ${openMenu ? "rotate-180" : ""}`}
-                            aria-hidden="true"
+                        <button
+                            type="button"
+                            className="inline-flex items-center gap-2 px-1 py-1 text-slate-700 transition"
+                            onClick={function () {
+                                setOpenMenu(!openMenu)
+                            }}
+                            aria-label="Abrir menu de usuario"
+                            aria-expanded={openMenu}
                         >
-                            <path d="M5 8l5 5 5-5" />
-                        </svg>
-                    </button>
+                            <div className="min-w-0 leading-tight text-right">
+                                <div className="flex items-center justify-end gap-2">
+                                    <h1 className="truncate text-sm font-semibold sm:text-base">{nombreUsuario}</h1>
+                                    <RoleBadge role={roleValue} />
+                                </div>
+                                <p className="truncate text-[11px] text-slate-500 sm:text-xs">{correoUsuario}</p>
+                            </div>
 
-                    {openMenu && (
-                        <div className="absolute right-0 mt-2 w-72 rounded-2xl border border-slate-200 bg-white shadow-xl z-50 overflow-hidden">
-                            <div className="border-b border-slate-100 px-4 py-4 text-center">
+                            <span className="inline-flex h-9 w-9 items-center justify-center rounded-full border border-blue-900/20 bg-white">
                                 <img
                                     src={avatarUsuario}
-                                    alt="Usuario"
-                                    className="mx-auto h-14 w-14 rounded-full object-cover border border-blue-900/20"
+                                    alt="Menu usuario"
+                                    className="h-8 w-8 rounded-full object-cover"
                                     onError={function (ev) {
                                         ev.currentTarget.src = "/img/user.jpg"
                                     }}
                                 />
-                                <p className="mt-2 text-sm font-semibold text-slate-700 truncate">{nombreUsuario}</p>
-                                <p className="text-xs text-slate-500 truncate">{correoUsuario}</p>
-                            </div>
+                            </span>
+                            <svg
+                                viewBox="0 0 20 20"
+                                fill="none"
+                                stroke="currentColor"
+                                strokeWidth="1.8"
+                                className={`h-4 w-4 text-slate-600 transition-transform ${openMenu ? "rotate-180" : ""}`}
+                                aria-hidden="true"
+                            >
+                                <path d="M5 8l5 5 5-5" />
+                            </svg>
+                        </button>
 
-                            <div className="p-2 space-y-1">
-                                <button
-                                    type="button"
-                                    className="w-full rounded-lg px-3 py-2.5 text-left text-sky-600 hover:bg-sky-50 transition"
-                                    onClick={function () {
-                                        if (avatarInputRef.current) {
-                                            avatarInputRef.current.click()
-                                        }
-                                    }}
-                                >
-                                    {subiendoAvatar ? "Subiendo imagen..." : "Cambiar imagen"}
-                                </button>
-                                <button
-                                    type="button"
-                                    className="w-full rounded-lg px-3 py-2.5 text-left text-slate-700 hover:bg-slate-100 transition"
-                                    onClick={abrirPerfil}
-                                >
-                                    Perfil
-                                </button>
-                                <button
-                                    type="button"
-                                    className="w-full rounded-lg px-3 py-2.5 text-left text-rose-600 hover:bg-rose-50 transition"
-                                    onClick={function () {
-                                        setOpenMenu(false)
-                                        onLogout()
-                                    }}
-                                >
-                                    Cerrar sesion
-                                </button>
+                        {openMenu && (
+                            <div className="absolute right-0 z-50 mt-2 w-72 overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-xl">
+                                <div className="border-b border-slate-100 px-4 py-4 text-center">
+                                    <img
+                                        src={avatarUsuario}
+                                        alt="Usuario"
+                                        className="mx-auto h-14 w-14 rounded-full border border-blue-900/20 object-cover"
+                                        onError={function (ev) {
+                                            ev.currentTarget.src = "/img/user.jpg"
+                                        }}
+                                    />
+                                    <p className="mt-2 truncate text-sm font-semibold text-slate-700">{nombreUsuario}</p>
+                                    <p className="truncate text-xs text-slate-500">{correoUsuario}</p>
+                                    <div className="mt-2">
+                                        <RoleBadge role={roleValue} />
+                                    </div>
+                                </div>
+
+                                <div className="space-y-1 p-2">
+                                    <button
+                                        type="button"
+                                        className="w-full rounded-lg px-3 py-2.5 text-left text-sky-600 transition hover:bg-sky-50"
+                                        onClick={function () {
+                                            if (avatarInputRef.current) {
+                                                avatarInputRef.current.click()
+                                            }
+                                        }}
+                                    >
+                                        {subiendoAvatar ? "Subiendo imagen..." : "Cambiar imagen"}
+                                    </button>
+                                    {!esAdminPanel && location.pathname !== "/user" && (
+                                        <button
+                                            type="button"
+                                            className="w-full rounded-lg px-3 py-2.5 text-left text-slate-700 transition hover:bg-slate-100"
+                                            onClick={abrirEgresos}
+                                        >
+                                            Mis egresos
+                                        </button>
+                                    )}
+                                    {esAdminPanel && location.pathname !== "/admin" && (
+                                        <button
+                                            type="button"
+                                            className="w-full rounded-lg px-3 py-2.5 text-left text-slate-700 transition hover:bg-slate-100"
+                                            onClick={abrirDashboard}
+                                        >
+                                            Dashboard
+                                        </button>
+                                    )}
+                                    <button
+                                        type="button"
+                                        className="w-full rounded-lg px-3 py-2.5 text-left text-slate-700 transition hover:bg-slate-100"
+                                        onClick={abrirPerfil}
+                                    >
+                                        Perfil
+                                    </button>
+                                    <button
+                                        type="button"
+                                        className="w-full rounded-lg px-3 py-2.5 text-left text-rose-600 transition hover:bg-rose-50"
+                                        onClick={function () {
+                                            setOpenMenu(false)
+                                            onLogout()
+                                        }}
+                                    >
+                                        Cerrar sesion
+                                    </button>
+                                </div>
+                                {avatarError && (
+                                    <p className="px-4 pb-3 text-xs font-medium text-rose-600">{avatarError}</p>
+                                )}
                             </div>
-                            {avatarError && (
-                                <p className="px-4 pb-3 text-xs font-medium text-rose-600">{avatarError}</p>
-                            )}
-                        </div>
-                    )}
+                        )}
+                    </div>
                 </div>
             </div>
-        </div>
+        </header>
     )
 }
 
