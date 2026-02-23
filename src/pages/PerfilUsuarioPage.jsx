@@ -2,6 +2,9 @@
 import { useNavigate } from "react-router-dom"
 
 import NavBarUser from "../components/NavBarUser"
+import NavBarAdmin from "../components/NavBarAdmin"
+import RoleBadge from "../components/RoleBadge"
+import { isAdminPanelRole, normalizeRoleValue } from "../utils/roles"
 
 const API_URL = "http://127.0.0.1:8000"
 const SIMBOLO_REGEX = /[^A-Za-z0-9]/
@@ -31,12 +34,14 @@ const ALLOWED_AVATAR_EXTENSIONS = new Set([
     ".bmp",
 ])
 const PRESET_AVATARS = [
-    "/img/avatars/avatar-1.svg",
-    "/img/avatars/avatar-2.svg",
-    "/img/avatars/avatar-3.svg",
-    "/img/avatars/avatar-4.svg",
-    "/img/avatars/avatar-5.svg",
-    "/img/avatars/avatar-6.svg",
+    "/img/avatars/gatito-1.png",
+    "/img/avatars/gatito-2.png",
+    "/img/avatars/gatito-3.png",
+    "/img/avatars/gatito-4.png",
+    "/img/avatars/gatito-5.png",
+    "/img/avatars/gatito-6.png",
+    "/img/avatars/gatito-7.png",
+    "/img/avatars/gatito-8.png",
 ]
 
 function PerfilUsuarioPage() {
@@ -469,17 +474,17 @@ function PerfilUsuarioPage() {
         }
 
         if (nueva.length < 8 || !SIMBOLO_REGEX.test(nueva)) {
-            setErrorContrasena("La nueva contrasena debe tener minimo 8 caracteres y un simbolo.")
+            setErrorContrasena("La nueva contraseña debe tener minimo 8 caracteres y un simbolo.")
             return
         }
 
         if (nueva !== confirmar) {
-            setErrorContrasena("La confirmacion no coincide con la nueva contrasena.")
+            setErrorContrasena("La confirmacion no coincide con la nueva contraseña.")
             return
         }
 
         if (actual === nueva) {
-            setErrorContrasena("La nueva contrasena debe ser diferente a la actual.")
+            setErrorContrasena("La nueva contraseña debe ser diferente a la actual.")
             return
         }
 
@@ -508,7 +513,7 @@ function PerfilUsuarioPage() {
             })
 
             if (!resp.ok) {
-                setErrorContrasena(data.detail || "No se pudo actualizar la contrasena.")
+                setErrorContrasena(data.detail || "No se pudo actualizar la contraseña.")
                 return
             }
 
@@ -519,7 +524,7 @@ function PerfilUsuarioPage() {
             setActual("")
             setNueva("")
             setConfirmar("")
-            setAviso({ tipo: "ok", texto: "Contrasena actualizada correctamente." })
+            setAviso({ tipo: "ok", texto: "Contraseña actualizada correctamente." })
         } catch {
             setErrorContrasena("No se pudo conectar con el backend.")
         } finally {
@@ -533,10 +538,12 @@ function PerfilUsuarioPage() {
         },
         [perfil.avatar_url]
     )
+    const roleValue = normalizeRoleValue(perfil.rol)
+    const esRolAdminPanel = isAdminPanelRole(roleValue)
 
     return (
         <div className="bg-slate-100 text-slate-800 min-h-screen">
-            <NavBarUser onLogout={logout} />
+            {esRolAdminPanel ? <NavBarAdmin onLogout={logout} /> : <NavBarUser onLogout={logout} />}
 
             <main className="w-full px-2 py-3 sm:px-4 sm:py-5 lg:px-6">
                 <div className="mx-auto w-full max-w-[1200px] space-y-5">
@@ -556,6 +563,19 @@ function PerfilUsuarioPage() {
                             {errorPerfil}
                         </div>
                     )}
+
+                    <div>
+                        <button
+                            type="button"
+                            className="inline-flex items-center gap-2 rounded-full border border-slate-300 bg-white px-4 py-2 text-sm font-semibold text-slate-700 transition hover:bg-slate-50"
+                            onClick={function () {
+                                navigate(esRolAdminPanel ? "/admin" : "/user")
+                            }}
+                        >
+                            <span aria-hidden="true">←</span>
+                            {esRolAdminPanel ? "Volver al dashboard" : "Volver a egresos"}
+                        </button>
+                    </div>
 
                     <section className="rounded-2xl border border-slate-200 bg-white p-4 shadow-sm sm:p-6">
                         <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
@@ -582,9 +602,12 @@ function PerfilUsuarioPage() {
                                 </div>
 
                                 <div className="min-w-0">
-                                    <h1 className="truncate text-2xl font-extrabold tracking-tight text-slate-800">
-                                        {perfil.name}
-                                    </h1>
+                                    <div className="flex items-center gap-2">
+                                        <h1 className="truncate text-2xl font-extrabold tracking-tight text-slate-800">
+                                            {perfil.name}
+                                        </h1>
+                                        <RoleBadge role={roleValue} />
+                                    </div>
                                     <p className="truncate text-base text-slate-500">{perfil.email}</p>
                                     <p className="mt-1 text-sm text-slate-500">
                                         {cargandoPerfil ? "Cargando perfil..." : "Gestiona tus datos y seguridad de cuenta."}
@@ -641,7 +664,7 @@ function PerfilUsuarioPage() {
                         <div className="px-4 py-5 sm:px-6">
                             <div className="flex flex-col gap-4 rounded-xl border border-slate-200 bg-slate-50 px-4 py-4 md:flex-row md:items-center md:justify-between">
                                 <div>
-                                    <p className="text-sm font-semibold text-slate-700">Contrasena</p>
+                                    <p className="text-sm font-semibold text-slate-700">Contraseña</p>
                                     <p className="text-sm text-slate-500">**************</p>
                                 </div>
 
@@ -654,7 +677,7 @@ function PerfilUsuarioPage() {
                                         onClick={abrirContrasena}
                                         className="rounded-full border border-blue-500 px-5 py-2 text-sm font-semibold text-blue-600 transition hover:bg-blue-50"
                                     >
-                                        Cambiar contrasena
+                                        Cambiar contraseña
                                     </button>
                                 </div>
                             </div>
@@ -891,15 +914,15 @@ function PerfilUsuarioPage() {
                         </button>
 
                         <div className="space-y-1 pr-10">
-                            <h2 className="text-2xl font-extrabold tracking-tight text-slate-700">Cambiar contrasena</h2>
+                            <h2 className="text-2xl font-extrabold tracking-tight text-slate-700">Cambiar contraseña</h2>
                             <p className="text-sm text-slate-500">
-                                Por seguridad, usa una contrasena nueva y fuerte para tu cuenta.
+                                Por seguridad, usa una contraseña nueva y fuerte para tu cuenta.
                             </p>
                         </div>
 
                         <form className="mt-6 space-y-4" onSubmit={cambiarContrasena}>
                             <div className="space-y-1">
-                                <label className="text-sm font-medium text-slate-700">Contrasena actual</label>
+                                <label className="text-sm font-medium text-slate-700">Contraseña actual</label>
                                 <input
                                     type="password"
                                     value={actual}
@@ -911,7 +934,7 @@ function PerfilUsuarioPage() {
                             </div>
 
                             <div className="space-y-1">
-                                <label className="text-sm font-medium text-slate-700">Nueva contrasena</label>
+                                <label className="text-sm font-medium text-slate-700">Nueva contraseña</label>
                                 <input
                                     type="password"
                                     value={nueva}
@@ -926,7 +949,7 @@ function PerfilUsuarioPage() {
                             </div>
 
                             <div className="space-y-1">
-                                <label className="text-sm font-medium text-slate-700">Confirmar nueva contrasena</label>
+                                <label className="text-sm font-medium text-slate-700">Confirmar nueva contraseña</label>
                                 <input
                                     type="password"
                                     value={confirmar}
@@ -945,7 +968,7 @@ function PerfilUsuarioPage() {
                                 }}
                                 className="text-sm font-medium text-blue-600 transition hover:text-blue-700"
                             >
-                                Olvidaste tu contrasena?
+                                Olvidaste tu contraseña?
                             </button>
 
                             {errorContrasena && (
@@ -967,7 +990,7 @@ function PerfilUsuarioPage() {
                                     disabled={guardandoContrasena}
                                     className="rounded-full bg-emerald-600 px-6 py-2.5 text-sm font-semibold text-white shadow-sm transition hover:bg-emerald-700 disabled:cursor-not-allowed disabled:opacity-70"
                                 >
-                                    {guardandoContrasena ? "Actualizando..." : "Cambiar contrasena"}
+                                    {guardandoContrasena ? "Actualizando..." : "Cambiar contraseña"}
                                 </button>
                             </div>
                         </form>

@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom"
 import Mensaje from "../components/Mensaje"
 import LoginForm from "../components/LoginForm"
 import Azul from "../components/auth/Azul"
+import { isAdminPanelRole, normalizeRoleValue } from "../utils/roles"
 
 function InicioSesionPage() {
 
@@ -45,7 +46,7 @@ function InicioSesionPage() {
         if (datosLogin != null) {
             const login = JSON.parse(datosLogin)
             if (login.ingreso == true) {
-                if (login.rol == "admin") {
+                if (isAdminPanelRole(login.rol)) {
                     navigate("/admin")
                 } else {
                     navigate("/user")
@@ -81,12 +82,15 @@ function InicioSesionPage() {
 
         const data = await resp.json()
         if (data.msg == "Acceso concedido") {
+            const rolNormalizado = normalizeRoleValue(data.rol)
             return {
                 valido: true,
-                rol: data.rol, // se obtiene admin o usuario
+                rol: rolNormalizado,
                 token: data.access_token || data.token || "",
                 nombre: data.name || "",
                 correo: data.email || correo,
+                id: data.id || "",
+                avatar_url: data.avatar_url || "",
             }
         } else {
             console.error(data.detail)
@@ -115,6 +119,8 @@ function InicioSesionPage() {
                 correo: resultadoLogin.correo || correo,
                 nombre: resultadoLogin.nombre || "",
                 rol: resultadoLogin.rol,
+                id: resultadoLogin.id || "",
+                avatar_url: resultadoLogin.avatar_url || "",
                 token: resultadoLogin.token || "",
                 cantidadIntentos: 0,
             }
@@ -123,7 +129,7 @@ function InicioSesionPage() {
                 localStorage.setItem("TOKEN", resultadoLogin.token)
             }
 
-            if (resultadoLogin.rol == "admin") {
+            if (isAdminPanelRole(resultadoLogin.rol)) {
                 navigate("/admin")
             } else {
                 navigate("/user")

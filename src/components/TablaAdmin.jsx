@@ -1,6 +1,6 @@
 import CargarTablaAdmin from "./CargarTablaAdmin"
 
-function TablaAdmin({ usuarios, borrarUsuario}) {
+function TablaAdmin({ usuarios, borrarUsuario, actorRole }) {
 
     return <div className="mt-10 mx-4">
         <div className="overflow-x-auto scroll rounded-lr-2xl rounded-t-2xl shadow-2xl">
@@ -17,7 +17,7 @@ function TablaAdmin({ usuarios, borrarUsuario}) {
                     </tr>
                 </thead>
                 <tbody className="divide-y divide-slate-200">
-                    <CargarTablaAdmin listaUsuarios={usuarios} borrarUsuario={borrarUsuario}/>
+                    <CargarTablaAdmin listaUsuarios={usuarios} borrarUsuario={borrarUsuario} actorRole={actorRole} />
                 </tbody>
             </table>
 
