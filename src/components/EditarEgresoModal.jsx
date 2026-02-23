@@ -2,21 +2,18 @@ function EditarEgresoModal({ onClose }) {
 
     function handleSubmit(e) {
         e.preventDefault()
-        // aquí luego conectas tu lógica para actualizar el egreso
+        // logica para actualizar egreso
         onClose()
     }
 
     return (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40">
-            {/* click fuera para cerrar */}
             <div
                 className="absolute inset-0"
                 onClick={onClose}
             />
 
             <section className="relative w-full max-w-md bg-white border border-slate-200 rounded-2xl shadow-lg p-4 sm:p-5 animate-fadeIn">
-                
-                {/* HEADER */}
                 <div className="space-y-1 mb-4">
                     <h1 className="text-xl font-extrabold tracking-tight text-slate-700 text-center">
                         EDITAR EGRESO
@@ -25,8 +22,6 @@ function EditarEgresoModal({ onClose }) {
                         Modifica la información del egreso seleccionado.
                     </p>
                 </div>
-
-                {/* FORM */}
                 <form onSubmit={handleSubmit} className="grid grid-cols-1 gap-3">
 
                     <div>
@@ -40,7 +35,6 @@ function EditarEgresoModal({ onClose }) {
                             required
                         />
                     </div>
-
                     <div>
                         <label className="block text-sm font-medium text-slate-600 mb-1">
                             Categoría
@@ -80,8 +74,6 @@ function EditarEgresoModal({ onClose }) {
                             placeholder="Ej: Compra de ropa"
                         />
                     </div>
-
-                    {/* ACTIONS */}
                     <div className="flex gap-2 mt-2">
                         <button
                             type="submit"
@@ -89,7 +81,6 @@ function EditarEgresoModal({ onClose }) {
                         >
                             Guardar cambios
                         </button>
-
                         <button
                             type="button"
                             onClick={onClose}

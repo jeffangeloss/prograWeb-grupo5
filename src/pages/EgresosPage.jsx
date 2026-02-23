@@ -3,6 +3,7 @@ import EgresosForm from "../components/EgresosForm"
 import NavBarUser from "../components/NavBarUser"
 import { useNavigate } from "react-router-dom"
 import FiltroPopUp from "../components/FiltroPopUp"
+import EditarEgresoModal from "../components/EditarEgresoModal"
 
 const API_URL = "http://127.0.0.1:8000"
 
@@ -13,6 +14,8 @@ function EgresosPage() {
     const [egresos, setEgresos] = useState([])
     const [cargando, setCargando] = useState(true)
     const [errorApi, setErrorApi] = useState("")
+    const [openEditar, setOpenEditar] = useState(false)
+    const [egresoSeleccionado, setEgresoSeleccionado] = useState(null)
 
     function obtenerSesion() {
         try {
@@ -254,7 +257,8 @@ function EgresosPage() {
                                                             <button
                                                                 className="rounded-full border border-slate-200 px-4 py-2 text-sm font-semibold text-slate-700 hover:bg-slate-100 transition"
                                                                 onClick={function () {
-                                                                    navigate("/editarEgreso")
+                                                                    setEgresoSeleccionado(egreso)
+                                                                    setOpenEditar(true)
                                                                 }}
                                                             >
                                                                 Editar egreso
@@ -322,6 +326,16 @@ function EgresosPage() {
             >
                 Prueba Chatbot
             </button>
+
+            {openEditar && (
+                <EditarEgresoModal
+                    egreso={egresoSeleccionado}
+                    onClose={function () {
+                        setOpenEditar(false)
+                        setEgresoSeleccionado(null)
+                    }}
+                />
+            )}
         </div>
     )
 }
