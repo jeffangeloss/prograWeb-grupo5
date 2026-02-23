@@ -1,34 +1,84 @@
 import { useState } from "react"
+import { useLocation } from "react-router-dom"
 import ContraForm from "../components/ContraForm"
 import Mensaje from "../components/Mensaje"
 import PopUp_ContraConfirm from "../components/PopUp_ContraConfirm"
 
 function RestableceContra_3() {
-    //no estoy poniendo getitem para el correo xq es backend, igual noc si entraria aca pero me pongo esto como marcador y no olvidarme XD
+
+    const location = useLocation()
+    const params = new URLSearchParams(location.search)
+    const token = params.get("token")
+
     const [mensaje, setMensaje] = useState("")
     const [mensajeVisible, setMensajeVisible] = useState(false)
-    const [popUpVisible, setPopUpVisible ] = useState(false)
+    const [popUpVisible, setPopUpVisible] = useState(false)
+    const [cargando, setCargando] = useState(false)
 
-    function Continue(pass, passConfirm) {
+    async function Continue(pass, passConfirm) {
         if (!pass || !passConfirm) {
             setMensaje("Debe completar todos los campos para continuar")
             setMensajeVisible(true)
             setPopUpVisible(false)
+            return
         }
-        else {
-            if (pass == passConfirm) {
-                console.log("Contraseña correcta")
-                setMensaje("")
-                setMensajeVisible(false)
-                setPopUpVisible(true)
-                //hacer que aparezca un componente que diga "confirmado"
-            }
-            else {
-                setMensaje("La contraseña ingresada debe ser igual en ambos campos")
-                setMensajeVisible(true)
-                setPopUpVisible(false)
+
+        if (pass != passConfirm) {
+            setMensaje("La contraseña ingresada debe ser igual en ambos campos")
+            setMensajeVisible(true)
+            setPopUpVisible(false)
+            return
+        }
+
+        if (!token) {
+            setMensaje("Token invalido")
+            setMensajeVisible(true)
+            setPopUpVisible(false)
+            return
+
+        }
+
+        try {
+            setCargando(true)
+
+            const resp = await fetch("http://127.0.0.1:8000/reset-pass/confirm", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+                    token: token,
+                    password: pass
+                })
+            })
+
+            const data = await resp.json()
+
+            if (!resp.ok) {
+                const backendMsg = data.detail?.msg
+
+                let userMessage = "Ocurrió un error al restablecer la contraseña."
+
+                if (backendMsg === "INVALID TOKEN") {
+                    userMessage = "El enlace de recuperación no es válido."
+                }
+                else if (backendMsg === "EXPIRED TOKEN") {
+                    userMessage = "El enlace ha expirado. Solicita uno nuevo."
+                }
+
+                throw new Error(userMessage)
             }
 
+            setMensaje("")
+            setMensajeVisible(false)
+            setPopUpVisible(true)
+
+        } catch (error) {
+            setMensaje(error.message || "Error al restablecer contraseña")
+            setMensajeVisible(true)
+            setPopUpVisible(false)
+        } finally {
+            setCargando(false)
         }
 
 
@@ -56,14 +106,16 @@ function RestableceContra_3() {
                 <p className="mt-2 text-slate-500">Ingresa tu nueva contraseña</p>
             </div>
 
-            <ContraForm onContinue={Continue} />
+            <ContraForm
+                cargando={cargando}
+                onContinue={Continue} />
 
             {/* mensaje de error */}
             <Mensaje
                 msg={mensaje}
                 visible={mensajeVisible}
             />
-            <PopUp_ContraConfirm visible={popUpVisible}/>
+            <PopUp_ContraConfirm visible={popUpVisible} />
 
         </div>
     </div>

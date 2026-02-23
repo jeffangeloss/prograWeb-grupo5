@@ -1,6 +1,6 @@
 import { useState } from "react"
 
-function ContraForm({ onContinue }) {
+function ContraForm({ cargando, onContinue }) {
 
     const [pass, setPass] = useState("")
     const [passConfirm, setPassConfirm] = useState("")
@@ -37,8 +37,9 @@ function ContraForm({ onContinue }) {
                         logout(),
                         onContinue(pass, passConfirm)
                 }}
+                disabled = {cargando}
                 className="mt-4 w-min rounded-full bg-indigo-600 px-16 py-3 font-semibold text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-300 active:scale-[0.99] transition"
-                type="submit" >Continuar
+                type="button" >{cargando ? "Procesando..." : "Continuar"}
             </button>
         </form>
     </div>
