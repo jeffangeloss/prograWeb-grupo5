@@ -4,6 +4,7 @@ import NavBarAdmin from "../components/NavBarAdmin"
 import TablaAdmin from "../components/TablaAdmin"
 import PopUp_BorrarUsuario from "../components/PopUp_BorrarUsuarioConfirm"
 import { useEffect, useMemo, useState } from "react"
+import { toast, Toaster } from "sonner";
 import {
     canManageUsers,
     isAdminPanelRole,
@@ -165,6 +166,7 @@ function AdminPage() {
         }
         setModalVisible(false)
         setUsuarioSeleccionado(null)
+        toast.success("Usuario borrado con éxito")
         cargarListaUsuarios(rolSeleccionado)
     }
 
@@ -193,6 +195,7 @@ function AdminPage() {
 
     return (
         <div className="bg-slate-50 min-h-screen">
+            <Toaster position="bottom-right" richColors closeButton />
             <NavBarAdmin onLogout={logout} />
             <div className="grid grid-cols-1 md:flex md:justify-center">
                 <div className="px-6 py-6 w-full max-w-7xl">
