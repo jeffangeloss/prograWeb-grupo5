@@ -3,6 +3,7 @@ import EgresosForm from "../components/EgresosForm"
 import NavBarUser from "../components/NavBarUser"
 import { useNavigate } from "react-router-dom"
 import FiltroPopUp from "../components/FiltroPopUp"
+import EditarEgresoModal from "../components/EditarEgresoModal"
 import { isAdminPanelRole, normalizeRoleValue } from "../utils/roles"
 
 const API_URL = "http://127.0.0.1:8000"
@@ -14,6 +15,9 @@ function EgresosPage() {
     const [egresos, setEgresos] = useState([])
     const [cargando, setCargando] = useState(true)
     const [errorApi, setErrorApi] = useState("")
+    const [openEditar, setOpenEditar] = useState(false)
+    const [egresoSeleccionado, setEgresoSeleccionado] = useState(null)
+    const [categories, setCategories] = useState([])
 
     function obtenerSesion() {
         try {
@@ -94,6 +98,29 @@ function EgresosPage() {
         }
     }
 
+    async function cargarCategorias() {
+    const token = obtenerToken()
+    if (!token) return
+
+    try {
+        const resp = await fetch(`${API_URL}/categories`, {
+            headers: {
+                Authorization: `Bearer ${token}`,
+            },
+        })
+
+        const data = await resp.json().catch(function () {
+            return []
+        })
+
+        if (!resp.ok) return
+
+        setCategories(Array.isArray(data) ? data : [])
+    } catch {
+        console.error("Error cargando categorias")
+    }
+}
+
     useEffect(function () {
         const sesion = obtenerSesion()
         const role = normalizeRoleValue(sesion?.rol || "user")
@@ -109,7 +136,8 @@ function EgresosPage() {
         }
 
         cargarEgresos()
-    }, [navigate])
+        cargarCategorias()
+    }, [])
 
     async function handleCrearEgreso(fecha, monto, categoria, descripcion) {
         const token = obtenerToken()
@@ -155,6 +183,17 @@ function EgresosPage() {
                 error: "No se pudo conectar con el backend",
             }
         }
+    }
+
+    async function actualizarEgresoEditado(egresoActualizado) {
+        setEgresos(function (prev) {
+            return prev.map(function (item) {
+                if (item.id === egresoActualizado.id) {
+                    return egresoActualizado
+                }
+                return item
+            })
+        })
     }
 
     return (
@@ -268,8 +307,8 @@ function EgresosPage() {
                                                             <button
                                                                 className="rounded-full border border-slate-200 px-4 py-2 text-sm font-semibold text-slate-700 hover:bg-slate-100 transition"
                                                                 onClick={function () {
-                                                                    localStorage.setItem("EGRESO_EDITAR", JSON.stringify(egreso))
-                                                                    navigate("/editarEgreso", { state: { egreso: egreso } })
+                                                                    setEgresoSeleccionado(egreso)
+                                                                    setOpenEditar(true)
                                                                 }}
                                                             >
                                                                 Editar egreso
@@ -337,6 +376,18 @@ function EgresosPage() {
             >
                 Prueba Chatbot
             </button>
+
+            {openEditar && (
+                <EditarEgresoModal
+                    egreso={egresoSeleccionado}
+                    categories={categories}
+                    onUpdated={actualizarEgresoEditado}
+                    onClose={function () {
+                        setOpenEditar(false)
+                        setEgresoSeleccionado(null)
+                    }}
+                />
+            )}
         </div>
     )
 }
