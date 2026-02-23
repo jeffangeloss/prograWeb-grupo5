@@ -1,11 +1,19 @@
-function FiltradoAdmin({ rolSeleccionado, onFiltro }) {
+function FiltradoAdmin({ rolSeleccionado, onFiltro, textoBusqueda, onBuscar }) {
     return <div className="ml-4 mt-6 gap-6 flex flex-col sm:flex-row sm:items-center">
-        <input className="bg-white sm:w-64 px-4 py-1 rounded-xl shadow-xl" type="text" placeholder="Buscar usuario..."></input>
+        <input
+            className="bg-white sm:w-64 px-4 py-1 rounded-xl shadow-xl"
+            type="text"
+            placeholder="Buscar usuario..."
+            value={textoBusqueda || ""}
+            onChange={function (ev) { onBuscar(ev.target.value) }}
+        />
         <select className="py-1 bg-white sm:w-48 px-4 rounded-xl shadow-xl"
             value={rolSeleccionado} onChange={function (ev) { onFiltro(ev.target.value) }}>
             <option value="">Todos</option>
-            <option value="Usuario">Usuario</option>
-            <option value="Administrador">Administrador</option>
+            <option value="1">Usuario</option>
+            <option value="2">Administrador</option>
+            <option value="3">Owner</option>
+            <option value="4">Auditor</option>
         </select>
     </div>
 }

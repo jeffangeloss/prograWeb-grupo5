@@ -3,6 +3,7 @@ import EgresosForm from "../components/EgresosForm"
 import NavBarUser from "../components/NavBarUser"
 import { useNavigate } from "react-router-dom"
 import FiltroPopUp from "../components/FiltroPopUp"
+import { isAdminPanelRole, normalizeRoleValue } from "../utils/roles"
 
 const API_URL = "http://127.0.0.1:8000"
 
@@ -46,7 +47,7 @@ function EgresosPage() {
         if (!Number.isFinite(monto)) {
             return "S/ 0.00"
         }
-        return S/ ${monto.toFixed(2)}
+        return `S/ ${monto.toFixed(2)}`
     }
 
     const totalRegistrado = useMemo(function () {
@@ -68,9 +69,9 @@ function EgresosPage() {
         setErrorApi("")
 
         try {
-            const resp = await fetch(${API_URL}/expenses, {
+            const resp = await fetch(`${API_URL}/expenses`, {
                 headers: {
-                    Authorization: Bearer ${token},
+                    Authorization: `Bearer ${token}`,
                 },
             })
 
@@ -94,8 +95,21 @@ function EgresosPage() {
     }
 
     useEffect(function () {
+        const sesion = obtenerSesion()
+        const role = normalizeRoleValue(sesion?.rol || "user")
+
+        if (isAdminPanelRole(role)) {
+            navigate("/admin")
+            return
+        }
+
+        if (role !== "user") {
+            navigate("/sesion")
+            return
+        }
+
         cargarEgresos()
-    }, [])
+    }, [navigate])
 
     async function handleCrearEgreso(fecha, monto, categoria, descripcion) {
         const token = obtenerToken()
@@ -107,11 +121,11 @@ function EgresosPage() {
         }
 
         try {
-            const resp = await fetch(${API_URL}/expenses, {
+            const resp = await fetch(`${API_URL}/expenses`, {
                 method: "POST",
                 headers: {
                     "content-type": "application/json",
-                    Authorization: Bearer ${token},
+                    Authorization: `Bearer ${token}`,
                 },
                 body: JSON.stringify({
                     amount: Number(monto),

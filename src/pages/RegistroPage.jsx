@@ -1,4 +1,3 @@
-import { Form } from "react-router-dom";
 import Azul from "../components/auth/Azul";
 import TituloCrearCuenta from "../components/auth/TituloCrearCuenta";
 import YaTienesCuenta from "../components/auth/YaTienesCuenta";

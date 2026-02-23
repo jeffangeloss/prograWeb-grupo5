@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom"
 import Mensaje from "../components/Mensaje"
 import LoginForm from "../components/LoginForm"
 import Azul from "../components/auth/Azul"
+import { isAdminPanelRole, normalizeRoleValue } from "../utils/roles"
 
 function InicioSesionPage() {
 
@@ -10,12 +11,42 @@ function InicioSesionPage() {
     const [mensaje, setMensaje] = useState("")
     const navigate = useNavigate()
 
+    function detectarNavegador() {
+        if (typeof navigator === "undefined") {
+            return "Desconocido"
+        }
+
+        const uaData = navigator.userAgentData
+        if (uaData && Array.isArray(uaData.brands)) {
+            const brands = uaData.brands
+                .map(function (item) {
+                    return (item?.brand || "").toLowerCase()
+                })
+
+            if (brands.some(function (brand) { return brand.includes("brave") })) return "Brave"
+            if (brands.some(function (brand) { return brand.includes("edge") })) return "Edge"
+            if (brands.some(function (brand) { return brand.includes("opera") })) return "Opera"
+            if (brands.some(function (brand) { return brand.includes("firefox") })) return "Firefox"
+            if (brands.some(function (brand) { return brand.includes("safari") })) return "Safari"
+            if (brands.some(function (brand) { return brand.includes("chrom") })) return "Chrome"
+        }
+
+        const ua = (navigator.userAgent || "").toLowerCase()
+        if (ua.includes("brave")) return "Brave"
+        if (ua.includes("edg/")) return "Edge"
+        if (ua.includes("opr/") || ua.includes("opera")) return "Opera"
+        if (ua.includes("firefox")) return "Firefox"
+        if (ua.includes("safari") && !ua.includes("chrome")) return "Safari"
+        if (ua.includes("chrome")) return "Chrome"
+        return "Desconocido"
+    }
+
     useEffect(function () {
         const datosLogin = localStorage.getItem("DATOS_LOGIN")
         if (datosLogin != null) {
             const login = JSON.parse(datosLogin)
             if (login.ingreso == true) {
-                if (login.rol == "admin") {
+                if (isAdminPanelRole(login.rol)) {
                     navigate("/admin")
                 } else {
                     navigate("/user")
@@ -26,6 +57,7 @@ function InicioSesionPage() {
     }, [])
 
     async function loginHTTP(correo, password) {
+        const navegadorActual = detectarNavegador()
         const resp = await fetch("http://127.0.0.1:8000/login", {
             method: "post",
             body: JSON.stringify({
@@ -33,7 +65,8 @@ function InicioSesionPage() {
                 password: password
             }),
             headers: {
-                "content-type": "application/json"
+                "content-type": "application/json",
+                "x-browser-name": navegadorActual
             }
         })
 
@@ -49,9 +82,15 @@ function InicioSesionPage() {
 
         const data = await resp.json()
         if (data.msg == "Acceso concedido") {
+            const rolNormalizado = normalizeRoleValue(data.rol)
             return {
                 valido: true,
-                rol: data.rol // se obtiene admin o usuario
+                rol: rolNormalizado,
+                token: data.access_token || data.token || "",
+                nombre: data.name || "",
+                correo: data.email || correo,
+                id: data.id || "",
+                avatar_url: data.avatar_url || "",
             }
         } else {
             console.error(data.detail)
@@ -77,13 +116,20 @@ function InicioSesionPage() {
 
             const datosLogin = {
                 ingreso: true,
-                correo: correo,
+                correo: resultadoLogin.correo || correo,
+                nombre: resultadoLogin.nombre || "",
                 rol: resultadoLogin.rol,
-                cantidadIntentos: 0
+                id: resultadoLogin.id || "",
+                avatar_url: resultadoLogin.avatar_url || "",
+                token: resultadoLogin.token || "",
+                cantidadIntentos: 0,
             }
             localStorage.setItem("DATOS_LOGIN", JSON.stringify(datosLogin))
+            if (resultadoLogin.token) {
+                localStorage.setItem("TOKEN", resultadoLogin.token)
+            }
 
-            if (resultadoLogin.rol == "admin") {
+            if (isAdminPanelRole(resultadoLogin.rol)) {
                 navigate("/admin")
             } else {
                 navigate("/user")

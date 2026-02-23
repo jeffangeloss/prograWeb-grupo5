@@ -1,3 +1,4 @@
+import { useEffect } from "react"
 import {
     Chart as ChartJS,
     LineElement,
@@ -7,13 +8,12 @@ import {
     PointElement,
     Tooltip,
     ArcElement,
-    Legend
-} from "chart.js";
-
-
-import { Bar, Doughnut, Line } from "react-chartjs-2";
-import NavBarUser from "../components/NavBarUser";
-import { Navigate, useNavigate } from "react-router-dom";
+    Legend,
+} from "chart.js"
+import { Bar, Doughnut, Line } from "react-chartjs-2"
+import NavBarUser from "../components/NavBarUser"
+import { useNavigate } from "react-router-dom"
+import { isAdminPanelRole, normalizeRoleValue } from "../utils/roles"
 
 
 ChartJS.register(
@@ -31,6 +31,30 @@ ChartJS.register(
 
 function GraficosUsuarioPage() {
     const navigate = useNavigate()
+
+    function obtenerSesion() {
+        try {
+            const raw = localStorage.getItem("DATOS_LOGIN")
+            return raw ? JSON.parse(raw) : null
+        } catch {
+            return null
+        }
+    }
+
+    useEffect(function () {
+        const sesion = obtenerSesion()
+        const role = normalizeRoleValue(sesion?.rol || "user")
+
+        if (isAdminPanelRole(role)) {
+            navigate("/admin")
+            return
+        }
+
+        if (role !== "user") {
+            navigate("/sesion")
+        }
+    }, [navigate])
+
     const data = {
         labels: ["Ene", "Feb", "Mar", "Abr", "May", "Jun"],
         datasets: [{
