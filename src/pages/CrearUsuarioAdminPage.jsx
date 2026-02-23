@@ -1,7 +1,6 @@
 import CrearUsuarioAdminForm from "../components/CrearUsuarioAdminForm"
 import NavBarAdmin from "../components/NavBarAdmin"
 import { useNavigate } from "react-router-dom"
-import { Toaster } from "sonner"
 
 function CrearUsuarioAdminPage() {
   const navigate = useNavigate()
@@ -11,7 +10,6 @@ function CrearUsuarioAdminPage() {
   }
 
   return <div className="bg-slate-50 bg-cover min-h-screen bg-center">
-    <Toaster position="bottom-right" richColors closeButton />
     <NavBarAdmin onLogout={logout} />
     <div className="px-6 py-6">
       <h1 className="pb-5 ml-6 text-3xl font-semibold text-center">Añadir Usuario</h1>

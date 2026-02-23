@@ -130,8 +130,9 @@ function EditarUsuarioForm() {
                 setError(extractError(data))
                 return
             }
-            toast.success("Usuario actualizado con éxito")
             navigate("/admin")
+            toast.success("Usuario actualizado correctamente")
+
         } catch {
             setError("No se pudo conectar con el backend.")
         } finally {

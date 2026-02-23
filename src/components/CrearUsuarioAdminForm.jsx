@@ -115,8 +115,9 @@ function CrearUsuarioForm() {
                 setError(extractError(data))
                 return
             }
-            toast.success("Usuario creado con éxito")
             navigate("/admin")
+            toast.success("Usuario creado correctamente")
+
         } catch {
             setError("No se pudo conectar con el backend.")
         } finally {
