@@ -1,6 +1,7 @@
 ﻿import { useMemo, useState } from "react"
 import { useNavigate } from "react-router-dom"
 import { canCreateRole, canManageUsers, normalizeRoleValue } from "../utils/roles"
+import { toast } from "sonner"
 
 const ROLE_OPTIONS = [
     { value: "1", role: "user", label: "Usuario" },
@@ -114,7 +115,7 @@ function CrearUsuarioForm() {
                 setError(extractError(data))
                 return
             }
-
+            toast.success("Usuario creado con éxito")
             navigate("/admin")
         } catch {
             setError("No se pudo conectar con el backend.")
