@@ -4,6 +4,7 @@ import NavBarUser from "../components/NavBarUser"
 import { useNavigate } from "react-router-dom"
 import FiltroPopUp from "../components/FiltroPopUp"
 import { isAdminPanelRole, normalizeRoleValue } from "../utils/roles"
+import { toast, Toaster } from "sonner";
 
 const API_URL = "http://127.0.0.1:8000"
 
@@ -188,17 +189,6 @@ function EgresosPage() {
         }
     }
 
-    async function actualizarEgresoEditado(egresoActualizado) {
-        setEgresos(function (prev) {
-            return prev.map(function (item) {
-                if (item.id === egresoActualizado.id) {
-                    return egresoActualizado
-                }
-                return item
-            })
-        })
-    }
-
     async function eliminarEgresoBtn(id) {
         if (egresoEliminar !== id) {
             setEgresoEliminar(id);
@@ -218,6 +208,7 @@ function EgresosPage() {
             if (resp.ok) {
                 setEgresos((prev) => prev.filter((item) => item.id !== id));
                 setEgresoEliminar(null);
+                toast.success("Egreso eliminado con éxito")
             } else {
                 const data = await resp.json();
                 setErrorApi(data.detail || "Error al eliminar el egreso");
@@ -229,8 +220,8 @@ function EgresosPage() {
 
     return (
         <div className="bg-slate-100 text-slate-800 min-h-screen">
+            <Toaster position="bottom-right" richColors closeButton />
             <NavBarUser onLogout={logout} />
-
             <main className="w-full px-2 py-3 sm:px-4 sm:py-5 lg:px-6">
                 <div className="w-full max-w-[1280px] mx-auto">
                     <section className="bg-slate-100/90 border border-slate-200 rounded-2xl shadow-sm p-4 sm:p-5 lg:p-6">
@@ -350,7 +341,7 @@ function EgresosPage() {
                                                                 className="rounded-full border border-slate-200 px-4 py-2 text-sm font-semibold text-slate-700 hover:bg-slate-100 transition"
                                                                 onClick={function () {
                                                                     localStorage.setItem("EGRESO_EDITAR", JSON.stringify(egreso))
-                                                                    navigate("/editarEgreso", { state: { egreso: egreso} } )
+                                                                    navigate("/editarEgreso", { state: { egreso: egreso } })
                                                                 }}
                                                             >
                                                                 Editar egreso
