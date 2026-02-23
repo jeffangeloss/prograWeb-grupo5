@@ -16,6 +16,7 @@ function EgresosPage() {
     const [errorApi, setErrorApi] = useState("")
     const [categories, setCategories] = useState([])
     const [ordenFecha, setOrdenFecha] = useState("desc")
+    const [egresoEliminar, setEgresoEliminar] = useState(null);
 
     useEffect(function () {
         cargarEgresos()
@@ -101,27 +102,27 @@ function EgresosPage() {
     }
 
     async function cargarCategorias() {
-    const token = obtenerToken()
-    if (!token) return
+        const token = obtenerToken()
+        if (!token) return
 
-    try {
-        const resp = await fetch(`${API_URL}/categories`, {
-            headers: {
-                Authorization: `Bearer ${token}`,
-            },
-        })
+        try {
+            const resp = await fetch(`${API_URL}/categories`, {
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                },
+            })
 
-        const data = await resp.json().catch(function () {
-            return []
-        })
+            const data = await resp.json().catch(function () {
+                return []
+            })
 
-        if (!resp.ok) return
+            if (!resp.ok) return
 
-        setCategories(Array.isArray(data) ? data : [])
-    } catch {
-        console.error("Error cargando categorias")
+            setCategories(Array.isArray(data) ? data : [])
+        } catch {
+            console.error("Error cargando categorias")
+        }
     }
-}
 
     useEffect(function () {
         const sesion = obtenerSesion()
@@ -184,6 +185,45 @@ function EgresosPage() {
                 ok: false,
                 error: "No se pudo conectar con el backend",
             }
+        }
+    }
+
+    async function actualizarEgresoEditado(egresoActualizado) {
+        setEgresos(function (prev) {
+            return prev.map(function (item) {
+                if (item.id === egresoActualizado.id) {
+                    return egresoActualizado
+                }
+                return item
+            })
+        })
+    }
+
+    async function eliminarEgresoBtn(id) {
+        if (egresoEliminar !== id) {
+            setEgresoEliminar(id);
+            setTimeout(function () { setEgresoEliminar(null) }, 3000);
+            return;
+        }
+
+        const token = obtenerToken();
+        try {
+            const resp = await fetch(`${API_URL}/expenses/${id}`, {
+                method: "DELETE",
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                },
+            });
+
+            if (resp.ok) {
+                setEgresos((prev) => prev.filter((item) => item.id !== id));
+                setEgresoEliminar(null);
+            } else {
+                const data = await resp.json();
+                setErrorApi(data.detail || "Error al eliminar el egreso");
+            }
+        } catch (err) {
+            setErrorApi("No se pudo conectar con el backend");
         }
     }
 
@@ -319,7 +359,12 @@ function EgresosPage() {
                                                             <button
                                                                 type="button"
                                                                 aria-label="Eliminar egreso"
-                                                                className="rounded-full border border-red-200 bg-red-50 px-3 py-2 text-sm font-medium text-red-600 hover:bg-red-100 hover:border-red-300 transition"
+                                                                className={
+                                                                    "rounded-full border px-3 py-2 text-sm font-medium transition " +
+                                                                    (egresoEliminar === egreso.id ?
+                                                                        "bg-orange-500 text-white border-orange-600 shadow-inner" :
+                                                                        "bg-red-50 text-red-600 border-red-200 hover:bg-red-100 hover:border-red-300")}
+                                                                onClick={function () { eliminarEgresoBtn(egreso.id) }}
                                                             >
                                                                 <img src="/img/trashbin.png" alt="Eliminar" className="w-4 h-4" />
                                                             </button>
