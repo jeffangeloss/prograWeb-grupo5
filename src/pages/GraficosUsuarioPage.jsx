@@ -31,7 +31,8 @@ ChartJS.register(
 
 function GraficosUsuarioPage() {
     const navigate = useNavigate()
-    const [stats, setStats] = useState(null)
+    const [statsCurrent, setStatsCurrent] = useState(null)
+    const [statsPrevious, setStatsPrevious] = useState(null)
     const [loading, setLoading] = useState(true)
     const [selectedMonth, setSelectedMonth] = useState(-1)
 
@@ -40,17 +41,25 @@ function GraficosUsuarioPage() {
         "Jul", "Ago", "Sep", "Oct", "Nov", "Dic"
     ]
 
-    const monthlyMap = {}
-    stats?.monthly?.forEach(function (item) {
-        monthlyMap[item.month] = item.total
-    })
+    function buildMonthlyData(stats) {
+        const map = {}
+        stats?.monthly?.forEach(item => {
+            map[item.month] = item.total
+        })
 
-    const monthlyData = monthLabels.map(function (_, index) {
-        return monthlyMap[index + 1] || 0
-    })
+        return monthLabels.map((_, index) => {
+            return map[index + 1] || 0
+        })
+    }
 
-    const categoryLabels = stats?.by_category?.map(c => c.category) || []
-    const categoryValues = stats?.by_category?.map(c => c.total) || []
+    const currentYear = new Date().getFullYear()
+    const previousYear = currentYear - 1
+
+    const monthlyCurrent = buildMonthlyData(statsCurrent)
+    const monthlyPrevious = buildMonthlyData(statsPrevious)
+
+    const categoryLabels = statsCurrent?.by_category?.map(c => c.category) || []
+    const categoryValues = statsCurrent?.by_category?.map(c => c.total) || []
 
     function obtenerSesion() {
         try {
@@ -71,32 +80,41 @@ function GraficosUsuarioPage() {
             const raw = localStorage.getItem("DATOS_LOGIN")
             const sesion = raw ? JSON.parse(raw) : null
             const token = sesion?.token
-
             if (!token) return
 
-            let url = "http://127.0.0.1:8000/expenses/stats"
+            const currentYear = new Date().getFullYear()
+            const previousYear = currentYear - 1
 
-            if (selectedMonth != -1) {
-                url = url + "?month=" + selectedMonth
+            async function fetchYear(year) {
+                let url = `http://127.0.0.1:8000/expenses/stats?year=${year}`
+
+                if (selectedMonth !== -1) {
+                    url += `&month=${selectedMonth}`
+                }
+
+                const resp = await fetch(url, {
+                    headers: { Authorization: `Bearer ${token}` }
+                })
+
+                return resp.ok ? resp.json() : null
             }
 
             try {
-                const resp = await fetch(url, {
-                    headers: {
-                        Authorization: `Bearer ${token}`
-                    }
-                })
+                const [currentData, previousData] = await Promise.all([
+                    fetchYear(currentYear),
+                    fetchYear(previousYear)
+                ])
 
-                const data = await resp.json()
-                if (resp.ok) {
-                    setStats(data)
-                }
+                setStatsCurrent(currentData)
+                setStatsPrevious(previousData)
+
             } catch (err) {
                 console.error(err)
             } finally {
                 setLoading(false)
             }
         }
+
         statsHTTP()
     }, [selectedMonth])
 
@@ -114,23 +132,84 @@ function GraficosUsuarioPage() {
         }
     }, [navigate])
 
-    const dataLine = {
+    function buildStackedData(stats) {
+        if (!stats?.monthly_by_category) return { labels: [], datasets: [] }
+
+        const labels =
+            selectedMonth === -1
+                ? monthLabels
+                : [monthLabels[selectedMonth - 1]]
+
+        // Obtener categorías únicas
+        const categories = [
+            ...new Set(stats.monthly_by_category.map(item => item.category))
+        ]
+
+        const datasets = categories.map((category, index) => {
+
+            const data = labels.map((_, monthIndex) => {
+                const monthNumber =
+                    selectedMonth === -1
+                        ? monthIndex + 1
+                        : selectedMonth
+
+                const found = stats.monthly_by_category.find(
+                    item =>
+                        item.month === monthNumber &&
+                        item.category === category
+                )
+
+                return found ? found.total : 0
+            })
+
+            const colors = [
+                "rgba(99, 102, 241, 0.8)",
+                "rgba(16, 185, 129, 0.8)",
+                "rgba(239, 68, 68, 0.8)",
+                "rgba(249, 115, 22, 0.8)",
+                "rgba(147, 51, 234, 0.8)",
+                "rgba(59, 130, 246, 0.8)"
+            ]
+
+            return {
+                label: category,
+                data,
+                backgroundColor: colors[index % colors.length],
+            }
+        })
+
+        return { labels, datasets }
+    }
+
+    const dataStacked = buildStackedData(statsCurrent)
+
+    const dataMultiAxis = {
         labels: monthLabels,
-        datasets: [{
-            label: "Egresos mensuales",
-            data: monthlyData,
-            borderColor: "#3b82f6",
-            backgroundColor: "rgba(59,130,246,0.2)",
-            tension: 0.4,
-            fill: true
-        }]
+        datasets: [
+            {
+                label: `Egresos ${currentYear}`,
+                data: monthlyCurrent,
+                borderColor: "#3b82f6",
+                backgroundColor: "rgba(59,130,246,0.2)",
+                yAxisID: "y",
+                tension: 0.4,
+            },
+            {
+                label: `Egresos ${previousYear}`,
+                data: monthlyPrevious,
+                borderColor: "#f59e0b",
+                backgroundColor: "rgba(245,158,11,0.2)",
+                yAxisID: "y1",
+                tension: 0.4,
+            }
+        ]
     }
     const dataBar = {
         labels: monthLabels,
         datasets: [
             {
-                label: "Egresos mensuales",
-                data: monthlyData,
+                label: `Egresos ${currentYear}`,
+                data: monthlyCurrent,
                 backgroundColor: [
                     "rgba(99, 102, 241, 0.8)",
                     "rgba(16, 185, 129, 0.8)",
@@ -161,6 +240,33 @@ function GraficosUsuarioPage() {
             }
         ]
     };
+
+    const multiAxisOptions = {
+        responsive: true,
+        interaction: {
+            mode: "index",
+            intersect: false,
+        },
+        stacked: false,
+        scales: {
+            y: {
+                type: "linear",
+                display: true,
+                position: "left",
+                beginAtZero: true,
+            },
+            y1: {
+                type: "linear",
+                display: true,
+                position: "right",
+                beginAtZero: true,
+                grid: {
+                    drawOnChartArea: false,
+                },
+            },
+        },
+    }
+
     const doughnutOptions = {
         responsive: true,
         plugins: {
@@ -186,6 +292,21 @@ function GraficosUsuarioPage() {
         },
     };
 
+    const stackedOptions = {
+    responsive: true,
+    maintainAspectRatio: false,
+    plugins: {
+        legend: { position: "top" }
+    },
+    scales: {
+        x: { stacked: true },
+        y: {
+            stacked: true,
+            beginAtZero: true
+        }
+    }
+}
+
     function logout() {
         localStorage.clear()
         navigate("/")
@@ -198,7 +319,7 @@ function GraficosUsuarioPage() {
 
             <div className="my-3 flex justify-between items-center">
                 <div className="flex items-center gap-4">
-                    <h1 className="whitespace-nowrap text-xl font-extrabold tracking-tight text-slate-700">Egresos del mes</h1>
+                    <h1 className="whitespace-nowrap text-xl font-extrabold tracking-tight text-slate-700">Resumen de los egresos</h1>
                     <select
                         value={selectedMonth}
                         onChange={function (e) {
@@ -233,13 +354,18 @@ function GraficosUsuarioPage() {
 
             <div className="grid grid-cols-1 justify-items-center lg:grid-cols-2 xl:grid-cols-3 gap-4 m-3 ">
                 <div className="bg-white rounded-2xl shadow-xl border border-slate-200 p-6 w-min">
-                    {stats && <Line data={dataLine} />}
+                    {statsCurrent && statsPrevious && (
+                        <Line data={dataMultiAxis} options={multiAxisOptions} />
+                    )}
                 </div>
                 <div className="bg-white rounded-2xl shadow-xl border border-slate-200 p-6 w-min">
-                    {stats && <Doughnut data={dataDoughnut} options={doughnutOptions} />}
+                    {statsCurrent && <Doughnut data={dataDoughnut} options={doughnutOptions} />}
                 </div>
                 <div className="bg-white rounded-2xl shadow-xl border border-slate-200 p-6 w-min">
-                    {stats && <Bar data={dataBar} options={barOptions} />}
+                    {statsCurrent && <Bar data={dataBar} options={barOptions} />}
+                </div>
+                <div className="bg-white rounded-2xl shadow-xl border border-slate-200 p-6 w-min">
+                    {statsCurrent && <Bar data={dataStacked} options={stackedOptions} />}
                 </div>
             </div>
 
