@@ -1,12 +1,15 @@
-import { useEffect, useMemo, useState } from "react"
-import EgresosForm from "../components/EgresosForm"
-import NavBarUser from "../components/NavBarUser"
+import { useEffect, useMemo, useRef, useState } from "react"
 import { useNavigate } from "react-router-dom"
+import { toast, Toaster } from "sonner"
+
+import EgresosForm from "../components/EgresosForm"
 import FiltroPopUp from "../components/FiltroPopUp"
+import NavBarUser from "../components/NavBarUser"
+import { clearAuthData, getAuthSession, getAuthToken, hasActiveSession } from "../utils/auth"
 import { isAdminPanelRole, normalizeRoleValue } from "../utils/roles"
-import { toast, Toaster } from "sonner";
 
 const API_URL = "http://127.0.0.1:8000"
+const LOGIN_REDIRECT_DELAY_MS = 1400
 
 function EgresosPage() {
     const navigate = useNavigate()
@@ -16,31 +19,71 @@ function EgresosPage() {
     const [cargando, setCargando] = useState(true)
     const [errorApi, setErrorApi] = useState("")
     const [categories, setCategories] = useState([])
+    const [categoriesLoading, setCategoriesLoading] = useState(false)
     const [ordenFecha, setOrdenFecha] = useState("desc")
-    const [egresoEliminar, setEgresoEliminar] = useState(null);
-
-    useEffect(function () {
-        cargarEgresos()
-    }, [ordenFecha])
-
-    function obtenerSesion() {
-        try {
-            const raw = localStorage.getItem("DATOS_LOGIN")
-            return raw ? JSON.parse(raw) : null
-        } catch {
-            return null
-        }
-    }
-
-    function obtenerToken() {
-        const sesion = obtenerSesion()
-        return sesion?.token || ""
-    }
+    const [egresoEliminar, setEgresoEliminar] = useState(null)
+    const [sesionBloqueada, setSesionBloqueada] = useState(false)
+    const [mensajeSesion, setMensajeSesion] = useState("Debes iniciar sesion para continuar.")
+    const sesionTimerRef = useRef(null)
 
     function logout() {
-        localStorage.clear()
+        clearAuthData()
         navigate("/")
     }
+
+    function bloquearSesion(mensaje) {
+        if (sesionBloqueada) {
+            return
+        }
+
+        setMensajeSesion(mensaje || "Sesion invalida. Inicia sesion nuevamente.")
+        setSesionBloqueada(true)
+        clearAuthData()
+
+        if (sesionTimerRef.current) {
+            window.clearTimeout(sesionTimerRef.current)
+        }
+        sesionTimerRef.current = window.setTimeout(function () {
+            navigate("/sesion", { replace: true })
+        }, LOGIN_REDIRECT_DELAY_MS)
+    }
+
+    useEffect(function () {
+        return function () {
+            if (sesionTimerRef.current) {
+                window.clearTimeout(sesionTimerRef.current)
+            }
+        }
+    }, [])
+
+    useEffect(function () {
+        if (!hasActiveSession()) {
+            bloquearSesion("Debes iniciar sesion para ver tus egresos.")
+            return
+        }
+
+        const sesion = getAuthSession()
+        const role = normalizeRoleValue(sesion?.rol)
+
+        if (isAdminPanelRole(role)) {
+            navigate("/admin", { replace: true })
+            return
+        }
+
+        if (role !== "user") {
+            bloquearSesion("No tienes permisos para acceder a esta pantalla.")
+            return
+        }
+
+        cargarCategorias()
+    }, [])
+
+    useEffect(function () {
+        if (sesionBloqueada) {
+            return
+        }
+        cargarEgresos()
+    }, [ordenFecha, sesionBloqueada])
 
     function formatearFecha(isoDate) {
         const parsed = new Date(isoDate)
@@ -65,11 +108,11 @@ function EgresosPage() {
     }, [egresos])
 
     async function cargarEgresos() {
-        const token = obtenerToken()
+        const token = getAuthToken()
         if (!token) {
             setCargando(false)
             setEgresos([])
-            setErrorApi("No hay sesion activa. Inicia sesion nuevamente.")
+            bloquearSesion("No hay sesion activa. Inicia sesion nuevamente.")
             return
         }
 
@@ -88,6 +131,10 @@ function EgresosPage() {
             })
 
             if (!resp.ok) {
+                if (resp.status === 401 || resp.status === 403) {
+                    bloquearSesion("Tu sesion expiro. Vuelve a iniciar sesion.")
+                    return
+                }
                 setEgresos([])
                 setErrorApi(data.detail || "No se pudieron cargar los egresos")
                 return
@@ -103,9 +150,13 @@ function EgresosPage() {
     }
 
     async function cargarCategorias() {
-        const token = obtenerToken()
-        if (!token) return
+        const token = getAuthToken()
+        if (!token) {
+            bloquearSesion("No hay sesion activa. Inicia sesion nuevamente.")
+            return
+        }
 
+        setCategoriesLoading(true)
         try {
             const resp = await fetch(`${API_URL}/categories`, {
                 headers: {
@@ -122,30 +173,15 @@ function EgresosPage() {
             setCategories(Array.isArray(data) ? data : [])
         } catch {
             console.error("Error cargando categorias")
+        } finally {
+            setCategoriesLoading(false)
         }
     }
 
-    useEffect(function () {
-        const sesion = obtenerSesion()
-        const role = normalizeRoleValue(sesion?.rol || "user")
-
-        if (isAdminPanelRole(role)) {
-            navigate("/admin")
-            return
-        }
-
-        if (role !== "user") {
-            navigate("/sesion")
-            return
-        }
-
-        cargarEgresos()
-        cargarCategorias()
-    }, [])
-
     async function handleCrearEgreso(fecha, monto, categoria, descripcion) {
-        const token = obtenerToken()
+        const token = getAuthToken()
         if (!token) {
+            bloquearSesion("Sesion expirada. Inicia sesion nuevamente.")
             return {
                 ok: false,
                 error: "Sesion expirada. Inicia sesion nuevamente.",
@@ -172,6 +208,13 @@ function EgresosPage() {
             })
 
             if (!resp.ok) {
+                if (resp.status === 401 || resp.status === 403) {
+                    bloquearSesion("Tu sesion expiro. Vuelve a iniciar sesion.")
+                    return {
+                        ok: false,
+                        error: "Tu sesion expiro. Vuelve a iniciar sesion.",
+                    }
+                }
                 return {
                     ok: false,
                     error: data.detail || "No se pudo registrar el egreso",
@@ -191,30 +234,43 @@ function EgresosPage() {
 
     async function eliminarEgresoBtn(id) {
         if (egresoEliminar !== id) {
-            setEgresoEliminar(id);
-            setTimeout(function () { setEgresoEliminar(null) }, 3000);
-            return;
+            setEgresoEliminar(id)
+            setTimeout(function () { setEgresoEliminar(null) }, 3000)
+            return
         }
 
-        const token = obtenerToken();
+        const token = getAuthToken()
+        if (!token) {
+            bloquearSesion("Sesion expirada. Inicia sesion nuevamente.")
+            return
+        }
+
         try {
             const resp = await fetch(`${API_URL}/expenses/${id}`, {
                 method: "DELETE",
                 headers: {
                     Authorization: `Bearer ${token}`,
                 },
-            });
+            })
 
             if (resp.ok) {
-                setEgresos((prev) => prev.filter((item) => item.id !== id));
-                setEgresoEliminar(null);
-                toast.success("Egreso eliminado con éxito")
-            } else {
-                const data = await resp.json();
-                setErrorApi(data.detail || "Error al eliminar el egreso");
+                setEgresos((prev) => prev.filter((item) => item.id !== id))
+                setEgresoEliminar(null)
+                toast.success("Egreso eliminado con exito")
+                return
             }
-        } catch (err) {
-            setErrorApi("No se pudo conectar con el backend");
+
+            if (resp.status === 401 || resp.status === 403) {
+                bloquearSesion("Tu sesion expiro. Vuelve a iniciar sesion.")
+                return
+            }
+
+            const data = await resp.json().catch(function () {
+                return {}
+            })
+            setErrorApi(data.detail || "Error al eliminar el egreso")
+        } catch {
+            setErrorApi("No se pudo conectar con el backend")
         }
     }
 
@@ -235,6 +291,7 @@ function EgresosPage() {
                                 <button
                                     type="button"
                                     onClick={function () {
+                                        cargarCategorias()
                                         setOpenCrear(true)
                                     }}
                                     className="inline-flex items-center gap-2 rounded-full bg-emerald-600 px-5 py-2.5 text-base font-bold text-white shadow-sm transition hover:bg-emerald-700 focus:outline-none focus:ring-2 focus:ring-emerald-300"
@@ -278,6 +335,7 @@ function EgresosPage() {
                                     onClose={function () {
                                         setOpenFiltro(false)
                                     }}
+                                    categories={categories}
                                 />
 
                                 <span className="rounded-full border border-slate-200 bg-white/70 px-3 py-1 text-xs font-semibold text-slate-700">
@@ -352,9 +410,9 @@ function EgresosPage() {
                                                                 aria-label="Eliminar egreso"
                                                                 className={
                                                                     "rounded-full border px-3 py-2 text-sm font-medium transition " +
-                                                                    (egresoEliminar === egreso.id ?
-                                                                        "bg-orange-500 text-white border-orange-600 shadow-inner" :
-                                                                        "bg-red-50 text-red-600 border-red-200 hover:bg-red-100 hover:border-red-300")}
+                                                                    (egresoEliminar === egreso.id
+                                                                        ? "bg-orange-500 text-white border-orange-600 shadow-inner"
+                                                                        : "bg-red-50 text-red-600 border-red-200 hover:bg-red-100 hover:border-red-300")}
                                                                 onClick={function () { eliminarEgresoBtn(egreso.id) }}
                                                             >
                                                                 <img src="/img/trashbin.png" alt="Eliminar" className="w-4 h-4" />
@@ -373,7 +431,7 @@ function EgresosPage() {
             </main>
 
             {openCrear && (
-                <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/45 p-4">
+                <div className="fixed inset-0 z-50 flex items-start justify-center overflow-y-auto bg-slate-900/45 p-4">
                     <button
                         type="button"
                         aria-label="Cerrar modal"
@@ -383,7 +441,7 @@ function EgresosPage() {
                         }}
                     />
 
-                    <section className="relative z-10 w-full max-w-xl rounded-2xl border border-slate-200 bg-white p-5 shadow-2xl sm:p-6">
+                    <section className="relative z-10 my-8 w-full max-w-xl max-h-[92vh] overflow-y-auto rounded-2xl border border-slate-200 bg-white p-5 shadow-2xl sm:p-6">
                         <button
                             type="button"
                             aria-label="Cerrar"
@@ -400,7 +458,21 @@ function EgresosPage() {
                             <p className="text-sm text-slate-500">Completa los datos para registrar tu gasto.</p>
                         </div>
 
-                        <EgresosForm onComplete={handleCrearEgreso} />
+                        <EgresosForm
+                            onComplete={handleCrearEgreso}
+                            categories={categories}
+                            categoriesLoading={categoriesLoading}
+                        />
+                    </section>
+                </div>
+            )}
+
+            {sesionBloqueada && (
+                <div className="fixed inset-0 z-[70] flex items-center justify-center bg-slate-900/60 p-4">
+                    <section className="w-full max-w-md rounded-2xl border border-slate-200 bg-white px-6 py-5 shadow-2xl">
+                        <h2 className="text-xl font-extrabold tracking-tight text-slate-700">Acceso restringido</h2>
+                        <p className="mt-2 text-sm text-slate-600">{mensajeSesion}</p>
+                        <p className="mt-4 text-xs font-semibold uppercase tracking-wide text-slate-400">Redirigiendo a login...</p>
                     </section>
                 </div>
             )}

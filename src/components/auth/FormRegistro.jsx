@@ -1,11 +1,9 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { passwordMeetsPolicy, passwordPolicyMessage } from "../../utils/passwordPolicy";
 
 /* para corroborar correo; “Desde el inicio hasta el final del texto, debe haber algo sin espacios + @ + algo sin espacios + . + algo sin espacios (ej. x@y.z”*/ 
 const EMAIL_REGEX = /^\S+@\S+\.\S+$/;
-/* Para detectar si hay algún caracter especial (no letra no número); marcará true en SIMBOLO_REGEX.test(password) */
-const SIMBOLO_REGEX = /[^A-Za-z0-9]/;
-
 function FormRegistro() {
     const navigate = useNavigate();
 
@@ -43,13 +41,8 @@ function FormRegistro() {
             /* si el correo no tiene el formato declarado en EMAIL_REGEX */ 
         }
         if (valores.password) {
-            const min8 = valores.password.length >= 8;
-            const tieneSimbolo = SIMBOLO_REGEX.test(valores.password);
-
-            if (!min8 || !tieneSimbolo) {
-                errs.push(
-                    "La contraseña debe tener mínimo 8 caracteres y un símbolo"
-                );
+            if (!passwordMeetsPolicy(valores.password)) {
+                errs.push(passwordPolicyMessage("La contraseña"));
             }
         }
         if (!aceptaTerminos) errs.push("Debe aceptar los términos y condiciones.");

@@ -1,40 +1,48 @@
-import TextoContra from "../components/TextoContra"
 import { useEffect, useState } from "react"
 
+import Mensaje from "../components/Mensaje"
+import TextoContra from "../components/TextoContra"
+
 function RestablecerContra_2() {
-
-
     const [correo, setCorreo] = useState("")
     const [cargando, setCargando] = useState(false)
+    const [mensaje, setMensaje] = useState("")
+    const [mensajeVisible, setMensajeVisible] = useState(false)
 
-    useEffect(function() {
+    useEffect(function () {
         const correoGuardado = localStorage.getItem("CorreoRecuperar")
-        if(correoGuardado){
+        if (correoGuardado) {
             setCorreo(correoGuardado)
         }
     }, [])
 
-    async function reenviarCorreo(){
+    async function reenviarCorreo() {
         if (!correo) return
+
         try {
             setCargando(true)
+            setMensaje("")
+            setMensajeVisible(false)
 
             const resp = await fetch("http://127.0.0.1:8000/reset-pass/request", {
                 method: "PUT",
                 headers: {
-                    "Content-Type": "application/json"
+                    "Content-Type": "application/json",
                 },
                 body: JSON.stringify({
-                    email: correo
-                })
+                    email: correo,
+                }),
             })
 
             if (!resp.ok) {
                 throw new Error("Error reenviando correo")
             }
 
-        } catch (error) {
-            setMensaje("Ocurrió un error al reenviar el correo.")
+            setMensaje("Correo reenviado correctamente.")
+            setMensajeVisible(true)
+        } catch {
+            setMensaje("Ocurrio un error al reenviar el correo.")
+            setMensajeVisible(true)
         } finally {
             setCargando(false)
         }
@@ -62,14 +70,15 @@ function RestablecerContra_2() {
             </div>
 
             {/* texto */}
-            
             <TextoContra
-            onResend={reenviarCorreo}
-            cargando = {cargando}
-            correo={correo} />
+                onResend={reenviarCorreo}
+                cargando={cargando}
+                correo={correo}
+            />
+
+            <Mensaje msg={mensaje} visible={mensajeVisible} />
         </div>
     </div>
-
 }
 
 export default RestablecerContra_2

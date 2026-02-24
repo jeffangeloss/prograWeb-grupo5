@@ -3,8 +3,7 @@ import { useNavigate } from "react-router-dom"
 
 import Mensaje from "../components/Mensaje"
 import NavBarUser from "../components/NavBarUser"
-
-const SIMBOLO_REGEX = /[^A-Za-z0-9]/
+import { passwordMeetsPolicy, passwordPolicyMessage } from "../utils/passwordPolicy"
 
 function CambiarContrasenaPage() {
     const navigate = useNavigate()
@@ -43,14 +42,14 @@ function CambiarContrasenaPage() {
         if (!actual || !nueva || !confirmar) {
             return "Debe completar todos los campos para continuar"
         }
-        if (nueva.length < 8 || !SIMBOLO_REGEX.test(nueva)) {
-            return "La nueva contraseña debe tener minimo 8 caracteres y un simbolo"
+        if (!passwordMeetsPolicy(nueva)) {
+            return passwordPolicyMessage("La nueva contrasena")
         }
         if (nueva !== confirmar) {
-            return "Las contraseñas no coinciden"
+            return "Las contrasenas no coinciden"
         }
         if (actual === nueva) {
-            return "La nueva contraseña debe ser diferente a la actual"
+            return "La nueva contrasena debe ser diferente a la actual"
         }
         return ""
     }
@@ -96,7 +95,7 @@ function CambiarContrasenaPage() {
         if (!respuesta.ok) {
             const detalle = typeof data?.detail === "string"
                 ? data.detail
-                : "No se pudo actualizar la contraseña"
+                : "No se pudo actualizar la contrasena"
             setMensajeError(detalle)
             return
         }
@@ -104,7 +103,7 @@ function CambiarContrasenaPage() {
         setActual("")
         setNueva("")
         setConfirmar("")
-        setMensajeExito("Tu contraseña se cambió correctamente.")
+        setMensajeExito("Tu contrasena se cambio correctamente.")
     }
 
     return (
@@ -113,14 +112,14 @@ function CambiarContrasenaPage() {
 
             <main className="w-full px-4 py-6 sm:px-6 lg:px-8">
                 <section className="mx-auto max-w-xl rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
-                    <h1 className="text-2xl font-extrabold tracking-tight text-slate-700">Cambiar contraseña</h1>
+                    <h1 className="text-2xl font-extrabold tracking-tight text-slate-700">Cambiar contrasena</h1>
                     <p className="mt-1 text-sm text-slate-500">
-                        Actualiza tu contraseña para mantener segura tu cuenta.
+                        Actualiza tu contrasena para mantener segura tu cuenta.
                     </p>
 
                     <form className="mt-6 space-y-4" onSubmit={onSubmit}>
                         <div className="space-y-1">
-                            <label className="text-sm font-medium text-slate-700">Contraseña actual</label>
+                            <label className="text-sm font-medium text-slate-700">Contrasena actual</label>
                             <input
                                 type="password"
                                 className="w-full rounded-md border border-slate-200 bg-white px-3 py-2 text-slate-700 shadow-sm focus:border-indigo-400 focus:ring-2 focus:ring-indigo-200"
@@ -132,7 +131,7 @@ function CambiarContrasenaPage() {
                         </div>
 
                         <div className="space-y-1">
-                            <label className="text-sm font-medium text-slate-700">Nueva contraseña</label>
+                            <label className="text-sm font-medium text-slate-700">Nueva contrasena</label>
                             <input
                                 type="password"
                                 className="w-full rounded-md border border-slate-200 bg-white px-3 py-2 text-slate-700 shadow-sm focus:border-indigo-400 focus:ring-2 focus:ring-indigo-200"
@@ -144,7 +143,7 @@ function CambiarContrasenaPage() {
                         </div>
 
                         <div className="space-y-1">
-                            <label className="text-sm font-medium text-slate-700">Confirmar nueva contraseña</label>
+                            <label className="text-sm font-medium text-slate-700">Confirmar nueva contrasena</label>
                             <input
                                 type="password"
                                 className="w-full rounded-md border border-slate-200 bg-white px-3 py-2 text-slate-700 shadow-sm focus:border-indigo-400 focus:ring-2 focus:ring-indigo-200"
@@ -160,7 +159,7 @@ function CambiarContrasenaPage() {
                             disabled={cargando}
                             className="w-full rounded-full bg-indigo-600 px-6 py-3 font-semibold text-white shadow-sm transition hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-300 disabled:cursor-not-allowed disabled:opacity-70"
                         >
-                            {cargando ? "Actualizando..." : "Actualizar contraseña"}
+                            {cargando ? "Actualizando..." : "Actualizar contrasena"}
                         </button>
                     </form>
 
