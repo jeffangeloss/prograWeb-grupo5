@@ -1,8 +1,5 @@
 import { useState, useRef, useEffect } from 'react';
-import { GoogleGenAI } from "@google/genai";
 
-// Initialize Gemini API
-const genAI = new GoogleGenAI({ apiKey: import.meta.env.VITE_GEMINI_API_KEY || "" });
 
 function ChatBotPage() {
     const [isOpen, setIsOpen] = useState(false);
@@ -24,50 +21,57 @@ function ChatBotPage() {
     }, [messages, isTyping, isOpen]);
 
     const handleSendMessage = async (e) => {
-        e?.preventDefault();
-        if (!input.trim() || isTyping) return;
+        e?.preventDefault()
+        if (!input.trim() || isTyping) return
+
+        const loginData = JSON.parse(localStorage.getItem("DATOS_LOGIN") || "{}")
+        if (!loginData.token) {
+            alert("No estás autenticado")
+            return
+        }
+
+        const token = loginData.token
 
         const userMessage = {
             role: 'user',
             text: input,
             timestamp: new Date(),
-        };
+        }
 
-        setMessages(prev => [...prev, userMessage]);
-        setInput('');
-        setIsTyping(true);
+        setMessages(prev => [...prev, userMessage])
+        setInput('')
+        setIsTyping(true)
 
         try {
-            const model = "gemini-2.5-flash";
-            const systemInstruction = "Eres un asesor financiero experto. Da consejos cortos y útiles en español.";
+            const response = await fetch("http://localhost:8000/chat/", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    "Authorization": `Bearer ${token}`
+                },
+                body: JSON.stringify({
+                    message: input
+                })
+            })
 
-            const response = await genAI.models.generateContent({
-                model,
-                contents: [
-                    ...messages.map(m => ({
-                        role: m.role,
-                        parts: [{ text: m.text }]
-                    })),
-                    { role: 'user', parts: [{ text: input }] }
-                ],
-                config: { systemInstruction },
-            });
+            const data = await response.json()
 
             setMessages(prev => [...prev, {
                 role: 'model',
-                text: response.text || "No pude procesar eso.",
+                text: data.text || "No pude procesar eso.",
                 timestamp: new Date(),
-            }]);
+            }])
+
         } catch (error) {
             setMessages(prev => [...prev, {
                 role: 'model',
-                text: "Error de conexión.",
+                text: "Error de conexión con el servidor.",
                 timestamp: new Date(),
-            }]);
+            }])
         } finally {
-            setIsTyping(false);
+            setIsTyping(false)
         }
-    };
+    }
 
     return (
         <div style={{ position: 'fixed', bottom: '20px', right: '20px', zIndex: 1000, fontFamily: 'sans-serif' }}>
