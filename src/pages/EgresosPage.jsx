@@ -7,6 +7,7 @@ import FiltroPopUp from "../components/FiltroPopUp"
 import NavBarUser from "../components/NavBarUser"
 import { clearAuthData, getAuthSession, getAuthToken, hasActiveSession } from "../utils/auth"
 import { isAdminPanelRole, normalizeRoleValue } from "../utils/roles"
+import ChatBotPage from "./ChatBotPage"
 
 const API_URL = "http://127.0.0.1:8000"
 const LOGIN_REDIRECT_DELAY_MS = 1400
@@ -40,6 +41,8 @@ function EgresosPage() {
     const [sesionBloqueada, setSesionBloqueada] = useState(false)
     const [mensajeSesion, setMensajeSesion] = useState("Debes iniciar sesion para continuar.")
     const sesionTimerRef = useRef(null)
+
+    const [chatOpen, setChatOpen] = useState(false)
 
     const totalRegistrado = useMemo(function () {
         return egresos.reduce(function (acc, item) {
@@ -734,15 +737,16 @@ function EgresosPage() {
                 </div>
             )}
 
-            <button
-                type="button"
-                className="fixed bottom-4 right-4 z-50 rounded-full bg-indigo-600 px-4 py-2 font-semibold text-white shadow-lg hover:bg-indigo-700"
-                onClick={function () {
-                    navigate("/chatbot")
-                }}
-            >
-                Prueba Chatbot
-            </button>
+            {!chatOpen && (
+                <button
+                    type="button"
+                    className="fixed bottom-4 left-4 z-50 rounded-full bg-indigo-600 px-4 py-2 font-semibold text-white shadow-lg hover:bg-indigo-700"
+                    onClick={function () {
+                        setChatOpen(true)
+                    }}>💬
+                </button>
+            )}
+            <ChatBotPage isOpen={chatOpen} setIsOpen={setChatOpen} />
         </div>
     )
 }
