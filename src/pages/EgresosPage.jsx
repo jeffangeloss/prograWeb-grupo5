@@ -253,79 +253,33 @@ function EgresosPage() {
     async function cargarCategorias() {
         const token = getAuthToken()
         if (!token) {
-            bloquearSesion("No hay sesion activa. Inicia sesion nuevamente.")
+            bloquearSesion("No hay sesión activa. Inicia sesión nuevamente.")
             return
         }
 
         setCategoriesLoading(true)
+
         try {
-            const resp = await fetch(`${API_URL}/expenses/categories`, {
+            const resp = await fetch(`${API_URL}/categories`, {
                 headers: {
                     Authorization: `Bearer ${token}`,
                 },
             })
 
-            const data = await resp.json().catch(function () {
-                return {}
-            })
-
             if (resp.status === 401 || resp.status === 403) {
-                bloquearSesion("Tu sesion expiro. Vuelve a iniciar sesion.")
+                bloquearSesion("Tu sesión expiró. Vuelve a iniciar sesión.")
                 return
             }
 
-            let listado = []
+            const data = await resp.json().catch(() => [])
 
-            if (resp.ok) {
-                listado = Array.isArray(data?.data) ? data.data : []
-            } else if (resp.status === 404) {
-                const legacyResp = await fetch(`${API_URL}/categories/`, {
-                    headers: {
-                        Authorization: `Bearer ${token}`,
-                    },
-                })
-
-                const legacyData = await legacyResp.json().catch(function () {
-                    return []
-                })
-
-                if (legacyResp.status === 401 || legacyResp.status === 403) {
-                    bloquearSesion("Tu sesion expiro. Vuelve a iniciar sesion.")
-                    return
-                }
-
-                if (legacyResp.ok) {
-                    listado = Array.isArray(legacyData)
-                        ? legacyData
-                            .map(function (item) {
-                                if (!item?.id) return null
-                                const name = String(item.name || item.nombre || "").trim()
-                                if (!name) return null
-                                return { id: item.id, name: name }
-                            })
-                            .filter(Boolean)
-                        : []
-                }
+            if (resp.ok && Array.isArray(data)) {
+                setCategories(
+                    data
+                        .filter(item => item?.id && item?.name)
+                        .sort((a, b) => a.name.localeCompare(b.name, "es"))
+                )
             }
-
-            if (listado.length === 0) return
-
-            setCategories(function (previas) {
-                const mapa = new Map()
-                previas.forEach(function (item) {
-                    mapa.set(item.id, item)
-                })
-                listado.forEach(function (item) {
-                    if (item?.id && item?.name) {
-                        mapa.set(item.id, { id: item.id, name: item.name })
-                    }
-                })
-                return Array.from(mapa.values()).sort(function (a, b) {
-                    return a.name.localeCompare(b.name, "es")
-                })
-            })
-        } catch {
-            // no-op: si el backend no responde, el combo puede inferirse desde egresos
         } finally {
             setCategoriesLoading(false)
         }
