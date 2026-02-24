@@ -53,7 +53,7 @@ function RestableceContra_3() {
             setMensajeVisible(true)
             setPopUpVisible(false)
             return
-          
+
         if (pass != passConfirm) {
             setMensaje("La contrasena ingresada debe ser igual en ambos campos")
             setMensajeVisible(true)
@@ -162,5 +162,5 @@ function RestableceContra_3() {
         </div>
     </div>
 }
-
+}
 export default RestableceContra_3
