@@ -593,7 +593,7 @@ function EgresosPage() {
                             <table className="w-full min-w-[860px] table-fixed text-left text-base text-slate-700">
                                 <thead className="border-b border-slate-200/80 bg-slate-50 text-[13px] uppercase tracking-wide text-slate-500">
                                     <tr>
-                                        <th className="px-4 py-5">
+                                        <th className="w-[170px] px-4 py-5">
                                             Fecha
                                             <button
                                                 type="button"
@@ -605,10 +605,10 @@ function EgresosPage() {
                                                 {ordenFecha === "desc" ? "DESC" : "ASC"}
                                             </button>
                                         </th>
-                                        <th className="px-4 py-5">Categoria</th>
-                                        <th className="px-4 py-5">Descripcion</th>
-                                        <th className="px-4 py-5 text-right">Monto</th>
-                                        <th className="px-4 py-5 text-right">Acciones</th>
+                                        <th className="w-[220px] px-4 py-5">Categoria</th>
+                                        <th className="px-4 py-5">Descripción</th>
+                                        <th className="w-[140px] px-4 py-5 text-right">Monto</th>
+                                        <th className="w-[220px] px-4 py-5 text-right">Acciones</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -629,8 +629,22 @@ function EgresosPage() {
                                             return (
                                                 <tr key={egreso.id} className="border-b border-slate-100">
                                                     <td className="px-4 py-5">{formatearFecha(egreso.expense_date)}</td>
-                                                    <td className="px-4 py-5">{egreso.category_name || "-"}</td>
-                                                    <td className="px-4 py-5">{egreso.description || "-"}</td>
+                                                    <td className="px-4 py-5">
+                                                        <span
+                                                            className="block max-w-[180px] truncate sm:max-w-[220px]"
+                                                            title={egreso.category_name || "-"}
+                                                        >
+                                                            {egreso.category_name || "-"}
+                                                        </span>
+                                                    </td>
+                                                    <td className="px-4 py-5">
+                                                        <span
+                                                            className="block max-w-[220px] truncate sm:max-w-[320px] lg:max-w-[460px]"
+                                                            title={egreso.description || "-"}
+                                                        >
+                                                            {egreso.description || "-"}
+                                                        </span>
+                                                    </td>
                                                     <td className="px-4 py-5 text-right font-semibold">{formatearMonto(egreso.amount)}</td>
                                                     <td className="px-4 py-5">
                                                         <div className="flex items-center justify-end gap-3">
