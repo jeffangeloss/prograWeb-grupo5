@@ -128,6 +128,16 @@ function SeguridadUsuarioPage() {
             <NavBarAdmin onLogout={logout} />
             <div className="p-6">
                 <div className="max-w-6xl mx-auto">
+                    <button
+                        type="button"
+                        className="mb-5 inline-flex items-center gap-2 rounded-full border border-slate-300 bg-white px-4 py-2 text-sm font-semibold text-slate-700 transition hover:bg-slate-50"
+                        onClick={function () {
+                            navigate("/admin")
+                        }}
+                    >
+                        <span aria-hidden="true">←</span>
+                        Volver al dashboard
+                    </button>
                     <h2 className="text-2xl font-bold text-slate-800">Historial de acceso</h2>
                     <p className="text-sm text-slate-500 mt-1">Auditar accesos de un usuario especifico.</p>
 
