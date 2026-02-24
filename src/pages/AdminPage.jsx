@@ -4,7 +4,7 @@ import NavBarAdmin from "../components/NavBarAdmin"
 import TablaAdmin from "../components/TablaAdmin"
 import PopUp_BorrarUsuario from "../components/PopUp_BorrarUsuarioConfirm"
 import { useEffect, useMemo, useState } from "react"
-import { toast, Toaster } from "sonner";
+import { toast } from "sonner"
 import {
     canManageUsers,
     isAdminPanelRole,
@@ -141,34 +141,49 @@ function AdminPage() {
         if (!usuarioSeleccionado?.id) {
             return
         }
+
         const token = getToken()
         if (!token) {
             logout()
             return
         }
 
-        const URL = `http://127.0.0.1:8000/admin/${usuarioSeleccionado.id}`
-        const response = await fetch(URL, {
-            method: "DELETE",
-            headers: {
-                "x-token": token,
-                Authorization: `Bearer ${token}`,
-            },
-        })
+        const toastId = toast.loading("Eliminando usuario...")
 
-        const data = await response.json().catch(function () {
-            return {}
-        })
+        try {
+            const URL = `http://127.0.0.1:8000/admin/${usuarioSeleccionado.id}`
+            const response = await fetch(URL, {
+                method: "DELETE",
+                headers: {
+                    "x-token": token,
+                    Authorization: `Bearer ${token}`,
+                },
+            })
 
-        if (!response.ok) {
-            setErrorApi(extractError(data))
-            return
+            const data = await response.json().catch(function () {
+                return {}
+            })
+
+            if (!response.ok) {
+                setErrorApi(extractError(data))
+                toast.error(data, { id: toastId })
+                return
+            }
+            setModalVisible(false)
+            setUsuarioSeleccionado(null)
+            toast.success("Usuario eliminado correctamente", { id: toastId })
+            await cargarListaUsuarios(rolSeleccionado)
+        } catch (err) {
+            toast.error("No se pudo conectar con el backend", { id: toastId })
         }
-        setModalVisible(false)
-        setUsuarioSeleccionado(null)
-        toast.success("Usuario borrado con éxito")
-        cargarListaUsuarios(rolSeleccionado)
     }
+
+    useEffect(function () {
+        if (location.state?.mensajeExito) {
+            toast.success(location.state.mensajeExito)
+            window.history.replaceState({}, document.title)
+        }
+    })
 
     useEffect(function () {
         if (!isAdminPanelRole(actorRole)) {
@@ -195,7 +210,6 @@ function AdminPage() {
 
     return (
         <div className="bg-slate-50 min-h-screen">
-            <Toaster position="bottom-right" richColors closeButton />
             <NavBarAdmin onLogout={logout} />
             <div className="grid grid-cols-1 md:flex md:justify-center">
                 <div className="px-6 py-6 w-full max-w-7xl">
