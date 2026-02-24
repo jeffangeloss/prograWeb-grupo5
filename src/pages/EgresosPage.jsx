@@ -190,12 +190,6 @@ function EgresosPage() {
     }
 
     async function eliminarEgresoBtn(id) {
-        if (egresoEliminar !== id) {
-            setEgresoEliminar(id);
-            setTimeout(function () { setEgresoEliminar(null) }, 3000);
-            return;
-        }
-
         const token = obtenerToken();
         try {
             const resp = await fetch(`${API_URL}/expenses/${id}`, {
@@ -350,11 +344,7 @@ function EgresosPage() {
                                                             <button
                                                                 type="button"
                                                                 aria-label="Eliminar egreso"
-                                                                className={
-                                                                    "rounded-full border px-3 py-2 text-sm font-medium transition " +
-                                                                    (egresoEliminar === egreso.id ?
-                                                                        "bg-orange-500 text-white border-orange-600 shadow-inner" :
-                                                                        "bg-red-50 text-red-600 border-red-200 hover:bg-red-100 hover:border-red-300")}
+                                                                className={"rounded-full border px-3 py-2 text-sm font-medium transition bg-red-50 text-red-600 border-red-200 hover:bg-red-100 hover:border-red-300"}
                                                                 onClick={function () { eliminarEgresoBtn(egreso.id) }}
                                                             >
                                                                 <img src="/img/trashbin.png" alt="Eliminar" className="w-4 h-4" />
@@ -370,7 +360,7 @@ function EgresosPage() {
                         </div>
                     </section>
                 </div>
-            </main>
+            </main >
 
             {openCrear && (
                 <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/45 p-4">
@@ -403,7 +393,8 @@ function EgresosPage() {
                         <EgresosForm onComplete={handleCrearEgreso} />
                     </section>
                 </div>
-            )}
+            )
+            }
 
             <button
                 type="button"
@@ -414,7 +405,7 @@ function EgresosPage() {
             >
                 Prueba Chatbot
             </button>
-        </div>
+        </div >
     )
 }
 
