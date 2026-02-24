@@ -14,6 +14,7 @@ import { Bar, Doughnut, Line } from "react-chartjs-2"
 import NavBarUser from "../components/NavBarUser"
 import { useNavigate } from "react-router-dom"
 import { isAdminPanelRole, normalizeRoleValue } from "../utils/roles"
+import PopUp_ToLogin from "../components/PopUp_ToLogin"
 
 
 ChartJS.register(
@@ -35,6 +36,8 @@ function GraficosUsuarioPage() {
     const [statsPrevious, setStatsPrevious] = useState(null)
     const [loading, setLoading] = useState(true)
     const [selectedMonth, setSelectedMonth] = useState(-1)
+    const [popUpVisible, setPopUpVisible] = useState(false)
+    const [popUpMensaje, setPopUpMensaje] = useState("")
 
     const monthLabels = [
         "Ene", "Feb", "Mar", "Abr", "May", "Jun",
@@ -75,12 +78,23 @@ function GraficosUsuarioPage() {
         return sesion?.token || ""
     }
 
+    function logout() {
+        localStorage.clear()
+        navigate("/")
+    }
+
     useEffect(function () {
         async function statsHTTP() {
-            const raw = localStorage.getItem("DATOS_LOGIN")
-            const sesion = raw ? JSON.parse(raw) : null
-            const token = sesion?.token
-            if (!token) return
+            const token = obtenerToken()
+            if (!token) {
+                setLoading(false)
+                setPopUpMensaje("No hay sesion activa. Inicia sesion nuevamente.")
+                setPopUpVisible(true)
+                return
+            }
+
+            setLoading(true)
+            setPopUpVisible(false)
 
             const currentYear = new Date().getFullYear()
             const previousYear = currentYear - 1
@@ -96,15 +110,26 @@ function GraficosUsuarioPage() {
                     headers: { Authorization: `Bearer ${token}` }
                 })
 
-                return resp.ok ? resp.json() : null
+                if (resp.status === 401) {
+                    setPopUpMensaje("Tu sesión ha expirado. Inicia sesión nuevamente.")
+                    setPopUpVisible(true)
+                    setLoading(false)
+                    return null
+                }
+
+                if (!resp.ok) {
+                    throw new Error("Error al obtener estadísticas")
+                }
+
+                return await resp.json()
             }
 
             try {
-                const [currentData, previousData] = await Promise.all([
-                    fetchYear(currentYear),
-                    fetchYear(previousYear)
-                ])
+                const currentData = await fetchYear(currentYear)
 
+                if (!currentData) return
+
+                const previousData = await fetchYear(previousYear)
                 setStatsCurrent(currentData)
                 setStatsPrevious(previousData)
 
@@ -293,28 +318,27 @@ function GraficosUsuarioPage() {
     };
 
     const stackedOptions = {
-    responsive: true,
-    maintainAspectRatio: false,
-    plugins: {
-        legend: { position: "top" }
-    },
-    scales: {
-        x: { stacked: true },
-        y: {
-            stacked: true,
-            beginAtZero: true
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+            legend: { position: "top" }
+        },
+        scales: {
+            x: { stacked: true },
+            y: {
+                stacked: true,
+                beginAtZero: true
+            }
         }
-    }
-}
-
-    function logout() {
-        localStorage.clear()
-        navigate("/")
     }
 
     return <div className="h-screen bg-slate-50 text-slate-800 overflow-x-hidden">
         <NavBarUser onLogout={logout} />
-
+        <PopUp_ToLogin
+            onLogout={logout}
+            mensaje={popUpMensaje}
+            visible={popUpVisible}
+        />
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
 
             <div className="my-3 flex justify-between items-center">

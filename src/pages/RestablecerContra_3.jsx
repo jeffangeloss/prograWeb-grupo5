@@ -3,7 +3,7 @@ import { useLocation, useNavigate } from "react-router-dom"
 
 import ContraForm from "../components/ContraForm"
 import Mensaje from "../components/Mensaje"
-import PopUp_ContraConfirm from "../components/PopUp_ContraConfirm"
+import PopUp_ToLogin from "../components/PopUp_ToLogin"
 import { passwordMeetsPolicy, passwordPolicyMessage } from "../utils/passwordPolicy"
 
 function RestableceContra_3() {
@@ -18,8 +18,13 @@ function RestableceContra_3() {
     const [mensaje, setMensaje] = useState("")
     const [mensajeVisible, setMensajeVisible] = useState(false)
     const [popUpVisible, setPopUpVisible] = useState(false)
+    const [popUpMensaje, setPopUpMensaje] = useState("")
     const [cargando, setCargando] = useState(false)
 
+    function logout() {
+        localStorage.clear()
+        navigate("/")
+    }
     const tokenValido = token.length >= 8
 
     async function Continue(pass, passConfirm) {
@@ -43,6 +48,12 @@ function RestableceContra_3() {
             return
         }
 
+        if (!token) {
+            setMensaje("Token invalido.")
+            setMensajeVisible(true)
+            setPopUpVisible(false)
+            return
+          
         if (pass != passConfirm) {
             setMensaje("La contrasena ingresada debe ser igual en ambos campos")
             setMensajeVisible(true)
@@ -83,6 +94,7 @@ function RestableceContra_3() {
 
             setMensaje("")
             setMensajeVisible(false)
+            setPopUpMensaje("Tu contraseña ha sido cambiada con éxito")
             setPopUpVisible(true)
         } catch (error) {
             setMensaje(error.message || "Error al restablecer contrasena")
@@ -142,7 +154,11 @@ function RestableceContra_3() {
                 msg={mensaje}
                 visible={mensajeVisible}
             />
-            <PopUp_ContraConfirm visible={popUpVisible} />
+            <PopUp_ToLogin 
+            onLogout={logout}
+            mensaje={popUpMensaje} 
+            visible={popUpVisible} />
+
         </div>
     </div>
 }
