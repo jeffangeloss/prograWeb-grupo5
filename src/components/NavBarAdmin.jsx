@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from "react"
 import { useLocation, useNavigate } from "react-router-dom"
 import RoleBadge from "./RoleBadge"
 import { normalizeRoleValue, roleLabel } from "../utils/roles"
+import { toast } from "sonner"
 
 const API_URL = "http://127.0.0.1:8000"
 const MAX_AVATAR_BYTES = 5 * 1024 * 1024
@@ -198,26 +199,43 @@ function NavBarAdmin({ onLogout }) {
         navigate(path)
     }
 
+    function abrirSpotifyToast() {
+        toast.custom((t) => (
+            <div className="relative group bg-white/50 backdrop-blur-md p-1 rounded-2xl shadow-2xl w-75">
+                <button onClick={() => toast.dismiss(t)} className="absolute -top-2 -right-2 bg-red-600 text-white rounded-full w-6 h-6 text-[10px] font-bold z-50"
+                >✕</button>
+
+                <div className="overflow-hidden rounded-xl">
+                    <iframe
+                        src="https://embed.spotify.com/playlist/37i9dQZF1DZ06evO08ff3r?si=iESH7iqkT5m-0xYJnb3zyQ?=autoplay=1"
+                        width="100%"
+                        height="152"
+                        allow="encrypted-media; autoplay"
+                        style={{ display: "block" }}
+                    ></iframe>
+                </div>
+            </div>
+        ), {
+            duration: Infinity, position: "bottom-left"
+        })
+    }
+
     return (
         <header className="border-b border-slate-200/80 bg-gradient-to-r from-[#96c7ef] to-[#cfe6f2] shadow-md">
             <div className="mx-auto flex w-full max-w-[1400px] flex-col gap-3 px-4 py-3 sm:flex-row sm:items-center sm:justify-between sm:px-6 sm:py-4">
-                <button
-                    type="button"
-                    onClick={function () {
-                        navigate("/admin")
-                    }}
-                    className="flex min-w-0 items-center"
-                >
+                <div className="flex items-center gap-2">
                     <img
                         src="/img/logotemp.png"
                         alt="Grupo 5"
-                        className="h-10 w-auto object-contain sm:h-11"
+                        className="h-10 w-auto object-contain sm:h-11 cursor-pointer transition-transform active:scale-90 hover:brightness-110"
+                        onClick={() => navigate("/admin")}
                     />
-                    <span className="ml-2 text-xl font-extrabold tracking-tight text-slate-900 sm:text-2xl">
-                        GRUPO 5
+                    <span
+                        className="text-xl font-extrabold tracking-tight text-slate-900 sm:text-2xl cursor-pointer hover:text-slate-700"
+                        onClick={function () { abrirSpotifyToast() }}
+                    >GRUPO 5
                     </span>
-                </button>
-
+                </div>
                 <div className="flex flex-wrap items-center justify-end gap-2 sm:gap-3">
                     <div ref={menuRef} className="relative">
                         <input

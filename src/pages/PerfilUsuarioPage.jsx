@@ -4,10 +4,10 @@ import { useNavigate } from "react-router-dom"
 import NavBarUser from "../components/NavBarUser"
 import NavBarAdmin from "../components/NavBarAdmin"
 import RoleBadge from "../components/RoleBadge"
+import { passwordMeetsPolicy, passwordPolicyMessage } from "../utils/passwordPolicy"
 import { isAdminPanelRole, normalizeRoleValue } from "../utils/roles"
 
 const API_URL = "http://127.0.0.1:8000"
-const SIMBOLO_REGEX = /[^A-Za-z0-9]/
 const MAX_AVATAR_BYTES = 5 * 1024 * 1024
 const ACCEPTED_IMAGE_TYPES = ".tiff,.jfif,.bmp,.pjp,.apng,.jpeg,.jpg,.png,.webp,.svg,.heic,.gif,.ico,.xbm,.xjl,.dib,.tif,.pjpeg,.avif"
 const ALLOWED_AVATAR_EXTENSIONS = new Set([
@@ -34,14 +34,14 @@ const ALLOWED_AVATAR_EXTENSIONS = new Set([
     ".bmp",
 ])
 const PRESET_AVATARS = [
-    "/img/avatars/gatito-1.png",
-    "/img/avatars/gatito-2.png",
-    "/img/avatars/gatito-3.png",
-    "/img/avatars/gatito-4.png",
-    "/img/avatars/gatito-5.png",
-    "/img/avatars/gatito-6.png",
-    "/img/avatars/gatito-7.png",
-    "/img/avatars/gatito-8.png",
+    "https://res.cloudinary.com/dmmyupwuu/image/upload/v1771912745/gatito-1_pmyxdz.png",
+    "https://res.cloudinary.com/dmmyupwuu/image/upload/v1771912745/gatito-2_mtutkd.png",
+    "https://res.cloudinary.com/dmmyupwuu/image/upload/v1771912745/gatito-3_nwuh85.png",
+    "https://res.cloudinary.com/dmmyupwuu/image/upload/v1771912745/gatito-4_nsqbb7.png",
+    "https://res.cloudinary.com/dmmyupwuu/image/upload/v1771912745/gatito-5_m7vz7f.png",
+    "https://res.cloudinary.com/dmmyupwuu/image/upload/v1771912745/gatito-6_dlldqw.png",
+    "https://res.cloudinary.com/dmmyupwuu/image/upload/v1771912745/gatito-7_xkql3p.png",
+    "https://res.cloudinary.com/dmmyupwuu/image/upload/v1771912745/gatito-8_kjf8nl.png",
 ]
 
 function PerfilUsuarioPage() {
@@ -66,7 +66,6 @@ function PerfilUsuarioPage() {
     const [openEditar, setOpenEditar] = useState(false)
     const [editNombre, setEditNombre] = useState("")
     const [editEmail, setEditEmail] = useState("")
-    const [editIdentificacion, setEditIdentificacion] = useState("")
     const [editError, setEditError] = useState("")
     const [guardandoPerfil, setGuardandoPerfil] = useState(false)
 
@@ -264,7 +263,6 @@ function PerfilUsuarioPage() {
     function abrirEditar() {
         setEditNombre(perfil.name || "")
         setEditEmail(perfil.email || "")
-        setEditIdentificacion(perfil.identificacion || "")
         setEditError("")
         setOpenEditar(true)
     }
@@ -333,7 +331,6 @@ function PerfilUsuarioPage() {
 
         const nombreLimpio = editNombre.trim()
         const emailLimpio = editEmail.trim().toLowerCase()
-        const identificacionLimpia = editIdentificacion.trim() || "-"
 
         if (!nombreLimpio || !emailLimpio) {
             setEditError("Completa nombre y email para continuar.")
@@ -371,13 +368,7 @@ function PerfilUsuarioPage() {
 
             const user = data?.user || {}
             const updatedAt = user?.updated_at || new Date().toISOString()
-            persistirPerfil(
-                {
-                    ...user,
-                    identificacion: identificacionLimpia,
-                },
-                updatedAt
-            )
+            persistirPerfil(user, updatedAt)
 
             setOpenEditar(false)
             setAviso({ tipo: "ok", texto: "Perfil actualizado correctamente." })
@@ -473,8 +464,8 @@ function PerfilUsuarioPage() {
             return
         }
 
-        if (nueva.length < 8 || !SIMBOLO_REGEX.test(nueva)) {
-            setErrorContrasena("La nueva contraseña debe tener minimo 8 caracteres y un simbolo.")
+        if (!passwordMeetsPolicy(nueva)) {
+            setErrorContrasena(passwordPolicyMessage("La nueva contrasena"))
             return
         }
 
@@ -638,18 +629,13 @@ function PerfilUsuarioPage() {
                             </button>
                         </div>
 
-                        <div className="grid gap-5 px-4 py-5 sm:grid-cols-2 sm:px-6 lg:grid-cols-3">
+                        <div className="grid gap-5 px-4 py-5 sm:grid-cols-2 sm:px-6">
                             <div className="rounded-xl border border-slate-200 bg-slate-50 px-4 py-3">
                                 <p className="text-xs font-semibold uppercase tracking-wide text-slate-500">Nombre</p>
                                 <p className="mt-2 text-lg font-semibold text-slate-700 break-words">{perfil.name}</p>
                             </div>
 
                             <div className="rounded-xl border border-slate-200 bg-slate-50 px-4 py-3">
-                                <p className="text-xs font-semibold uppercase tracking-wide text-slate-500">Identificacion</p>
-                                <p className="mt-2 text-lg font-semibold text-slate-700 break-all">{perfil.identificacion || "-"}</p>
-                            </div>
-
-                            <div className="rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 sm:col-span-2 lg:col-span-1">
                                 <p className="text-xs font-semibold uppercase tracking-wide text-slate-500">Email</p>
                                 <p className="mt-2 text-lg font-semibold text-slate-700 break-all">{perfil.email}</p>
                             </div>
@@ -741,18 +727,6 @@ function PerfilUsuarioPage() {
                                 />
                             </div>
 
-                            <div className="space-y-1">
-                                <label className="text-sm font-medium text-slate-700">Identificacion</label>
-                                <input
-                                    type="text"
-                                    value={editIdentificacion}
-                                    onChange={function (ev) {
-                                        setEditIdentificacion(ev.target.value)
-                                    }}
-                                    className="w-full rounded-md border border-slate-200 bg-white px-3 py-2 text-slate-700 shadow-sm focus:border-indigo-400 focus:ring-2 focus:ring-indigo-200"
-                                />
-                            </div>
-
                             <button
                                 type="button"
                                 onClick={abrirModalAvatar}
@@ -807,7 +781,7 @@ function PerfilUsuarioPage() {
                             X
                         </button>
 
-                        <h2 className="pr-10 text-2xl font-extrabold tracking-tight text-sky-600">
+                        <h2 className="pr-10 text-2xl font-extrabold tracking-tight text-slate-700">
                             Cambiar imagen de perfil
                         </h2>
 
@@ -964,7 +938,7 @@ function PerfilUsuarioPage() {
                                 type="button"
                                 onClick={function () {
                                     setOpenContrasena(false)
-                                    navigate("/restablecer/correo")
+                                    navigate("/restablecer")
                                 }}
                                 className="text-sm font-medium text-blue-600 transition hover:text-blue-700"
                             >

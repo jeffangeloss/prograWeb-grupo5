@@ -2,6 +2,7 @@ import { useEffect, useMemo, useState } from "react"
 import { useLocation, useNavigate } from "react-router-dom"
 import NavBarUser from "../components/NavBarUser"
 import { isAdminPanelRole, normalizeRoleValue } from "../utils/roles"
+import { clearAuthData, hasActiveSession } from "../utils/auth"
 
 const API_URL = "http://127.0.0.1:8000"
 
@@ -32,13 +33,18 @@ function EditarEgresoPage() {
     }
 
     function logout() {
-        localStorage.clear()
+        clearAuthData()
         navigate("/")
     }
 
     useEffect(function () {
+        if (!hasActiveSession()) {
+            navigate("/sesion")
+            return
+        }
+
         const sesion = obtenerSesion()
-        const role = normalizeRoleValue(sesion?.rol || "user")
+        const role = normalizeRoleValue(sesion?.rol)
 
         if (isAdminPanelRole(role)) {
             navigate("/admin")
@@ -99,6 +105,8 @@ function EditarEgresoPage() {
 
         const token = obtenerToken()
         if (!token) {
+            clearAuthData()
+            navigate("/sesion")
             setError("Sesion expirada. Inicia sesion nuevamente.")
             return
         }
@@ -129,6 +137,11 @@ function EditarEgresoPage() {
             })
 
             if (!resp.ok) {
+                if (resp.status === 401 || resp.status === 403) {
+                    clearAuthData()
+                    navigate("/sesion")
+                    return
+                }
                 setError(data.detail || "No se pudo actualizar el egreso.")
                 return
             }

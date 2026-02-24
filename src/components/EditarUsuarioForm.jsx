@@ -6,6 +6,7 @@ import {
     normalizeRoleValue,
     roleType,
 } from "../utils/roles"
+import { toast } from "sonner"
 
 const ROLE_OPTIONS = [
     { value: "1", role: "user", label: "Usuario" },
@@ -129,8 +130,9 @@ function EditarUsuarioForm() {
                 setError(extractError(data))
                 return
             }
-
             navigate("/admin")
+            toast.success("Usuario actualizado correctamente")
+
         } catch {
             setError("No se pudo conectar con el backend.")
         } finally {

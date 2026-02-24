@@ -4,6 +4,7 @@ import Mensaje from "../components/Mensaje"
 import LoginForm from "../components/LoginForm"
 import Azul from "../components/auth/Azul"
 import { isAdminPanelRole, normalizeRoleValue } from "../utils/roles"
+import { getAuthSession, hasActiveSession } from "../utils/auth"
 
 function InicioSesionPage() {
 
@@ -42,17 +43,16 @@ function InicioSesionPage() {
     }
 
     useEffect(function () {
-        const datosLogin = localStorage.getItem("DATOS_LOGIN")
-        if (datosLogin != null) {
-            const login = JSON.parse(datosLogin)
-            if (login.ingreso == true) {
-                if (isAdminPanelRole(login.rol)) {
-                    navigate("/admin")
-                } else {
-                    navigate("/user")
-                }
-                return
-            }
+        if (!hasActiveSession()) {
+            return
+        }
+
+        const login = getAuthSession()
+        const role = normalizeRoleValue(login?.rol)
+        if (isAdminPanelRole(role)) {
+            navigate("/admin")
+        } else {
+            navigate("/user")
         }
     }, [])
 
@@ -74,6 +74,18 @@ function InicioSesionPage() {
             // Error en el login
             const data = await resp.json()
             console.error("ERROR:", data)
+
+            if (
+                data?.detail &&
+                data.detail.toLowerCase().includes("verificar")
+            ) {
+                return {
+                    valido: false,
+                    noVerificado: true,
+                    error: data.detail
+                }
+            }
+
             return {
                 valido: false,
                 error: data.detail || "Error en login"
@@ -109,6 +121,12 @@ function InicioSesionPage() {
         }
 
         const resultadoLogin = await loginHTTP(correo, password)
+
+        if (resultadoLogin.noVerificado) {
+            setMensaje(resultadoLogin.error)
+            setMensajeVisible(true)
+            return
+        }
         
         if (resultadoLogin.valido) {
             setMensaje("")
