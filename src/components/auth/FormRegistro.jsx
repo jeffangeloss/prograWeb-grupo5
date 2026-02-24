@@ -120,14 +120,26 @@ function FormRegistro() {
 
         setEnviando(true);
         const resultado = await registrarHTTP(payload);
-        setEnviando(false);
 
         if (!resultado.ok) {
             setErrores([resultado.error]);
+            setEnviando(false)
             return;
         }
 
-        navigate("/sesion");
+        try {
+            await fetch("http://127.0.0.1:8000/mailverif/send", {
+                method: "POST",
+                headers: {"Content-Type" : "application/json"},
+                body: JSON.stringify({ email: payload.email })
+            });
+        } catch (error) {
+            console.error("No se pudo enviar el correo: ", error)
+        }
+
+        setEnviando(false)
+
+        navigate("/registro/verif")
     }
 
 

@@ -176,6 +176,35 @@ function EgresosPage() {
         return query.toString()
     }
 
+    function actualizarCategoriasDesdeEgresos(listadoEgresos) {
+        if (!Array.isArray(listadoEgresos) || listadoEgresos.length === 0) return
+
+        const nuevas = listadoEgresos
+            .map(function (egreso) {
+                if (!egreso?.category_id || !egreso?.category_name) return null
+                return {
+                    id: egreso.category_id,
+                    name: egreso.category_name,
+                }
+            })
+            .filter(Boolean)
+
+        if (nuevas.length === 0) return
+
+        setCategories(function (previas) {
+            const mapa = new Map()
+            previas.forEach(function (item) {
+                mapa.set(item.id, item)
+            })
+            nuevas.forEach(function (item) {
+                mapa.set(item.id, item)
+            })
+            return Array.from(mapa.values()).sort(function (a, b) {
+                return a.name.localeCompare(b.name, "es")
+            })
+        })
+    }
+
     async function cargarEgresos() {
         const token = getAuthToken()
         if (!token) {
@@ -210,7 +239,9 @@ function EgresosPage() {
                 return
             }
 
-            setEgresos(Array.isArray(data.data) ? data.data : [])
+            const listado = Array.isArray(data.data) ? data.data : []
+            setEgresos(listado)
+            actualizarCategoriasDesdeEgresos(listado)
         } catch {
             setEgresos([])
             setErrorApi("No se pudo conectar con el backend")
@@ -228,21 +259,73 @@ function EgresosPage() {
 
         setCategoriesLoading(true)
         try {
-            const resp = await fetch(`${API_URL}/categories/`, {
+            const resp = await fetch(`${API_URL}/expenses/categories`, {
                 headers: {
                     Authorization: `Bearer ${token}`,
                 },
             })
 
             const data = await resp.json().catch(function () {
-                return []
+                return {}
             })
 
-            if (!resp.ok) return
+            if (resp.status === 401 || resp.status === 403) {
+                bloquearSesion("Tu sesion expiro. Vuelve a iniciar sesion.")
+                return
+            }
 
-            setCategories(Array.isArray(data) ? data : [])
+            let listado = []
+
+            if (resp.ok) {
+                listado = Array.isArray(data?.data) ? data.data : []
+            } else if (resp.status === 404) {
+                const legacyResp = await fetch(`${API_URL}/categories/`, {
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                    },
+                })
+
+                const legacyData = await legacyResp.json().catch(function () {
+                    return []
+                })
+
+                if (legacyResp.status === 401 || legacyResp.status === 403) {
+                    bloquearSesion("Tu sesion expiro. Vuelve a iniciar sesion.")
+                    return
+                }
+
+                if (legacyResp.ok) {
+                    listado = Array.isArray(legacyData)
+                        ? legacyData
+                            .map(function (item) {
+                                if (!item?.id) return null
+                                const name = String(item.name || item.nombre || "").trim()
+                                if (!name) return null
+                                return { id: item.id, name: name }
+                            })
+                            .filter(Boolean)
+                        : []
+                }
+            }
+
+            if (listado.length === 0) return
+
+            setCategories(function (previas) {
+                const mapa = new Map()
+                previas.forEach(function (item) {
+                    mapa.set(item.id, item)
+                })
+                listado.forEach(function (item) {
+                    if (item?.id && item?.name) {
+                        mapa.set(item.id, { id: item.id, name: item.name })
+                    }
+                })
+                return Array.from(mapa.values()).sort(function (a, b) {
+                    return a.name.localeCompare(b.name, "es")
+                })
+            })
         } catch {
-            console.error("Error cargando categorias")
+            // no-op: si el backend no responde, el combo puede inferirse desde egresos
         } finally {
             setCategoriesLoading(false)
         }

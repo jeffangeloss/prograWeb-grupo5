@@ -74,6 +74,18 @@ function InicioSesionPage() {
             // Error en el login
             const data = await resp.json()
             console.error("ERROR:", data)
+
+            if (
+                data?.detail &&
+                data.detail.toLowerCase().includes("verificar")
+            ) {
+                return {
+                    valido: false,
+                    noVerificado: true,
+                    error: data.detail
+                }
+            }
+
             return {
                 valido: false,
                 error: data.detail || "Error en login"
@@ -109,6 +121,12 @@ function InicioSesionPage() {
         }
 
         const resultadoLogin = await loginHTTP(correo, password)
+
+        if (resultadoLogin.noVerificado) {
+            setMensaje(resultadoLogin.error)
+            setMensajeVisible(true)
+            return
+        }
         
         if (resultadoLogin.valido) {
             setMensaje("")
