@@ -2,7 +2,7 @@ import { useState } from "react"
 import { useLocation } from "react-router-dom"
 import ContraForm from "../components/ContraForm"
 import Mensaje from "../components/Mensaje"
-import PopUp_ContraConfirm from "../components/PopUp_ContraConfirm"
+import PopUp_ToLogin from "../components/PopUp_ToLogin"
 
 function RestableceContra_3() {
 
@@ -13,7 +13,13 @@ function RestableceContra_3() {
     const [mensaje, setMensaje] = useState("")
     const [mensajeVisible, setMensajeVisible] = useState(false)
     const [popUpVisible, setPopUpVisible] = useState(false)
+    const [popUpMensaje, setPopUpMensaje] = useState("")
     const [cargando, setCargando] = useState(false)
+
+    function logout() {
+        localStorage.clear()
+        navigate("/")
+    }
 
     async function Continue(pass, passConfirm) {
         if (!pass || !passConfirm) {
@@ -31,7 +37,7 @@ function RestableceContra_3() {
         }
 
         if (!token) {
-            setMensaje("Token invalido")
+            setMensaje("Token invalido.")
             setMensajeVisible(true)
             setPopUpVisible(false)
             return
@@ -71,6 +77,7 @@ function RestableceContra_3() {
 
             setMensaje("")
             setMensajeVisible(false)
+            setPopUpMensaje("Tu contraseña ha sido cambiada con éxito")
             setPopUpVisible(true)
 
         } catch (error) {
@@ -115,7 +122,10 @@ function RestableceContra_3() {
                 msg={mensaje}
                 visible={mensajeVisible}
             />
-            <PopUp_ContraConfirm visible={popUpVisible} />
+            <PopUp_ToLogin 
+            onLogout={logout}
+            mensaje={popUpMensaje} 
+            visible={popUpVisible} />
 
         </div>
     </div>
