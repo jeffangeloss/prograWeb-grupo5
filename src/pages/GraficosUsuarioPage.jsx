@@ -378,7 +378,13 @@ function GraficosUsuarioPage() {
             </div>
 
             
-                {statsCurrent?.total !== 0 && statsPrevious?.total !== 0 ? (
+                {!statsCurrent ? 
+                (
+                    <div className="text-center bg-white rounded-2xl shadow-xl border border-slate-200 p-6">
+                        No se tienen egresos registrados de este año
+                    </div>
+                ):
+                (
                     <>
                 <div className="grid grid-cols-1 justify-items-center lg:grid-cols-2 xl:grid-cols-3 gap-4 m-3 ">
                     <div className="bg-white rounded-2xl shadow-xl border border-slate-200 p-6 w-min">
@@ -397,12 +403,8 @@ function GraficosUsuarioPage() {
                     </div>
                 </div>
                 </>
-                ):
-                (
-                    <div className="text-center bg-white rounded-2xl shadow-xl border border-slate-200 p-6">
-                        No se tienen egresos registrados de este año
-                    </div>
-                )}
+                )
+                }
             
 
         </div>
