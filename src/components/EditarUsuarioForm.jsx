@@ -61,20 +61,9 @@ function EditarUsuarioForm() {
 
     const [nombre, setNombre] = useState(usuario?.full_name || usuario?.nombre || "")
     const [email, setEmail] = useState(usuario?.email || "")
-    const [rol, setRol] = useState(String(roleType(targetRole)))
+    const rol = String(roleType(targetRole))
     const [error, setError] = useState("")
     const [guardando, setGuardando] = useState(false)
-
-    const opcionesPermitidas = ROLE_OPTIONS.filter(function (option) {
-        if (actorRole === "owner") {
-            if (usuario?.isSelf) {
-                return option.role === "owner"
-            }
-            return true
-        }
-        if (actorRole === "admin") return option.role === "user"
-        return false
-    })
 
     async function guardarCambios() {
         setError("")
@@ -100,17 +89,11 @@ function EditarUsuarioForm() {
             return
         }
 
-        if (!ROLE_OPTIONS.some(function (opt) { return opt.value === rol })) {
-            setError("Rol inválido.")
-            return
-        }
-
         setGuardando(true)
         try {
             const usuarioEditado = {
                 full_name: nombre.trim(),
                 email: email.trim().toLowerCase(),
-                type: Number(rol),
             }
 
             const response = await fetch(`http://127.0.0.1:8000/admin/${usuario.id}`, {
@@ -183,11 +166,11 @@ function EditarUsuarioForm() {
                 <div className="mb-6">
                     <label className="text-slate-700 mb-2 ml-1">Rol</label>
                     <select
-                        className="w-full mt-2 px-4 py-2 rounded-xl shadow-md bg-white text-black"
+                        className="w-full mt-2 px-4 py-2 rounded-xl shadow-md bg-gray-300 text-gray-600 cursor-not-allowed"
                         value={rol}
-                        onChange={function (ev) { setRol(ev.target.value) }}
+                        disabled
                     >
-                        {opcionesPermitidas.map(function (option) {
+                        {ROLE_OPTIONS.map(function (option) {
                             return (
                                 <option key={option.value} value={option.value}>
                                     {option.label}

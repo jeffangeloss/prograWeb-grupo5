@@ -13,12 +13,13 @@ function LoginForm({ onLogin }) {
         setPassword(ev.target.value)
     }
 
-    function loginOnClick() {
+    function submitOnLogin(ev) {
+        ev.preventDefault()
         onLogin(correo, password)
     }
 
     return <div className="mb-5" >
-        <form className="grid gap-2 sm:gap-3">
+        <form onSubmit={submitOnLogin} className="grid gap-2 sm:gap-3">
             <InputEmail correo={correo} correoOnChange={correoOnChange} />
 
             <label className="text-sm font-medium text-slate-700">
@@ -42,9 +43,8 @@ function LoginForm({ onLogin }) {
             </div>
 
             <button
-                onClick={loginOnClick}
                 className="mt-3 w-full sm:w-fit whitespace-nowrap rounded-full bg-indigo-600 px-10 sm:px-16 py-3 font-semibold text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-300 active:scale-[0.99] transition"
-                type="button"
+                type="submit"
             >
                 Iniciar sesión
             </button>

@@ -139,7 +139,7 @@ function EgresosForm({ onComplete, categories = [], categoriesLoading = false })
                 </div>
 
                 <div className="space-y-1">
-                    <label className="text-sm font-medium text-slate-700">Descripcion</label>
+                    <label className="text-sm font-medium text-slate-700">Descripción</label>
                     <textarea
                         rows="3"
                         placeholder="Ej: Pollito a la brasa"
