@@ -23,6 +23,7 @@ import AuditoriaAdminPage from './pages/AuditoriaAdminPage'
 import EditarEgresoPage from './pages/EditarEgresoPage'
 import ConfirmarEmailPage from './pages/ConfirmarEmailPage'
 import { Toaster } from 'sonner'
+import ProtectedRoute from './components/auth/ProtectedRoute'
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>
@@ -31,23 +32,23 @@ createRoot(document.getElementById('root')).render(
       <Routes>
         <Route path="/" element={<LandingPage />} />
         <Route path="/sesion" element={<InicioSesionPage />} />
-        <Route path="/admin" element={<AdminPage />} />
-        <Route path="/user" element={<EgresosPage />} />
-        <Route path="/editarEgreso" element={<EditarEgresoPage />} />
+        <Route path="/admin" element={<ProtectedRoute allowRoles={["admin", "owner", "auditor"]}><AdminPage /></ProtectedRoute>} />
+        <Route path="/user" element={<ProtectedRoute allowRoles={["user"]}><EgresosPage /></ProtectedRoute>} />
+        <Route path="/editarEgreso" element={<ProtectedRoute allowRoles={["user"]}><EditarEgresoPage /></ProtectedRoute>} />
         <Route path="/registro" element={<RegistroPage />} />
-        <Route path="/editarUsuario" element={<EditarUsuarioPage />} />
-        <Route path="/crearUsuario" element={<CrearUsuarioAdminPage />} />
-        <Route path="/seguridadUsuario" element={<SeguridadUsuarioPage />} />
+        <Route path="/editarUsuario" element={<ProtectedRoute allowRoles={["admin", "owner"]}><EditarUsuarioPage /></ProtectedRoute>} />
+        <Route path="/crearUsuario" element={<ProtectedRoute allowRoles={["admin", "owner"]}><CrearUsuarioAdminPage /></ProtectedRoute>} />
+        <Route path="/seguridadUsuario" element={<ProtectedRoute allowRoles={["admin", "owner", "auditor"]}><SeguridadUsuarioPage /></ProtectedRoute>} />
         <Route path="/restablecer" element={<RestableceContra />} />
         <Route path="/restablecer/mensaje" element={<RestablecerContra_2 />} />
         <Route path="/restablecer/correo" element={<RestablecerContra_correo />} />
         <Route path="/restablecer/form" element={<RestablecerContra_3 />} />
-        <Route path="/estadisticas" element={<EstadisticasPage />} />
-        <Route path="/chatbot" element={<ChatBotPage />} />
-        <Route path="/GraficosUsuario" element={<GraficosUsuarioPage />} />
-        <Route path="/mi-contrasena" element={<CambiarContrasenaPage />} />
-        <Route path="/perfil" element={<PerfilUsuarioPage />} />
-        <Route path="/auditoriaAdmin" element={<AuditoriaAdminPage />} />
+        <Route path="/estadisticas" element={<ProtectedRoute allowRoles={["admin", "owner", "auditor"]}><EstadisticasPage /></ProtectedRoute>} />
+        <Route path="/chatbot" element={<ProtectedRoute allowRoles={["user"]}><ChatBotPage /></ProtectedRoute>} />
+        <Route path="/GraficosUsuario" element={<ProtectedRoute allowRoles={["user"]}><GraficosUsuarioPage /></ProtectedRoute>} />
+        <Route path="/mi-contrasena" element={<ProtectedRoute allowRoles={["user"]}><CambiarContrasenaPage /></ProtectedRoute>} />
+        <Route path="/perfil" element={<ProtectedRoute allowRoles={["user", "admin", "owner", "auditor"]}><PerfilUsuarioPage /></ProtectedRoute>} />
+        <Route path="/auditoriaAdmin" element={<ProtectedRoute allowRoles={["owner", "auditor"]}><AuditoriaAdminPage /></ProtectedRoute>} />
         <Route path="/registro/verif" element={<ConfirmarEmailPage />} />
       </Routes>
     </HashRouter>

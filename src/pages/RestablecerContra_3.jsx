@@ -1,41 +1,53 @@
-import { useState } from "react"
-import { useLocation } from "react-router-dom"
+import { useMemo, useState } from "react"
+import { useLocation, useNavigate } from "react-router-dom"
+
 import ContraForm from "../components/ContraForm"
 import Mensaje from "../components/Mensaje"
 import PopUp_ContraConfirm from "../components/PopUp_ContraConfirm"
+import { passwordMeetsPolicy, passwordPolicyMessage } from "../utils/passwordPolicy"
 
 function RestableceContra_3() {
-
     const location = useLocation()
-    const params = new URLSearchParams(location.search)
-    const token = params.get("token")
+    const navigate = useNavigate()
+
+    const token = useMemo(function () {
+        const params = new URLSearchParams(location.search)
+        return (params.get("token") || "").trim()
+    }, [location.search])
 
     const [mensaje, setMensaje] = useState("")
     const [mensajeVisible, setMensajeVisible] = useState(false)
     const [popUpVisible, setPopUpVisible] = useState(false)
     const [cargando, setCargando] = useState(false)
 
+    const tokenValido = token.length >= 8
+
     async function Continue(pass, passConfirm) {
+        if (!tokenValido) {
+            setMensaje("Enlace invalido. Solicita un nuevo correo de recuperacion.")
+            setMensajeVisible(true)
+            setPopUpVisible(false)
+            return
+        }
+
         if (!pass || !passConfirm) {
             setMensaje("Debe completar todos los campos para continuar")
             setMensajeVisible(true)
             setPopUpVisible(false)
             return
         }
-
-        if (pass != passConfirm) {
-            setMensaje("La contraseña ingresada debe ser igual en ambos campos")
+        if (!passwordMeetsPolicy(pass)) {
+            setMensaje(passwordPolicyMessage("La contrasena"))
             setMensajeVisible(true)
             setPopUpVisible(false)
             return
         }
 
-        if (!token) {
-            setMensaje("Token invalido")
+        if (pass != passConfirm) {
+            setMensaje("La contrasena ingresada debe ser igual en ambos campos")
             setMensajeVisible(true)
             setPopUpVisible(false)
             return
-
         }
 
         try {
@@ -44,25 +56,25 @@ function RestableceContra_3() {
             const resp = await fetch("http://127.0.0.1:8000/reset-pass/confirm", {
                 method: "POST",
                 headers: {
-                    "Content-Type": "application/json"
+                    "Content-Type": "application/json",
                 },
                 body: JSON.stringify({
                     token: token,
-                    password: pass
-                })
+                    password: pass,
+                }),
             })
 
-            const data = await resp.json()
+            const data = await resp.json().catch(function () {
+                return {}
+            })
 
             if (!resp.ok) {
                 const backendMsg = data.detail?.msg
-
-                let userMessage = "Ocurrió un error al restablecer la contraseña."
+                let userMessage = "Ocurrio un error al restablecer la contrasena."
 
                 if (backendMsg === "INVALID TOKEN") {
-                    userMessage = "El enlace de recuperación no es válido."
-                }
-                else if (backendMsg === "EXPIRED TOKEN") {
+                    userMessage = "El enlace de recuperacion no es valido."
+                } else if (backendMsg === "EXPIRED TOKEN") {
                     userMessage = "El enlace ha expirado. Solicita uno nuevo."
                 }
 
@@ -72,16 +84,13 @@ function RestableceContra_3() {
             setMensaje("")
             setMensajeVisible(false)
             setPopUpVisible(true)
-
         } catch (error) {
-            setMensaje(error.message || "Error al restablecer contraseña")
+            setMensaje(error.message || "Error al restablecer contrasena")
             setMensajeVisible(true)
             setPopUpVisible(false)
         } finally {
             setCargando(false)
         }
-
-
     }
 
     return <div className="grid md:grid-cols-[20%_80%]">
@@ -106,9 +115,27 @@ function RestableceContra_3() {
                 <p className="mt-2 text-slate-500">Ingresa tu nueva contraseña</p>
             </div>
 
-            <ContraForm
-                cargando={cargando}
-                onContinue={Continue} />
+            {!tokenValido ? (
+                <div className="rounded-xl border border-amber-200 bg-amber-50 px-4 py-4 text-sm text-amber-700">
+                    No se detecto un token valido en el enlace. Solicita un nuevo correo de recuperacion.
+                    <div className="mt-4">
+                        <button
+                            type="button"
+                            className="rounded-full bg-indigo-600 px-5 py-2 text-sm font-semibold text-white hover:bg-indigo-700"
+                            onClick={function () {
+                                navigate("/restablecer")
+                            }}
+                        >
+                            Solicitar enlace nuevo
+                        </button>
+                    </div>
+                </div>
+            ) : (
+                <ContraForm
+                    cargando={cargando}
+                    onContinue={Continue}
+                />
+            )}
 
             {/* mensaje de error */}
             <Mensaje
@@ -116,10 +143,8 @@ function RestableceContra_3() {
                 visible={mensajeVisible}
             />
             <PopUp_ContraConfirm visible={popUpVisible} />
-
         </div>
     </div>
-
 }
 
 export default RestableceContra_3

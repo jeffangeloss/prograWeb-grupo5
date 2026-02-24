@@ -4,10 +4,10 @@ import { useNavigate } from "react-router-dom"
 import NavBarUser from "../components/NavBarUser"
 import NavBarAdmin from "../components/NavBarAdmin"
 import RoleBadge from "../components/RoleBadge"
+import { passwordMeetsPolicy, passwordPolicyMessage } from "../utils/passwordPolicy"
 import { isAdminPanelRole, normalizeRoleValue } from "../utils/roles"
 
 const API_URL = "http://127.0.0.1:8000"
-const SIMBOLO_REGEX = /[^A-Za-z0-9]/
 const MAX_AVATAR_BYTES = 5 * 1024 * 1024
 const ACCEPTED_IMAGE_TYPES = ".tiff,.jfif,.bmp,.pjp,.apng,.jpeg,.jpg,.png,.webp,.svg,.heic,.gif,.ico,.xbm,.xjl,.dib,.tif,.pjpeg,.avif"
 const ALLOWED_AVATAR_EXTENSIONS = new Set([
@@ -464,8 +464,8 @@ function PerfilUsuarioPage() {
             return
         }
 
-        if (nueva.length < 8 || !SIMBOLO_REGEX.test(nueva)) {
-            setErrorContrasena("La nueva contraseña debe tener minimo 8 caracteres y un simbolo.")
+        if (!passwordMeetsPolicy(nueva)) {
+            setErrorContrasena(passwordPolicyMessage("La nueva contrasena"))
             return
         }
 
@@ -938,7 +938,7 @@ function PerfilUsuarioPage() {
                                 type="button"
                                 onClick={function () {
                                     setOpenContrasena(false)
-                                    navigate("/restablecer/correo")
+                                    navigate("/restablecer")
                                 }}
                                 className="text-sm font-medium text-blue-600 transition hover:text-blue-700"
                             >

@@ -1,7 +1,7 @@
-import { useState } from "react"
+import { useMemo, useState } from "react"
 import Mensaje from "./Mensaje"
 
-function EgresosForm({ onComplete }) {
+function EgresosForm({ onComplete, categories = [], categoriesLoading = false }) {
     const [mensajeVisible, setMensajeVisible] = useState(false)
     const [mensaje, setMensaje] = useState("")
     const [guardando, setGuardando] = useState(false)
@@ -11,9 +11,33 @@ function EgresosForm({ onComplete }) {
     const [categoria, setCategoria] = useState("")
     const [descripcion, setDescripcion] = useState("")
 
+    const categoryOptions = useMemo(function () {
+        const names = categories
+            .map(function (item) {
+                return String(item?.name || item?.nombre || "").trim()
+            })
+            .filter(function (name) {
+                return Boolean(name)
+            })
+
+        return Array.from(new Set(names)).sort(function (a, b) {
+            return a.localeCompare(b, "es", { sensitivity: "base" })
+        })
+    }, [categories])
+
     function validarCampos() {
         if (!fecha || !monto || !categoria || !descripcion) {
             setMensaje("Debe completar todos los campos para continuar")
+            setMensajeVisible(true)
+            return false
+        }
+        if (Number(monto) <= 0) {
+            setMensaje("El monto debe ser mayor a 0.")
+            setMensajeVisible(true)
+            return false
+        }
+        if (categoryOptions.length === 0) {
+            setMensaje("No hay categorias disponibles. Intenta recargar.")
             setMensajeVisible(true)
             return false
         }
@@ -91,18 +115,26 @@ function EgresosForm({ onComplete }) {
                     <select
                         className="w-full rounded-md border border-slate-200 bg-white px-3 py-2 text-slate-700 shadow-sm focus:border-indigo-400 focus:ring-2 focus:ring-indigo-200"
                         required
+                        disabled={categoriesLoading || categoryOptions.length === 0}
                         value={categoria}
                         onChange={function (ev) {
                             setCategoria(ev.target.value)
                         }}
                     >
-                        <option value="">Seleccione</option>
-                        <option>Alimentacion</option>
-                        <option>Transporte</option>
-                        <option>Servicios</option>
-                        <option>Salud</option>
-                        <option>Educacion</option>
-                        <option>Otros</option>
+                        <option value="">
+                            {categoriesLoading
+                                ? "Cargando categorias..."
+                                : categoryOptions.length === 0
+                                    ? "No hay categorias"
+                                    : "Seleccione"}
+                        </option>
+                        {categoryOptions.map(function (name) {
+                            return (
+                                <option key={name} value={name}>
+                                    {name}
+                                </option>
+                            )
+                        })}
                     </select>
                 </div>
 
