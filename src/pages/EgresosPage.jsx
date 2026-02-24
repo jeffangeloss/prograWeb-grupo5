@@ -189,7 +189,7 @@ function EgresosPage() {
         }
     }
 
-    async function eliminarEgresoBtn(id) {
+    async function eliminarEgreso(id) {
         const token = obtenerToken();
         try {
             const resp = await fetch(`${API_URL}/expenses/${id}`, {
@@ -205,7 +205,7 @@ function EgresosPage() {
                 toast.success("Egreso eliminado con éxito")
             } else {
                 const data = await resp.json();
-                setErrorApi(data.detail || "Error al eliminar el egreso");
+                setErrorApi(data.detail || "Error al eliminar egreso");
             }
         } catch (err) {
             setErrorApi("No se pudo conectar con el backend");
@@ -341,14 +341,26 @@ function EgresosPage() {
                                                                 Editar egreso
                                                             </button>
 
-                                                            <button
-                                                                type="button"
-                                                                aria-label="Eliminar egreso"
-                                                                className={"rounded-full border px-3 py-2 text-sm font-medium transition bg-red-50 text-red-600 border-red-200 hover:bg-red-100 hover:border-red-300"}
-                                                                onClick={function () { eliminarEgresoBtn(egreso.id) }}
-                                                            >
-                                                                <img src="/img/trashbin.png" alt="Eliminar" className="w-4 h-4" />
-                                                            </button>
+                                                            {egresoEliminar === egreso.id ? (
+                                                                <div className="flex items-center gap-2 animate-in fade-in zoom-in-95 duration-200">
+                                                                    <button
+                                                                        onClick={() => eliminarEgreso(egreso.id)}
+                                                                        className="rounded-full bg-red-600 px-4 py-2 text-[10px] font-bold text-white shadow-md hover:bg-red-700 active:scale-95">Sí
+                                                                    </button>
+                                                                    <button
+                                                                        onClick={() => setEgresoEliminar(null)}
+                                                                        className="text-[10px] font-bold text-slate-400 hover:text-slate-600 uppercase tracking-wider">No
+                                                                    </button>
+                                                                </div>
+                                                            ) :
+                                                                (
+                                                                    <button
+                                                                        type="button"
+                                                                        className="rounded-full border px-3 py-2 text-sm font-medium transition bg-red-50 text-red-600 border-red-200 hover:bg-red-100 active:scale-95"
+                                                                        onClick={() => setEgresoEliminar(egreso.id)}>
+                                                                        <img src="/img/trashbin.png" alt="Eliminar" className="w-4 h-4" />
+                                                                    </button>
+                                                                )}
                                                         </div>
                                                     </td>
                                                 </tr>
