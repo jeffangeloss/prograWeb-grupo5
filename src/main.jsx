@@ -21,7 +21,7 @@ import CambiarContrasenaPage from './pages/CambiarContrasenaPage'
 import PerfilUsuarioPage from './pages/PerfilUsuarioPage'
 import AuditoriaAdminPage from './pages/AuditoriaAdminPage'
 import EditarEgresoPage from './pages/EditarEgresoPage'
-import VerifPage from './pages/VerifPage'
+import ConfirmarEmailPage from './pages/ConfirmarEmailPage'
 
 
 createRoot(document.getElementById('root')).render(
@@ -47,7 +47,7 @@ createRoot(document.getElementById('root')).render(
       <Route path="/mi-contrasena" element={<CambiarContrasenaPage />} />
       <Route path="/perfil" element={<PerfilUsuarioPage />} />
       <Route path="/auditoriaAdmin" element={<AuditoriaAdminPage />} />
-      <Route path="/registro/verif" element={<VerifPage />} />
+      <Route path="/registro/verif" element={<ConfirmarEmailPage />} />
     </Routes>
   </HashRouter>
   </StrictMode>,
