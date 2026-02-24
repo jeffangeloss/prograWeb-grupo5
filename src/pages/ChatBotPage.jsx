@@ -56,6 +56,9 @@ function ChatBotPage() {
 
             const data = await response.json()
 
+            if (!response.ok) {
+                throw new Error("Error servidor")
+            }
             setMessages(prev => [...prev, {
                 role: 'model',
                 text: data.text || "No pude procesar eso.",
