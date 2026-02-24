@@ -155,6 +155,8 @@ function GraficosUsuarioPage() {
         if (role !== "user") {
             navigate("/sesion")
         }
+
+
     }, [navigate])
 
     function buildStackedData(stats) {
@@ -375,23 +377,33 @@ function GraficosUsuarioPage() {
 
             </div>
 
-
-            <div className="grid grid-cols-1 justify-items-center lg:grid-cols-2 xl:grid-cols-3 gap-4 m-3 ">
-                <div className="bg-white rounded-2xl shadow-xl border border-slate-200 p-6 w-min">
-                    {statsCurrent && statsPrevious && (
-                        <Line data={dataMultiAxis} options={multiAxisOptions} />
-                    )}
+            
+                {statsCurrent?.total !== 0 ? (
+                    <>
+                <div className="grid grid-cols-1 justify-items-center lg:grid-cols-2 xl:grid-cols-3 gap-4 m-3 ">
+                    <div className="bg-white rounded-2xl shadow-xl border border-slate-200 p-6 w-min">
+                        {statsCurrent && statsPrevious && (
+                            <Line data={dataMultiAxis} options={multiAxisOptions} />
+                        )}
+                    </div>
+                    <div className="bg-white rounded-2xl shadow-xl border border-slate-200 p-6 w-min">
+                        {statsCurrent && <Doughnut data={dataDoughnut} options={doughnutOptions} />}
+                    </div>
+                    <div className="bg-white rounded-2xl shadow-xl border border-slate-200 p-6 w-min">
+                        {statsCurrent && <Bar data={dataBar} options={barOptions} />}
+                    </div>
+                    <div className="bg-white rounded-2xl shadow-xl border border-slate-200 p-6 w-min">
+                        {statsCurrent && <Bar data={dataStacked} options={stackedOptions} />}
+                    </div>
                 </div>
-                <div className="bg-white rounded-2xl shadow-xl border border-slate-200 p-6 w-min">
-                    {statsCurrent && <Doughnut data={dataDoughnut} options={doughnutOptions} />}
-                </div>
-                <div className="bg-white rounded-2xl shadow-xl border border-slate-200 p-6 w-min">
-                    {statsCurrent && <Bar data={dataBar} options={barOptions} />}
-                </div>
-                <div className="bg-white rounded-2xl shadow-xl border border-slate-200 p-6 w-min">
-                    {statsCurrent && <Bar data={dataStacked} options={stackedOptions} />}
-                </div>
-            </div>
+                </>
+                ):
+                (
+                    <div className="text-center bg-white rounded-2xl shadow-xl border border-slate-200 p-6">
+                        No se tienen egresos registrados de este año
+                    </div>
+                )}
+            
 
         </div>
 
