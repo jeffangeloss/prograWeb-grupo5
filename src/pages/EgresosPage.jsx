@@ -7,8 +7,9 @@ import FiltroPopUp from "../components/FiltroPopUp"
 import NavBarUser from "../components/NavBarUser"
 import { clearAuthData, getAuthSession, getAuthToken, hasActiveSession } from "../utils/auth"
 import { isAdminPanelRole, normalizeRoleValue } from "../utils/roles"
+import ChatBotPage from "./ChatBotPage"
+import params from "../params"
 
-const API_URL = "http://127.0.0.1:8000"
 const LOGIN_REDIRECT_DELAY_MS = 1400
 
 const EMPTY_FILTERS = {
@@ -219,7 +220,7 @@ function EgresosPage() {
 
         try {
             const queryString = construirQueryString()
-            const resp = await fetch(`${API_URL}/expenses/?${queryString}`, {
+            const resp = await fetch(`${params.API_URL}/expenses/?${queryString}`, {
                 headers: {
                     Authorization: `Bearer ${token}`,
                 },
@@ -259,7 +260,7 @@ function EgresosPage() {
 
         setCategoriesLoading(true)
         try {
-            const resp = await fetch(`${API_URL}/expenses/categories`, {
+            const resp = await fetch(`${params.API_URL}/categories`, {
                 headers: {
                     Authorization: `Bearer ${token}`,
                 },
@@ -342,7 +343,7 @@ function EgresosPage() {
         }
 
         try {
-            const resp = await fetch(`${API_URL}/expenses/`, {
+            const resp = await fetch(`${params.API_URL}/expenses/`, {
                 method: "POST",
                 headers: {
                     "content-type": "application/json",
@@ -394,7 +395,7 @@ function EgresosPage() {
         }
 
         try {
-            const resp = await fetch(`${API_URL}/expenses/${id}`, {
+            const resp = await fetch(`${params.API_URL}/expenses/${id}`, {
                 method: "DELETE",
                 headers: {
                     Authorization: `Bearer ${token}`,
