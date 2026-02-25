@@ -20,7 +20,7 @@ function SeguridadUsuarioPage() {
         usuarioApi?.role_value || usuarioApi?.role || usuarioApi?.rol || usuario?.role || usuario?.rol,
         usuarioApi?.type || usuario?.type
     )
-    const img = roleValue === "user" ? "/img/user.jpg" : "/img/admin.jpg"
+    const img = roleValue === "user" ? "https://res.cloudinary.com/dmmyupwuu/image/upload/v1771912745/gatito-1_pmyxdz.png" : "https://res.cloudinary.com/dmmyupwuu/image/upload/v1771912745/gatito-2_mtutkd.png"
     const label = roleLabel(roleValue)
 
     const usuarioCard = usuarioApi || usuario || { nombre: "-", email: "-" }

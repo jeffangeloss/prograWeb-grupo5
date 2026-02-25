@@ -13,7 +13,7 @@ function LandingPage() {
                         onClick={function () { navigate("/") }}
                         className="flex items-center gap-3"
                     >
-                        <img src="/img/logotemp.png" alt="logo" className="h-10 w-auto" />
+                        <img src="https://res.cloudinary.com/dmmyupwuu/image/upload/v1771998697/logotemp_krs62l.png" alt="logo" className="h-10 w-auto" />
                         <span className="hidden sm:block font-extrabold text-slate-900">
                             GRUPO 5
                         </span>
@@ -117,7 +117,7 @@ function LandingPage() {
                         <div className="flex justify-center">
                             <div className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm">
                                 <img
-                                    src="/img/chanchito.svg"
+                                    src="https://res.cloudinary.com/dmmyupwuu/image/upload/v1771998696/chanchito_yzws02.svg"
                                     alt="Ilustración"
                                     className="block w-full max-w-[360px] h-auto"
                                 />
@@ -143,7 +143,7 @@ function LandingPage() {
                     <div className="mt-8 grid grid-cols-1 md:grid-cols-3 gap-6">
                         {/* <!-- Card 1 --> */}
                         <div className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm hover:shadow-md transition">
-                            <img src="/img/icon1.png" alt="" className="h-12 w-12 object-contain" />
+                            <img src="https://res.cloudinary.com/dmmyupwuu/image/upload/v1771998696/icon1_yyyrhi.png" alt="" className="h-12 w-12 object-contain" />
                             <h3 className="mt-4 text-xl font-extrabold">Registro rápido</h3>
                             <p className="mt-2 text-slate-600 leading-relaxed">
                                 Agrega montos y descripciones en pocos segundos con campos claros.
@@ -152,7 +152,7 @@ function LandingPage() {
 
                         {/* <!-- Card 2 --> */}
                         <div className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm hover:shadow-md transition">
-                            <img src="/img/icon2.png" alt="" className="h-12 w-12 object-contain" />
+                            <img src="https://res.cloudinary.com/dmmyupwuu/image/upload/v1771998696/icon2_bferou.png" alt="" className="h-12 w-12 object-contain" />
                             <h3 className="mt-4 text-xl font-extrabold">Visual simple</h3>
                             <p className="mt-2 text-slate-600 leading-relaxed">
                                 Ordena tu historial y detecta hábitos con una interfaz limpia.
@@ -161,7 +161,7 @@ function LandingPage() {
 
                         {/* <!-- Card 3 --> */}
                         <div className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm hover:shadow-md transition">
-                            <img src="/img/icon3.png" alt="" className="h-12 w-12 object-contain" />
+                            <img src="https://res.cloudinary.com/dmmyupwuu/image/upload/v1771998696/icon3_ilsc1o.png" alt="" className="h-12 w-12 object-contain" />
                             <h3 className="mt-4 text-xl font-extrabold">Orden y seguridad</h3>
                             <p className="mt-2 text-slate-600 leading-relaxed">
                                 Flujos pensados para autenticación y control básico de acceso.
@@ -255,7 +255,7 @@ function LandingPage() {
                     </div>
 
                     <div className="flex md:justify-end">
-                        <img src="/img/logotemp.png" alt="logo" className="h-12 w-auto opacity-90" />
+                        <img src="https://res.cloudinary.com/dmmyupwuu/image/upload/v1771998697/logotemp_krs62l.png" alt="logo" className="h-12 w-auto opacity-90" />
                     </div>
                 </div>
             </footer>

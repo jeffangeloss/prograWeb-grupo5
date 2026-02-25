@@ -1,4 +1,4 @@
-﻿import { useEffect, useMemo, useRef, useState } from "react"
+import { useEffect, useMemo, useRef, useState } from "react"
 import { useNavigate } from "react-router-dom"
 
 import NavBarUser from "../components/NavBarUser"
@@ -104,7 +104,7 @@ function PerfilUsuarioPage() {
 
     function resolverAvatarSrc(rawAvatar) {
         if (!rawAvatar) {
-            return "/img/user.jpg"
+            return "https://res.cloudinary.com/dmmyupwuu/image/upload/v1771912745/gatito-1_pmyxdz.png"
         }
 
         if (rawAvatar.startsWith("data:image")) {
@@ -579,7 +579,7 @@ function PerfilUsuarioPage() {
                                             alt="Avatar usuario"
                                             className="h-14 w-14 rounded-full object-cover"
                                             onError={function (ev) {
-                                                ev.currentTarget.src = "/img/user.jpg"
+                                                ev.currentTarget.src = "https://res.cloudinary.com/dmmyupwuu/image/upload/v1771912745/gatito-1_pmyxdz.png"
                                             }}
                                         />
                                     </span>
@@ -589,7 +589,7 @@ function PerfilUsuarioPage() {
                                         aria-label="Cambiar imagen de perfil"
                                         className="absolute -right-1 -bottom-1 inline-flex h-6 w-6 items-center justify-center rounded-full border border-blue-200 bg-white text-blue-600 shadow-sm transition hover:bg-blue-50"
                                     >
-                                        <img src="/img/icon1.png" alt="" className="h-3.5 w-3.5 object-contain" />
+                                        <img src="https://res.cloudinary.com/dmmyupwuu/image/upload/v1771998696/icon1_yyyrhi.png" alt="" className="h-3.5 w-3.5 object-contain" />
                                     </button>
                                 </div>
 
@@ -794,7 +794,7 @@ function PerfilUsuarioPage() {
                                     alt="Vista previa avatar"
                                     className="h-48 w-48 rounded-full object-cover"
                                     onError={function (ev) {
-                                        ev.currentTarget.src = "/img/user.jpg"
+                                        ev.currentTarget.src = "https://res.cloudinary.com/dmmyupwuu/image/upload/v1771912745/gatito-1_pmyxdz.png"
                                     }}
                                 />
                             </div>

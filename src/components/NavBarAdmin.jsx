@@ -37,7 +37,7 @@ function NavBarAdmin({ onLogout }) {
 
     function resolverAvatarSrc(rawAvatar) {
         if (!rawAvatar) {
-            return "/img/user.jpg"
+            return "https://res.cloudinary.com/dmmyupwuu/image/upload/v1771912745/gatito-1_pmyxdz.png"
         }
 
         if (rawAvatar.startsWith("data:image")) {
@@ -226,7 +226,7 @@ function NavBarAdmin({ onLogout }) {
             <div className="mx-auto flex w-full max-w-[1400px] flex-col gap-3 px-4 py-3 sm:flex-row sm:items-center sm:justify-between sm:px-6 sm:py-4">
                 <div className="flex items-center gap-2">
                     <img
-                        src="/img/logotemp.png"
+                        src="https://res.cloudinary.com/dmmyupwuu/image/upload/v1771998697/logotemp_krs62l.png"
                         alt="Grupo 5"
                         className="h-10 w-auto object-contain sm:h-11 cursor-pointer transition-transform active:scale-90 hover:brightness-110"
                         onClick={() => navigate("/admin")}
@@ -274,7 +274,7 @@ function NavBarAdmin({ onLogout }) {
                                     alt={roleLabel(roleValue)}
                                     className="h-8 w-8 rounded-full object-cover"
                                     onError={function (ev) {
-                                        ev.currentTarget.src = "/img/user.jpg"
+                                        ev.currentTarget.src = "https://res.cloudinary.com/dmmyupwuu/image/upload/v1771912745/gatito-1_pmyxdz.png"
                                     }}
                                 />
                             </span>
@@ -298,7 +298,7 @@ function NavBarAdmin({ onLogout }) {
                                         alt={roleLabel(roleValue)}
                                         className="mx-auto h-14 w-14 rounded-full border border-blue-900/20 object-cover"
                                         onError={function (ev) {
-                                            ev.currentTarget.src = "/img/user.jpg"
+                                            ev.currentTarget.src = "https://res.cloudinary.com/dmmyupwuu/image/upload/v1771912745/gatito-1_pmyxdz.png"
                                         }}
                                     />
                                     <p className="mt-2 truncate text-sm font-semibold text-slate-700">{nombre}</p>
