@@ -429,8 +429,10 @@ function GraficosUsuarioPage() {
                             <div className="w-full max-w-[560px] rounded-2xl border border-slate-200 bg-white p-4 shadow-xl sm:p-6">
                                 {statsCurrent && <Bar data={dataBar} options={barOptions} />}
                             </div>
-                            <div className="w-full max-w-[560px] rounded-2xl border border-slate-200 bg-white p-4 shadow-xl sm:p-6">
-                                {statsCurrent && <Bar data={dataStacked} options={stackedOptions} />}
+                            <div className="w-full max-w-[980px] rounded-2xl border border-slate-200 bg-white p-4 shadow-xl sm:p-6 lg:col-span-2 xl:col-span-3">
+                                <div className="h-[320px] sm:h-[360px] md:h-[420px]">
+                                    {statsCurrent && <Bar data={dataStacked} options={stackedOptions} />}
+                                </div>
                             </div>
                         </div>
                     </>
