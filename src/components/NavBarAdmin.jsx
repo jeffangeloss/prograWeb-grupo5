@@ -8,6 +8,8 @@ import { THEME_CHANGED_EVENT, isDarkThemeActive, toggleThemeMode } from "../util
 
 const API_URL = params.BACKEND_URL
 const MAX_AVATAR_BYTES = 5 * 1024 * 1024
+const LOGO_LIGHT_URL = "https://res.cloudinary.com/dmmyupwuu/image/upload/v1771998697/logotemp_krs62l.png"
+const LOGO_DARK_URL = "https://res.cloudinary.com/dmmyupwuu/image/upload/v1772027332/Solarix_Halo_Tidalglow_2023_-_Royale_High_m4vfet.jpg"
 
 function leerSesion() {
     try {
@@ -217,6 +219,7 @@ function NavBarAdmin({ onLogout }) {
     const correo = sesion?.correo || sesion?.email || ""
     const avatarUsuario = resolverAvatarSrc(sesion?.avatar_url || sesion?.avatar || "")
     const puedeVerAuditoriaAdmin = roleValue === "owner" || roleValue === "auditor"
+    const logoSrc = isDarkMode ? LOGO_DARK_URL : LOGO_LIGHT_URL
 
     function navegar(path) {
         setOpenMenu(false)
@@ -249,7 +252,7 @@ function NavBarAdmin({ onLogout }) {
             <div className="mx-auto flex w-full max-w-[1400px] flex-col gap-3 px-4 py-3 sm:flex-row sm:items-center sm:justify-between sm:px-6 sm:py-4">
                 <div className="flex items-center gap-2">
                     <img
-                        src="https://res.cloudinary.com/dmmyupwuu/image/upload/v1771998697/logotemp_krs62l.png"
+                        src={logoSrc}
                         alt="Grupo 5"
                         className="h-10 w-auto object-contain sm:h-11 cursor-pointer transition-transform active:scale-90 hover:brightness-110"
                         onClick={() => navigate("/admin")}
