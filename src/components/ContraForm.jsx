@@ -12,8 +12,13 @@ function ContraForm({ cargando, onContinue }) {
         setPassConfirm(ev.target.value)
     }
 
+    function submitOnContinue(ev) {
+        ev.preventDefault()
+        onContinue(pass, passConfirm)
+    }
+
     return <div className="mb-5">
-        <form className="grid gap-3">
+        <form onSubmit={submitOnContinue} className="grid gap-3">
             <label className="text-sm font-medium text-slate-700">Contraseña</label>
             <input
                 value={pass}
@@ -30,12 +35,9 @@ function ContraForm({ cargando, onContinue }) {
                 type="password" placeholder="******">
             </input>
             <button
-                onClick={function () {
-                    onContinue(pass, passConfirm)
-                }}
                 disabled={cargando}
                 className="mt-4 w-full rounded-full bg-indigo-600 px-8 py-3 font-semibold text-white shadow-sm transition hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-300 active:scale-[0.99] sm:w-fit sm:px-16"
-                type="button" >{cargando ? "Procesando..." : "Continuar"}
+                type="submit" >{cargando ? "Procesando..." : "Continuar"}
             </button>
         </form>
     </div>
