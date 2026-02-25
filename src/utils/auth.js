@@ -34,6 +34,7 @@ export function hasActiveSession() {
 export function clearAuthData() {
     localStorage.removeItem("DATOS_LOGIN")
     localStorage.removeItem("TOKEN")
+    localStorage.removeItem("TWO_FACTOR_PENDING")
     localStorage.removeItem("PERFIL_LOCAL")
     localStorage.removeItem("PERFIL_UPDATED_AT")
     localStorage.removeItem("PASSWORD_UPDATED_AT")
