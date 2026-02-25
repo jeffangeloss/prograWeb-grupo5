@@ -22,6 +22,7 @@ import PerfilUsuarioPage from './pages/PerfilUsuarioPage'
 import AuditoriaAdminPage from './pages/AuditoriaAdminPage'
 import EditarEgresoPage from './pages/EditarEgresoPage'
 import ConfirmarEmailPage from './pages/ConfirmarEmailPage'
+import TwoFactorPage from './pages/TwoFactorPage'
 import { Toaster } from 'sonner'
 import ProtectedRoute from './components/auth/ProtectedRoute'
 import { initializeTheme } from './utils/theme'
@@ -35,6 +36,7 @@ createRoot(document.getElementById('root')).render(
       <Routes>
         <Route path="/" element={<LandingPage />} />
         <Route path="/sesion" element={<InicioSesionPage />} />
+        <Route path="/two-factor" element={<TwoFactorPage />} />
         <Route path="/admin" element={<ProtectedRoute allowRoles={["admin", "owner", "auditor"]}><AdminPage /></ProtectedRoute>} />
         <Route path="/user" element={<ProtectedRoute allowRoles={["user"]}><EgresosPage /></ProtectedRoute>} />
         <Route path="/editarEgreso" element={<ProtectedRoute allowRoles={["user"]}><EditarEgresoPage /></ProtectedRoute>} />

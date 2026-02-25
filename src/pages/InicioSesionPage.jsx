@@ -5,8 +5,12 @@ import LoginForm from "../components/LoginForm"
 import Azul from "../components/auth/Azul"
 import { isAdminPanelRole, normalizeRoleValue } from "../utils/roles"
 import { getAuthSession, hasActiveSession } from "../utils/auth"
+import { clearTwoFactorPending, saveTwoFactorPending } from "../utils/twoFactor"
 import params from "../params"
 import ThemeToggleButton from "../components/ThemeToggleButton"
+
+const FORCE_2FA =
+    String(import.meta?.env?.VITE_FORCE_2FA ?? "true").toLowerCase() !== "false"
 
 function InicioSesionPage() {
 
@@ -95,10 +99,47 @@ function InicioSesionPage() {
         }
 
         const data = await resp.json()
+        if (data.requires_2fa && data.tmp_token) {
+            const rolNormalizado = normalizeRoleValue(data.rol)
+            return {
+                valido: true,
+                requiere2FA: true,
+                rol: rolNormalizado,
+                tmp_token: data.tmp_token,
+                nombre: data.name || "",
+                correo: data.email || correo,
+                id: data.id || "",
+                avatar_url: data.avatar_url || "",
+            }
+        }
+
+        if (FORCE_2FA && data.msg == "Acceso concedido") {
+            const tmpCompatToken = data.access_token || data.token || ""
+            if (!tmpCompatToken) {
+                return {
+                    valido: false,
+                    error: "Este acceso requiere validacion con autenticador."
+                }
+            }
+
+            const rolNormalizado = normalizeRoleValue(data.rol)
+            return {
+                valido: true,
+                requiere2FA: true,
+                rol: rolNormalizado,
+                tmp_token: tmpCompatToken,
+                nombre: data.name || "",
+                correo: data.email || correo,
+                id: data.id || "",
+                avatar_url: data.avatar_url || "",
+            }
+        }
+
         if (data.msg == "Acceso concedido") {
             const rolNormalizado = normalizeRoleValue(data.rol)
             return {
                 valido: true,
+                requiere2FA: false,
                 rol: rolNormalizado,
                 token: data.access_token || data.token || "",
                 nombre: data.name || "",
@@ -122,6 +163,7 @@ function InicioSesionPage() {
             return
         }
 
+        clearTwoFactorPending()
         const resultadoLogin = await loginHTTP(correo, password)
 
         if (resultadoLogin.noVerificado) {
@@ -134,6 +176,19 @@ function InicioSesionPage() {
             setMensaje("")
             setMensajeVisible(false)
 
+            if (resultadoLogin.requiere2FA) {
+                saveTwoFactorPending({
+                    tmp_token: resultadoLogin.tmp_token,
+                    correo: resultadoLogin.correo || correo,
+                    nombre: resultadoLogin.nombre || "",
+                    rol: resultadoLogin.rol,
+                    id: resultadoLogin.id || "",
+                    avatar_url: resultadoLogin.avatar_url || "",
+                })
+                navigate("/two-factor")
+                return
+            }
+
             const datosLogin = {
                 ingreso: true,
                 correo: resultadoLogin.correo || correo,
@@ -144,6 +199,7 @@ function InicioSesionPage() {
                 token: resultadoLogin.token || "",
                 cantidadIntentos: 0,
             }
+            clearTwoFactorPending()
             localStorage.setItem("DATOS_LOGIN", JSON.stringify(datosLogin))
             if (resultadoLogin.token) {
                 localStorage.setItem("TOKEN", resultadoLogin.token)
@@ -157,7 +213,7 @@ function InicioSesionPage() {
             return
         }
 
-        setMensaje("Correo y/o contraseña incorrectos")
+        setMensaje(resultadoLogin.error || "Correo y/o contraseña incorrectos")
         setMensajeVisible(true)
 
         const datosLogin = localStorage.getItem("DATOS_LOGIN")
