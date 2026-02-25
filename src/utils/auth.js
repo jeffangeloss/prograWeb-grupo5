@@ -1,4 +1,6 @@
 const JWT_PATTERN = /^[A-Za-z0-9_-]+\.[A-Za-z0-9_-]+\.[A-Za-z0-9_-]+$/
+const FORCE_2FA =
+    String(import.meta?.env?.VITE_FORCE_2FA ?? "true").toLowerCase() !== "false"
 
 export function getAuthSession() {
     try {
@@ -25,10 +27,34 @@ export function isJwtLike(token) {
     return JWT_PATTERN.test((token || "").trim())
 }
 
+export function decodeJwtPayload(token) {
+    try {
+        const raw = (token || "").trim()
+        if (!isJwtLike(raw)) return null
+        const payloadPart = raw.split(".")[1]
+        const normalized = payloadPart.replace(/-/g, "+").replace(/_/g, "/")
+        const padded = normalized + "=".repeat((4 - (normalized.length % 4)) % 4)
+        const decoded = atob(padded)
+        return JSON.parse(decoded)
+    } catch {
+        return null
+    }
+}
+
 export function hasActiveSession() {
     const sesion = getAuthSession()
     const token = getAuthToken()
-    return Boolean(sesion?.ingreso === true && token && isJwtLike(token))
+    if (!(sesion?.ingreso === true && token && isJwtLike(token))) {
+        return false
+    }
+
+    if (!FORCE_2FA) {
+        return true
+    }
+
+    const payload = decodeJwtPayload(token)
+    const stage = String(payload?.stage || "").toUpperCase()
+    return stage === "FULL"
 }
 
 export function clearAuthData() {

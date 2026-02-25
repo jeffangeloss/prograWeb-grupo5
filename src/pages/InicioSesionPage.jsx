@@ -9,6 +9,9 @@ import { clearTwoFactorPending, saveTwoFactorPending } from "../utils/twoFactor"
 import params from "../params"
 import ThemeToggleButton from "../components/ThemeToggleButton"
 
+const FORCE_2FA =
+    String(import.meta?.env?.VITE_FORCE_2FA ?? "true").toLowerCase() !== "false"
+
 function InicioSesionPage() {
 
     const [mensajeVisible, setMensajeVisible] = useState(false)
@@ -110,6 +113,13 @@ function InicioSesionPage() {
             }
         }
 
+        if (FORCE_2FA && data.msg == "Acceso concedido") {
+            return {
+                valido: false,
+                error: "Este acceso requiere validacion con autenticador."
+            }
+        }
+
         if (data.msg == "Acceso concedido") {
             const rolNormalizado = normalizeRoleValue(data.rol)
             return {
@@ -188,7 +198,7 @@ function InicioSesionPage() {
             return
         }
 
-        setMensaje("Correo y/o contraseña incorrectos")
+        setMensaje(resultadoLogin.error || "Correo y/o contraseña incorrectos")
         setMensajeVisible(true)
 
         const datosLogin = localStorage.getItem("DATOS_LOGIN")
