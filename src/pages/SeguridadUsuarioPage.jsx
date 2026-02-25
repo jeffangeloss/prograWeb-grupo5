@@ -20,10 +20,32 @@ function SeguridadUsuarioPage() {
         usuarioApi?.role_value || usuarioApi?.role || usuarioApi?.rol || usuario?.role || usuario?.rol,
         usuarioApi?.type || usuario?.type
     )
-    const img = roleValue === "user" ? "https://res.cloudinary.com/dmmyupwuu/image/upload/v1771912745/gatito-1_pmyxdz.png" : "https://res.cloudinary.com/dmmyupwuu/image/upload/v1771912745/gatito-2_mtutkd.png"
+    const avatarFallback = roleValue === "user"
+        ? "https://res.cloudinary.com/dmmyupwuu/image/upload/v1771912745/gatito-1_pmyxdz.png"
+        : "https://res.cloudinary.com/dmmyupwuu/image/upload/v1771912745/gatito-2_mtutkd.png"
     const label = roleLabel(roleValue)
 
     const usuarioCard = usuarioApi || usuario || { nombre: "-", email: "-" }
+    const img = useMemo(function () {
+        const rawAvatar = (usuarioCard?.avatar_url || "").trim()
+        if (!rawAvatar) {
+            return avatarFallback
+        }
+
+        const secureAvatar = rawAvatar.startsWith("http://")
+            ? `https://${rawAvatar.slice(7)}`
+            : rawAvatar
+
+        if (secureAvatar.startsWith("data:image")) {
+            return secureAvatar
+        }
+
+        // Force refresh when avatar was updated to avoid stale cached image in admin/audit views.
+        const avatarVersion = usuarioCard?.updated_at
+            ? encodeURIComponent(String(usuarioCard.updated_at))
+            : Date.now()
+        return `${secureAvatar}${secureAvatar.includes("?") ? "&" : "?"}v=${avatarVersion}`
+    }, [avatarFallback, usuarioCard?.avatar_url, usuarioCard?.updated_at])
 
     function parseNavegador(webAgent) {
         const ua = (webAgent || "").toLowerCase().trim()

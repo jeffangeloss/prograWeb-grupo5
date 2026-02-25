@@ -63,6 +63,9 @@ function EditarUsuarioForm() {
     const [nombre, setNombre] = useState(usuario?.full_name || usuario?.nombre || "")
     const [email, setEmail] = useState(usuario?.email || "")
     const rol = String(roleType(targetRole))
+    const rolLabel = ROLE_OPTIONS.find(function (option) {
+        return option.value === rol
+    })?.label || "Usuario"
     const [error, setError] = useState("")
     const [guardando, setGuardando] = useState(false)
 
@@ -166,19 +169,13 @@ function EditarUsuarioForm() {
 
                 <div className="mb-6">
                     <label className="text-slate-700 mb-2 ml-1">Rol</label>
-                    <select
-                        className="w-full mt-2 px-4 py-2 rounded-xl shadow-md bg-gray-300 text-gray-600 cursor-not-allowed"
-                        value={rol}
+                    <input
+                        type="text"
+                        className="w-full mt-2 px-4 py-2 rounded-xl shadow-md bg-gray-300 text-gray-600"
+                        value={rolLabel}
                         disabled
-                    >
-                        {ROLE_OPTIONS.map(function (option) {
-                            return (
-                                <option key={option.value} value={option.value}>
-                                    {option.label}
-                                </option>
-                            )
-                        })}
-                    </select>
+                        readOnly
+                    />
                 </div>
 
                 <div className="mb-8">
