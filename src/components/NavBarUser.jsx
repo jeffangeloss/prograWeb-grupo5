@@ -64,7 +64,11 @@ function NavBarUser({ onLogout }) {
             return rawAvatar
         }
 
-        if (rawAvatar.startsWith("http://") || rawAvatar.startsWith("https://")) {
+        if (rawAvatar.startsWith("http://")) {
+            return `https://${rawAvatar.slice(7)}`
+        }
+
+        if (rawAvatar.startsWith("https://")) {
             return rawAvatar
         }
 
