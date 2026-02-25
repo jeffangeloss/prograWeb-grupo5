@@ -9,6 +9,7 @@ import {
     Tooltip,
     ArcElement,
     Legend,
+    Title
 } from "chart.js"
 import { Bar, Doughnut, Line } from "react-chartjs-2"
 import NavBarUser from "../components/NavBarUser"
@@ -26,7 +27,8 @@ ChartJS.register(
     PointElement,
     Tooltip,
     ArcElement,
-    Legend
+    Legend,
+    Title
 );
 
 
@@ -281,6 +283,19 @@ function GraficosUsuarioPage() {
         responsive: true,
         maintainAspectRatio: false,
         plugins: {
+            title: {
+                display: true,
+                text: `Egresos por categoría - ${selectedYear1}`,
+                font: {
+                    size: 16,
+                    weight: "bold"
+                },
+                padding: {
+                    top: 10,
+                    bottom: 20
+                }
+            },
+
             legend: {
                 position: "bottom",
             },
@@ -307,6 +322,19 @@ function GraficosUsuarioPage() {
         responsive: true,
         maintainAspectRatio: false,
         plugins: {
+            
+            title: {
+            display: true,
+            text: `Egresos por categoría - ${selectedYear1}`,
+            font: {
+                size: 16,
+                weight: "bold"
+            },
+            padding: {
+                bottom: 20
+            }
+        },
+            
             legend: { position: "top" }
         },
         scales: {

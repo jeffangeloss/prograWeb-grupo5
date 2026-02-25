@@ -52,7 +52,7 @@ function LandingPage() {
                     <div className="pointer-events-none absolute -top-24 -right-24 h-72 w-72 rounded-full bg-indigo-200/40 blur-3xl"></div>
                     <div className="pointer-events-none absolute -bottom-24 -left-24 h-72 w-72 rounded-full bg-sky-200/40 blur-3xl"></div>
 
-                    <div className="relative grid grid-cols-1 lg:grid-cols-2 gap-10 items-center p-8 sm:p-12">
+                    <div className="relative grid grid-cols-1 md:grid-cols-2 gap-10 items-center p-8 sm:p-12">
                         {/* <!-- Texto --> */}
                         <div className="min-w-0">
                             <h1 className="mt-6 text-5xl sm:text-6xl font-extrabold leading-[1.05]">
@@ -99,7 +99,7 @@ function LandingPage() {
                             </div>
 
                             {/* <!-- mini stats --> */}
-                            <div className="mt-10 grid grid-cols-3 gap-3 max-w-md">
+                            <div className="mt-10 grid md:grid-cols-3 grid-cols-2 gap-3 max-w-md">
                                 <div className="rounded-2xl border border-slate-200 bg-white px-4 py-3">
                                     <p className="text-xs text-slate-500">Categorías</p>
                                     <p className="text-lg font-extrabold">Rápidas</p>
