@@ -34,6 +34,13 @@ function extractError(data) {
     return "Error inesperado en la petición."
 }
 
+const PAGE_SIZE_OPTIONS = [
+    { value: "5", label: "5" },
+    { value: "10", label: "10" },
+    { value: "20", label: "20" },
+    { value: "all", label: "Todos" },
+]
+
 function normalizarUsuarioApi(item, currentUserId) {
     const role = normalizeRoleValue(item?.role_value || item?.role || item?.rol, item?.type)
     const id = item?.id || ""
@@ -65,6 +72,8 @@ function AdminPage() {
     const [listaUsuarios, setListaUsuarios] = useState([])
     const [cargando, setCargando] = useState(false)
     const [errorApi, setErrorApi] = useState("")
+    const [pageSize, setPageSize] = useState("10")
+    const [currentPage, setCurrentPage] = useState(1)
 
     const [modalVisible, setModalVisible] = useState(false)
     const [usuarioSeleccionado, setUsuarioSeleccionado] = useState(null)
@@ -209,6 +218,65 @@ function AdminPage() {
         )
     })
 
+    const pageSizeNumber = useMemo(function () {
+        if (pageSize === "all") {
+            return Math.max(usuariosFiltrados.length, 1)
+        }
+        const parsed = Number(pageSize)
+        return Number.isFinite(parsed) && parsed > 0 ? parsed : 10
+    }, [pageSize, usuariosFiltrados.length])
+
+    const totalPaginas = useMemo(function () {
+        if (pageSize === "all") {
+            return 1
+        }
+        return Math.max(1, Math.ceil(usuariosFiltrados.length / pageSizeNumber))
+    }, [usuariosFiltrados.length, pageSize, pageSizeNumber])
+
+    const usuariosPaginados = useMemo(function () {
+        if (pageSize === "all") {
+            return usuariosFiltrados
+        }
+        const inicio = (currentPage - 1) * pageSizeNumber
+        return usuariosFiltrados.slice(inicio, inicio + pageSizeNumber)
+    }, [usuariosFiltrados, pageSize, currentPage, pageSizeNumber])
+
+    const resumenPaginacion = useMemo(function () {
+        if (usuariosFiltrados.length === 0) {
+            return "0 de 0"
+        }
+
+        if (pageSize === "all") {
+            return `1-${usuariosFiltrados.length} de ${usuariosFiltrados.length}`
+        }
+
+        const inicio = (currentPage - 1) * pageSizeNumber + 1
+        const fin = Math.min(currentPage * pageSizeNumber, usuariosFiltrados.length)
+        return `${inicio}-${fin} de ${usuariosFiltrados.length}`
+    }, [usuariosFiltrados.length, pageSize, currentPage, pageSizeNumber])
+
+    useEffect(function () {
+        setCurrentPage(1)
+    }, [pageSize, rolSeleccionado, textoBusqueda])
+
+    useEffect(function () {
+        if (currentPage > totalPaginas) {
+            setCurrentPage(totalPaginas)
+        }
+    }, [currentPage, totalPaginas])
+
+    function irPaginaAnterior() {
+        setCurrentPage(function (prev) {
+            return Math.max(1, prev - 1)
+        })
+    }
+
+    function irPaginaSiguiente() {
+        setCurrentPage(function (prev) {
+            return Math.min(totalPaginas, prev + 1)
+        })
+    }
+
     return (
         <div className="bg-slate-50 min-h-screen">
             <NavBarAdmin onLogout={logout} />
@@ -256,7 +324,70 @@ function AdminPage() {
                         </p>
                     )}
 
-                    <TablaAdmin usuarios={usuariosFiltrados} borrarUsuario={handleOpenModal} actorRole={actorRole} />
+                    <div className="mt-4 ml-4 mr-4 flex flex-wrap items-center justify-between gap-2">
+                        <span className="rounded-full border border-slate-200 bg-white/70 px-3 py-1 text-xs font-semibold text-slate-700">
+                            {usuariosFiltrados.length} {usuariosFiltrados.length === 1 ? "registro" : "registros"}
+                        </span>
+
+                        <label className="inline-flex items-center gap-2 rounded-full border border-slate-200 bg-white px-3 py-1 text-xs font-semibold text-slate-700">
+                            Mostrar
+                            <select
+                                value={pageSize}
+                                onChange={function (ev) {
+                                    setPageSize(ev.target.value)
+                                }}
+                                className="rounded-md border border-slate-300 bg-white px-2 py-1 text-xs font-semibold text-slate-700 focus:border-indigo-400 focus:ring-2 focus:ring-indigo-200"
+                            >
+                                {PAGE_SIZE_OPTIONS.map(function (option) {
+                                    return (
+                                        <option key={option.value} value={option.value}>
+                                            {option.label}
+                                        </option>
+                                    )
+                                })}
+                            </select>
+                        </label>
+                    </div>
+
+                    <TablaAdmin
+                        usuarios={usuariosPaginados}
+                        totalUsuarios={usuariosFiltrados.length}
+                        borrarUsuario={handleOpenModal}
+                        actorRole={actorRole}
+                    />
+
+                    {!cargando && usuariosFiltrados.length > 0 && (
+                        <div className="mx-4 mt-4 flex flex-col gap-2 text-sm text-slate-600 sm:flex-row sm:items-center sm:justify-between">
+                            <p>
+                                Mostrando {resumenPaginacion}
+                            </p>
+
+                            <div className="flex flex-wrap items-center gap-2">
+                                <button
+                                    type="button"
+                                    onClick={irPaginaAnterior}
+                                    disabled={currentPage <= 1 || pageSize === "all"}
+                                    className="rounded-md border border-slate-300 bg-white px-3 py-1.5 font-semibold text-slate-700 transition hover:bg-slate-100 disabled:cursor-not-allowed disabled:opacity-50"
+                                >
+                                    Anterior
+                                </button>
+
+                                <span className="rounded-md border border-slate-200 bg-white px-3 py-1.5 font-semibold text-slate-700">
+                                    Pagina {currentPage} de {totalPaginas}
+                                </span>
+
+                                <button
+                                    type="button"
+                                    onClick={irPaginaSiguiente}
+                                    disabled={currentPage >= totalPaginas || pageSize === "all"}
+                                    className="rounded-md border border-slate-300 bg-white px-3 py-1.5 font-semibold text-slate-700 transition hover:bg-slate-100 disabled:cursor-not-allowed disabled:opacity-50"
+                                >
+                                    Siguiente
+                                </button>
+                            </div>
+                        </div>
+                    )}
+
                     <PopUp_BorrarUsuario
                         visible={modalVisible}
                         userName={usuarioSeleccionado?.full_name}
