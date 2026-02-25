@@ -21,12 +21,16 @@ function normalizeThemeMode(value) {
     if (value === "dark" || value === "light" || value === "system") {
         return value
     }
-    return "system"
+    return "light"
 }
 
 function getStoredThemeMode() {
-    if (!canUseStorage()) return "system"
-    return normalizeThemeMode(window.localStorage.getItem(THEME_STORAGE_KEY))
+    if (!canUseStorage()) return "light"
+
+    const storedMode = window.localStorage.getItem(THEME_STORAGE_KEY)
+    if (!storedMode || storedMode === "system") return "light"
+
+    return normalizeThemeMode(storedMode)
 }
 
 function setStoredThemeMode(mode) {
@@ -50,7 +54,7 @@ function systemPrefersDark() {
 function resolveTheme(mode) {
     const normalizedMode = normalizeThemeMode(mode)
     if (normalizedMode === "system") {
-        return systemPrefersDark() ? "dark" : "light"
+        return "light"
     }
     return normalizedMode
 }

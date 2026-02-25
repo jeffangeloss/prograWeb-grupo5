@@ -106,6 +106,7 @@ function EditarUsuarioForm() {
                 headers: {
                     "content-type": "application/json",
                     "x-token": token,
+                    Authorization: `Bearer ${token}`,
                 },
             })
 
