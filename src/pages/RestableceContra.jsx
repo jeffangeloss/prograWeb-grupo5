@@ -56,9 +56,9 @@ function RestableceContra() {
         </div>
 
         {/* contenido derecha */}
-        <div className="py-8 px-16">
+        <div className="px-4 py-8 sm:px-8 lg:px-16">
             {/* boton regresar */}
-            <div className="justify-self-end flex items-center gap-3 text-sm text-slate-600">
+            <div className="flex flex-wrap items-center justify-end gap-2 text-sm text-slate-600">
                 <span className="text-gray-700 text-sm sm:text-base">¿Recordaste tu contraseña?</span>
                 <a href="#/sesion"
                     className="inline-flex items-center justify-center rounded-full border border-indigo-400 px-5 py-2 font-medium text-indigo-600 hover:bg-indigo-50 focus:outline-none focus:ring-2 focus:ring-indigo-300">
@@ -69,8 +69,8 @@ function RestableceContra() {
 
             <div className="">
                 {/* header */}
-                <div className="my-10">
-                    <h1 className="text-4xl font-extrabold tracking-tight text-slate-700">RESTABLECER CONTRASEÑA</h1>
+                <div className="my-8 sm:my-10">
+                    <h1 className="text-3xl sm:text-4xl font-extrabold tracking-tight text-slate-700">RESTABLECER CONTRASEÑA</h1>
                     <p className="mt-2 text-slate-500">Indica el correo electrónico con el que te registraste</p>
                 </div>
 

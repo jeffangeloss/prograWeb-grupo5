@@ -114,8 +114,8 @@ function RestableceContra_3() {
                 />
             </div>
 
-            <div className="py-8 px-16">
-                <div className="justify-self-end flex items-center gap-3 text-sm text-slate-600">
+            <div className="px-4 py-8 sm:px-8 lg:px-16">
+                <div className="flex flex-wrap items-center justify-end gap-2 text-sm text-slate-600">
                     <span className="text-gray-700 text-sm sm:text-base">Recordaste tu contrasena?</span>
                     <a
                         href="#/sesion"
@@ -125,8 +125,8 @@ function RestableceContra_3() {
                     </a>
                 </div>
 
-                <div className="my-10">
-                    <h1 className="text-4xl font-extrabold tracking-tight text-slate-700">RESTABLECER CONTRASENA</h1>
+                <div className="my-8 sm:my-10">
+                    <h1 className="text-3xl sm:text-4xl font-extrabold tracking-tight text-slate-700">RESTABLECER CONTRASENA</h1>
                     <p className="mt-2 text-slate-500">Ingresa tu nueva contrasena</p>
                 </div>
 

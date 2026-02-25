@@ -1,8 +1,8 @@
 function PopUp_ToLogin({onLogout, mensaje, visible}) {
 
     return visible ?
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
-        <div className="w-1/2 max-w-sm rounded-2xl bg-white py-8 px-5 text-center shadow-xl">
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4">
+        <div className="w-full max-w-sm rounded-2xl bg-white px-5 py-8 text-center shadow-xl">
             <p className="mb-5 text-slate-500">{mensaje}</p>
             <button 
             onClick={onLogout}

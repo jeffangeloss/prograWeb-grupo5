@@ -34,7 +34,6 @@ function GraficosUsuarioPage() {
     const navigate = useNavigate()
     const [statsCurrent, setStatsCurrent] = useState(null)
     const [statsPrevious, setStatsPrevious] = useState(null)
-    const [loading, setLoading] = useState(true)
     const [selectedMonth, setSelectedMonth] = useState(-1)
     const [popUpVisible, setPopUpVisible] = useState(false)
     const [popUpMensaje, setPopUpMensaje] = useState("")
@@ -89,13 +88,11 @@ function GraficosUsuarioPage() {
         async function statsHTTP() {
             const token = obtenerToken()
             if (!token) {
-                setLoading(false)
                 setPopUpMensaje("No hay sesion activa. Inicia sesion nuevamente.")
                 setPopUpVisible(true)
                 return
             }
 
-            setLoading(true)
             setPopUpVisible(false)
 
             async function fetchYear(year) {
@@ -112,7 +109,6 @@ function GraficosUsuarioPage() {
                 if (resp.status === 401) {
                     setPopUpMensaje("Tu sesión ha expirado. Inicia sesión nuevamente.")
                     setPopUpVisible(true)
-                    setLoading(false)
                     return null
                 }
 
@@ -134,8 +130,6 @@ function GraficosUsuarioPage() {
 
             } catch (err) {
                 console.error(err)
-            } finally {
-                setLoading(false)
             }
         }
 
@@ -333,7 +327,7 @@ function GraficosUsuarioPage() {
         }
     }
 
-    return <div className="h-screen bg-slate-50 text-slate-800 overflow-x-hidden">
+    return <div className="min-h-screen bg-slate-50 text-slate-800 overflow-x-hidden">
         <NavBarUser onLogout={logout} />
         <PopUp_ToLogin
             onLogout={logout}
@@ -430,19 +424,19 @@ function GraficosUsuarioPage() {
                 ) :
                 (
                     <>
-                        <div className="grid grid-cols-1 justify-items-center lg:grid-cols-2 xl:grid-cols-3 gap-4 m-3 ">
-                            <div className="bg-white rounded-2xl shadow-xl border border-slate-200 p-6 w-min">
+                        <div className="m-3 grid grid-cols-1 justify-items-center gap-4 lg:grid-cols-2 xl:grid-cols-3">
+                            <div className="w-full max-w-[560px] rounded-2xl border border-slate-200 bg-white p-4 shadow-xl sm:p-6">
                                 {statsCurrent && statsPrevious && (
                                     <Line data={dataMultiAxis} options={multiAxisOptions} />
                                 )}
                             </div>
-                            <div className="bg-white rounded-2xl shadow-xl border border-slate-200 p-6 w-min">
+                            <div className="w-full max-w-[560px] rounded-2xl border border-slate-200 bg-white p-4 shadow-xl sm:p-6">
                                 {statsCurrent && <Doughnut data={dataDoughnut} options={doughnutOptions} />}
                             </div>
-                            <div className="bg-white rounded-2xl shadow-xl border border-slate-200 p-6 w-min">
+                            <div className="w-full max-w-[560px] rounded-2xl border border-slate-200 bg-white p-4 shadow-xl sm:p-6">
                                 {statsCurrent && <Bar data={dataBar} options={barOptions} />}
                             </div>
-                            <div className="bg-white rounded-2xl shadow-xl border border-slate-200 p-6 w-min">
+                            <div className="w-full max-w-[560px] rounded-2xl border border-slate-200 bg-white p-4 shadow-xl sm:p-6">
                                 {statsCurrent && <Bar data={dataStacked} options={stackedOptions} />}
                             </div>
                         </div>
