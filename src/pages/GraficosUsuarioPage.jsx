@@ -256,6 +256,7 @@ function GraficosUsuarioPage() {
 
     const multiAxisOptions = {
         responsive: true,
+        maintainAspectRatio: false,
         interaction: {
             mode: "index",
             intersect: false,
@@ -282,6 +283,7 @@ function GraficosUsuarioPage() {
 
     const doughnutOptions = {
         responsive: true,
+        maintainAspectRatio: false,
         plugins: {
             legend: {
                 position: "bottom",
@@ -417,19 +419,25 @@ function GraficosUsuarioPage() {
                 ) :
                 (
                     <>
-                        <div className="m-3 grid grid-cols-1 justify-items-center gap-4 lg:grid-cols-2 xl:grid-cols-3">
-                            <div className="w-full max-w-[560px] rounded-2xl border border-slate-200 bg-white p-4 shadow-xl sm:p-6">
-                                {statsCurrent && statsPrevious && (
-                                    <Line data={dataMultiAxis} options={multiAxisOptions} />
-                                )}
+                        <div className="m-3 grid grid-cols-1 gap-4 lg:grid-cols-2 xl:grid-cols-12">
+                            <div className="w-full rounded-2xl border border-slate-200 bg-white p-4 shadow-xl sm:p-6 xl:col-span-6">
+                                <div className="h-[280px] sm:h-[320px]">
+                                    {statsCurrent && statsPrevious && (
+                                        <Line data={dataMultiAxis} options={multiAxisOptions} />
+                                    )}
+                                </div>
                             </div>
-                            <div className="w-full max-w-[560px] rounded-2xl border border-slate-200 bg-white p-4 shadow-xl sm:p-6">
-                                {statsCurrent && <Doughnut data={dataDoughnut} options={doughnutOptions} />}
+                            <div className="w-full rounded-2xl border border-slate-200 bg-white p-4 shadow-xl sm:p-6 xl:col-span-6">
+                                <div className="h-[280px] sm:h-[320px]">
+                                    {statsCurrent && <Doughnut data={dataDoughnut} options={doughnutOptions} />}
+                                </div>
                             </div>
-                            <div className="w-full max-w-[560px] rounded-2xl border border-slate-200 bg-white p-4 shadow-xl sm:p-6">
-                                {statsCurrent && <Bar data={dataBar} options={barOptions} />}
+                            <div className="w-full rounded-2xl border border-slate-200 bg-white p-4 shadow-xl sm:p-6 xl:col-span-4">
+                                <div className="h-[300px] sm:h-[340px]">
+                                    {statsCurrent && <Bar data={dataBar} options={barOptions} />}
+                                </div>
                             </div>
-                            <div className="w-full max-w-[980px] rounded-2xl border border-slate-200 bg-white p-4 shadow-xl sm:p-6 lg:col-span-2 xl:col-span-3">
+                            <div className="w-full rounded-2xl border border-slate-200 bg-white p-4 shadow-xl sm:p-6 xl:col-span-8">
                                 <div className="h-[320px] sm:h-[360px] md:h-[420px]">
                                     {statsCurrent && <Bar data={dataStacked} options={stackedOptions} />}
                                 </div>
