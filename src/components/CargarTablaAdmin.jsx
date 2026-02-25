@@ -44,12 +44,12 @@ function CargarTablaAdmin({ listaUsuarios, borrarUsuario, actorRole }) {
                     </td>
                     <td className="px-3 py-4 text-right">
                         {puedeBorrar ? (
-                            <button className="rounded-full border border-red-200 bg-red-50 px-4 py-1.5 text-xs font-medium text-red-600 hover:bg-red-100 hover:border-red-300 transition"
+                            <button className="rounded-full border border-red-200 bg-red-50 w-10 h-10 flex items-center justify-center text-red-600 hover:bg-red-100 hover:border-red-300 transition"
                                 onClick={function () { borrarUsuario(usuario) }}>
                                 <img
                                     src={imagen}
                                     alt="Eliminar"
-                                    className="w-4 h-4 size-auto"
+                                    className="w-4 h-4 object-contain"
                                 />
                             </button>
                         ) : (
