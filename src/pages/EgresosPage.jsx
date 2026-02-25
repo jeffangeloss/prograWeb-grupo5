@@ -775,7 +775,7 @@ function EgresosPage() {
                                                                         setEgresoEliminar(egreso.id)
                                                                     }}
                                                                 >
-                                                                    <img src="/img/trashbin.png" alt="Eliminar" className="h-4 w-4" />
+                                                                    <img src="https://res.cloudinary.com/dmmyupwuu/image/upload/v1771998697/trashbin_gwh0cl.png" alt="Eliminar" className="h-4 w-4" />
                                                                 </button>
                                                             )}
                                                         </div>

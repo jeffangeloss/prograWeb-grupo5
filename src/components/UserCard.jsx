@@ -1,7 +1,7 @@
 import RoleBadge from "./RoleBadge"
 import { normalizeRoleValue, roleLabel } from "../utils/roles"
 
-function UserCard({ usuario, imgSrc = "/img/user.jpg", label = "Usuario", role }) {
+function UserCard({ usuario, imgSrc = "https://res.cloudinary.com/dmmyupwuu/image/upload/v1771912745/gatito-1_pmyxdz.png", label = "Usuario", role }) {
     const roleValue = normalizeRoleValue(role || usuario?.role || usuario?.role_value || usuario?.rol)
     const labelText = label || roleLabel(roleValue)
 

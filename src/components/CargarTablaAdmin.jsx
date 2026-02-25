@@ -1,7 +1,8 @@
 import { useNavigate } from "react-router-dom"
 import RoleBadge from "./RoleBadge"
 import { canDeleteTarget, canEditTarget, normalizeRoleValue } from "../utils/roles"
-import imagen from "/img/trashbin.png"
+
+const imagen = "https://res.cloudinary.com/dmmyupwuu/image/upload/v1771998697/trashbin_gwh0cl.png"
 
 function CargarTablaAdmin({ listaUsuarios, borrarUsuario, actorRole }) {
     const navigate = useNavigate()
