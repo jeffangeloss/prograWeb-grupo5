@@ -3,8 +3,9 @@ import { useNavigate } from "react-router-dom";
 import { passwordMeetsPolicy, passwordPolicyMessage } from "../../utils/passwordPolicy";
 import params from "../../params";
 
-/* para corroborar correo; “Desde el inicio hasta el final del texto, debe haber algo sin espacios + @ + algo sin espacios + . + algo sin espacios (ej. x@y.z”*/ 
+/* para corroborar correo; "Desde el inicio hasta el final del texto, debe haber algo sin espacios + @ + algo sin espacios + . + algo sin espacios (ej. x@y.z)"*/ 
 const EMAIL_REGEX = /^\S+@\S+\.\S+$/;
+const MAIL_REQUEST_TIMEOUT_MS = 18000;
 function FormRegistro() {
     const navigate = useNavigate();
 
@@ -103,47 +104,68 @@ function FormRegistro() {
         return { ok: true, data };
     }
 
+    async function fetchWithTimeout(url, options, timeoutMs) {
+        const controller = new AbortController();
+        const timeoutId = setTimeout(() => controller.abort(), timeoutMs);
+
+        try {
+            return await fetch(url, {
+                ...options,
+                signal: controller.signal,
+            });
+        } finally {
+            clearTimeout(timeoutId);
+        }
+    }
+
     async function onSubmit(e) {
         e.preventDefault();
         setIntentoEnviar(true);
-
         const errs = validar(form, acepta);
         setErrores(errs);
-
         // si hay al menos 1 error, NO se crea cuenta ni se redirige
         if (errs.length > 0) return;
-
         const payload = {
             full_name: `${form.nombre.trim()} ${form.apellido.trim()}`.trim(),
             email: form.correo.trim().toLowerCase(),
             password: form.password,
         };
-
         setEnviando(true);
-        const resultado = await registrarHTTP(payload);
-
-        if (!resultado.ok) {
-            setErrores([resultado.error]);
-            setEnviando(false)
-            return;
-        }
-
         try {
-            await fetch(`${params.BACKEND_URL}/mailverif/send`, {
+            const resultado = await registrarHTTP(payload);
+            if (!resultado.ok) {
+                setErrores([resultado.error]);
+                return;
+            }
+            const mailResp = await fetchWithTimeout(`${params.BACKEND_URL}/mailverif/send`, {
                 method: "POST",
-                headers: {"Content-Type" : "application/json"},
-                body: JSON.stringify({ email: payload.email })
-            });
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ email: payload.email }),
+            }, MAIL_REQUEST_TIMEOUT_MS);
+            if (!mailResp.ok) {
+                let mailData = null;
+                try {
+                    mailData = await mailResp.json();
+                } catch {
+                    mailData = null;
+                }
+                const detail =
+                    typeof mailData?.detail === "string"
+                        ? mailData.detail
+                        : "No se pudo enviar el correo de verificacion";
+                throw new Error(detail);
+            }
+            navigate("/registro/verif");
         } catch (error) {
-            console.error("No se pudo enviar el correo: ", error)
+            if (error?.name === "AbortError") {
+                setErrores(["Cuenta creada, pero el envio del correo excedio el tiempo de espera. Intenta reenviar la verificacion en unos minutos."]);
+                return;
+            }
+            setErrores([`Cuenta creada, pero fallo el envio del correo: ${error.message}`]);
+        } finally {
+            setEnviando(false);
         }
-
-        setEnviando(false)
-
-        navigate("/registro/verif")
     }
-
-
     return (
         <form className="space-y-5" onSubmit={onSubmit}> {/* <!-- como un margin automatico para cada seccion --> */}
             {/* <!-- GRID PRINCIPAL --> */}

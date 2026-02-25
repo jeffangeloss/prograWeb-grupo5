@@ -115,10 +115,6 @@ function PerfilUsuarioPage() {
             return rawAvatar
         }
 
-        if (rawAvatar.startsWith("/uploads/")) {
-            return `${API_URL}${rawAvatar}`
-        }
-
         return rawAvatar
     }
 
