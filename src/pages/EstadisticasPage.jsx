@@ -44,14 +44,19 @@ function EstadisticasPage() {
 
   const URL = `${params.BACKEND_URL}/admin/user_stats`;
   const token = getToken();
-  console.log(token)
 
   useEffect(() => {
     async function fetchStats() {
+      if (!token) {
+        navigate("/sesion");
+        return;
+      }
+
       try {
         const resp = await fetch(URL, {
           headers: {
-            "x-token": token
+            "x-token": token,
+            Authorization: `Bearer ${token}`,
           }
         });
 
@@ -93,7 +98,7 @@ function EstadisticasPage() {
     }
 
     fetchStats();
-  }, []);
+  }, [navigate, token, URL]);
 
   function logout() {
     localStorage.clear();

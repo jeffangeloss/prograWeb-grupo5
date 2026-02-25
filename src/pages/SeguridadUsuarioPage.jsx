@@ -90,6 +90,11 @@ function SeguridadUsuarioPage() {
         }
 
         const token = getTokenAdmin()
+        if (!token) {
+            setErrorApi("Sesion expirada. Inicia sesion nuevamente.")
+            setLogs([])
+            return
+        }
         setCargando(true)
         setErrorApi("")
 
@@ -98,6 +103,7 @@ function SeguridadUsuarioPage() {
                 method: "GET",
                 headers: {
                     "x-token": token,
+                    Authorization: `Bearer ${token}`,
                 },
             })
 

@@ -77,7 +77,7 @@ function CambiarContrasenaPage() {
             method: "PATCH",
             headers: {
                 "content-type": "application/json",
-                authorization: `Bearer ${token}`,
+                Authorization: `Bearer ${token}`,
             },
             body: JSON.stringify({
                 current_password: actual,

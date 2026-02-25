@@ -71,6 +71,7 @@ function AuditoriaAdminPage() {
                 method: "GET",
                 headers: {
                     "x-token": token,
+                    Authorization: `Bearer ${token}`,
                 },
             })
 

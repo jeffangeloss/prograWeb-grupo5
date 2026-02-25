@@ -2,7 +2,7 @@ import { useEffect, useMemo, useState } from "react"
 import { useLocation, useNavigate } from "react-router-dom"
 import NavBarUser from "../components/NavBarUser"
 import { isAdminPanelRole, normalizeRoleValue } from "../utils/roles"
-import { clearAuthData, hasActiveSession } from "../utils/auth"
+import { clearAuthData, getAuthToken, hasActiveSession } from "../utils/auth"
 import params from "../params"
 
 const API_URL = params.BACKEND_URL
@@ -28,11 +28,6 @@ function EditarEgresoPage() {
         } catch {
             return null
         }
-    }
-
-    function obtenerToken() {
-        const sesion = obtenerSesion()
-        return sesion?.token || ""
     }
 
     function logout() {
@@ -95,7 +90,7 @@ function EditarEgresoPage() {
     }, [egreso])
 
     useEffect(function () {
-        const token = obtenerToken()
+        const token = getAuthToken()
         fetch(`${API_URL}/categories`, {
             headers: token
                 ? {
@@ -121,7 +116,7 @@ function EditarEgresoPage() {
             return
         }
 
-        const token = obtenerToken()
+        const token = getAuthToken()
         if (!token) {
             clearAuthData()
             navigate("/sesion")

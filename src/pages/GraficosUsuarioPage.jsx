@@ -15,6 +15,7 @@ import NavBarUser from "../components/NavBarUser"
 import { useNavigate } from "react-router-dom"
 import { isAdminPanelRole, normalizeRoleValue } from "../utils/roles"
 import PopUp_ToLogin from "../components/PopUp_ToLogin"
+import { getAuthToken } from "../utils/auth"
 import params from "../params"
 
 ChartJS.register(
@@ -74,11 +75,6 @@ function GraficosUsuarioPage() {
         }
     }
 
-    function obtenerToken() {
-        const sesion = obtenerSesion()
-        return sesion?.token || ""
-    }
-
     function logout() {
         localStorage.clear()
         navigate("/")
@@ -86,7 +82,7 @@ function GraficosUsuarioPage() {
 
     useEffect(function () {
         async function statsHTTP() {
-            const token = obtenerToken()
+            const token = getAuthToken()
             if (!token) {
                 setPopUpMensaje("No hay sesion activa. Inicia sesion nuevamente.")
                 setPopUpVisible(true)
