@@ -11,9 +11,6 @@ function ContraForm({ cargando, onContinue }) {
     function passConfirmOnChange(ev) {
         setPassConfirm(ev.target.value)
     }
-    function logout() {
-        localStorage.clear()
-    }
 
     return <div className="mb-5">
         <form className="grid gap-3">
@@ -34,8 +31,7 @@ function ContraForm({ cargando, onContinue }) {
             </input>
             <button
                 onClick={function () {
-                        logout(),
-                        onContinue(pass, passConfirm)
+                    onContinue(pass, passConfirm)
                 }}
                 disabled = {cargando}
                 className="mt-4 w-min rounded-full bg-indigo-600 px-16 py-3 font-semibold text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-300 active:scale-[0.99] transition"

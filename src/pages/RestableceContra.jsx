@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react"
+import { useState } from "react"
 import { useNavigate } from "react-router-dom"
 import CorreoForm from "../components/CorreoForm"
 import Mensaje from "../components/Mensaje"
@@ -21,15 +21,19 @@ function RestableceContra() {
 
             })
 
-            const data = await resp.json()
+            const data = await resp.json().catch(function () {
+                return {}
+            })
 
             if (!resp.ok) {
-                throw new Error("Error en la solicitud")
+                throw new Error(data?.detail || "Error en la solicitud")
             }
 
             localStorage.setItem("CorreoRecuperar", correo)
+            setMensaje("")
+            setMensajeVisible(false)
             navigate('/restablecer/mensaje')
-        } catch (error) {
+        } catch {
             setMensaje("Error al enviar la solicitud")
             setMensajeVisible(true)
         }
