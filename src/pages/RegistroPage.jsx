@@ -2,6 +2,7 @@ import Azul from "../components/auth/Azul";
 import TituloCrearCuenta from "../components/auth/TituloCrearCuenta";
 import YaTienesCuenta from "../components/auth/YaTienesCuenta";
 import FormRegistro from "../components/auth/FormRegistro";
+import ThemeToggleButton from "../components/ThemeToggleButton";
 
 function RegistroPage() {
     return <div>
@@ -21,7 +22,10 @@ function RegistroPage() {
                     <div className="w-full max-w-xl">
                         {/* <!-- Top-right: login (para que solo esa parte se vaya a la derecha arriba)--> */}
                         <div className="flex justify-end mb-4 md:mb-0 md:absolute md:top-6 md:right-6 z-10">
-                        <YaTienesCuenta />
+                            <div className="flex items-center gap-2">
+                                <ThemeToggleButton />
+                                <YaTienesCuenta />
+                            </div>
                         </div>
                         <TituloCrearCuenta />
 

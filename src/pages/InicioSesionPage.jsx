@@ -6,6 +6,7 @@ import Azul from "../components/auth/Azul"
 import { isAdminPanelRole, normalizeRoleValue } from "../utils/roles"
 import { getAuthSession, hasActiveSession } from "../utils/auth"
 import params from "../params"
+import ThemeToggleButton from "../components/ThemeToggleButton"
 
 function InicioSesionPage() {
 
@@ -178,6 +179,7 @@ function InicioSesionPage() {
             <div className="px-4 py-8 sm:px-8 lg:px-16">
                 {/* boton regresar */}
                 <div className="flex flex-wrap items-center justify-end gap-2 text-sm text-slate-600">
+                    <ThemeToggleButton />
                     <span className="text-gray-700 text-sm sm:text-base">¿No tienes una cuenta?</span>
                     <a href="#/registro"
                         className="inline-flex items-center justify-center rounded-full border border-indigo-400 px-5 py-2 font-medium text-indigo-600 hover:bg-indigo-50 focus:outline-none focus:ring-2 focus:ring-indigo-300">
