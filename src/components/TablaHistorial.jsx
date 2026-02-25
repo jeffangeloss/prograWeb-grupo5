@@ -1,6 +1,6 @@
 import AccionBadge from "./AccionBadge"
 
-function TablaHistorial({ logs }) {
+function TablaHistorial({ logs, totalLogs }) {
     return <div className="mt-6 bg-white border border-slate-200 rounded-2xl shadow-sm overflow-hidden ">
         <div className="w-full overflow-x-auto md:overflow-visible">
             <table className="min-w-max md:min-w-full w-full text-left text-sm text-slate-700">
@@ -27,7 +27,7 @@ function TablaHistorial({ logs }) {
             </table>
         </div>
         <div className="px-4 py-3 text-xs text-slate-500 text-right">
-            Registros: {logs.length}
+            Registros: {typeof totalLogs === "number" ? totalLogs : logs.length}
         </div>
     </div>
 }

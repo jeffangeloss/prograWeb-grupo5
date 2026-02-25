@@ -1,6 +1,6 @@
 import CargarTablaAdmin from "./CargarTablaAdmin"
 
-function TablaAdmin({ usuarios, borrarUsuario, actorRole }) {
+function TablaAdmin({ usuarios, totalUsuarios, borrarUsuario, actorRole }) {
 
     return <div className="mt-10 mx-4">
         <div className="overflow-x-auto scroll rounded-lr-2xl rounded-t-2xl shadow-2xl">
@@ -22,7 +22,9 @@ function TablaAdmin({ usuarios, borrarUsuario, actorRole }) {
             </table>
 
         </div>
-        <span className="px-4 py-2 text-xs rounded-b-2xl flex bg-slate-50 text-slate-500 justify-end overflow-x-auto">Usuarios: {usuarios.length}</span>
+        <span className="px-4 py-2 text-xs rounded-b-2xl flex bg-slate-50 text-slate-500 justify-end overflow-x-auto">
+            Usuarios: {typeof totalUsuarios === "number" ? totalUsuarios : usuarios.length}
+        </span>
     </div>
 }
 
