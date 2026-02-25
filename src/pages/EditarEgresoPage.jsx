@@ -3,8 +3,9 @@ import { useLocation, useNavigate } from "react-router-dom"
 import NavBarUser from "../components/NavBarUser"
 import { isAdminPanelRole, normalizeRoleValue } from "../utils/roles"
 import { clearAuthData, hasActiveSession } from "../utils/auth"
+import params from "../params"
 
-const API_URL = "http://127.0.0.1:8000"
+const API_URL = params.BACKEND_URL
 
 function EditarEgresoPage() {
     const navigate = useNavigate()
@@ -93,10 +94,17 @@ function EditarEgresoPage() {
         return egreso?.category_name || "-"
     }, [egreso])
 
-    useEffect(function() {
-        fetch("http://127.0.0.1:8000/categories")
-        .then(res => res.json())
-        .then(data => setCategories(data))
+    useEffect(function () {
+        const token = obtenerToken()
+        fetch(`${API_URL}/categories`, {
+            headers: token
+                ? {
+                    Authorization: `Bearer ${token}`,
+                }
+                : {},
+        })
+            .then(function (res) { return res.json() })
+            .then(function (data) { setCategories(data) })
     }, [])
 
     async function guardarCambios(ev) {

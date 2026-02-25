@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom"
 import Mensaje from "../components/Mensaje"
 import NavBarUser from "../components/NavBarUser"
 import { passwordMeetsPolicy, passwordPolicyMessage } from "../utils/passwordPolicy"
+import params from "../params"
 
 function CambiarContrasenaPage() {
     const navigate = useNavigate()
@@ -72,7 +73,7 @@ function CambiarContrasenaPage() {
         }
 
         setCargando(true)
-        const respuesta = await fetch("http://127.0.0.1:8000/me/password", {
+        const respuesta = await fetch(`${params.BACKEND_URL}/me/password`, {
             method: "PATCH",
             headers: {
                 "content-type": "application/json",

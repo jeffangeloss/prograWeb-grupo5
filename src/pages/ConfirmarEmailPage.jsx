@@ -1,5 +1,6 @@
 import { useState } from "react"
 import { useNavigate } from "react-router-dom"
+import params from "../params"
 
 export default function ConfirmarEmailPage() {
   const navigate = useNavigate()
@@ -14,7 +15,7 @@ export default function ConfirmarEmailPage() {
     setError("")
 
     try {
-      const res = await fetch("http://127.0.0.1:8000/mailverif/confirm", {
+      const res = await fetch(`${params.BACKEND_URL}/mailverif/confirm`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ token })

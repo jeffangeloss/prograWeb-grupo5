@@ -1,5 +1,6 @@
 import { useState, useRef, useEffect } from 'react'
 import ReactMarkdown from 'react-markdown'
+import params from "../params"
 
 function ChatBotPage({ isOpen, setIsOpen }) {
     const [input, setInput] = useState('')
@@ -42,7 +43,7 @@ function ChatBotPage({ isOpen, setIsOpen }) {
         setIsTyping(true)
 
         try {
-            const response = await fetch("http://localhost:8000/chat/", {
+            const response = await fetch(`${params.API_URL}/chat/`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",

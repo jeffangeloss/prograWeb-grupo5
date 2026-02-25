@@ -7,6 +7,7 @@ import {
     roleType,
 } from "../utils/roles"
 import { toast } from "sonner"
+import params from "../params"
 
 const ROLE_OPTIONS = [
     { value: "1", role: "user", label: "Usuario" },
@@ -96,7 +97,7 @@ function EditarUsuarioForm() {
                 email: email.trim().toLowerCase(),
             }
 
-            const response = await fetch(`http://127.0.0.1:8000/admin/${usuario.id}`, {
+            const response = await fetch(`${params.BACKEND_URL}/admin/${usuario.id}`, {
                 method: "PATCH",
                 body: JSON.stringify(usuarioEditado),
                 headers: {

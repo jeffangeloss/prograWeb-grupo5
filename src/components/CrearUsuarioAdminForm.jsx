@@ -4,6 +4,7 @@ import { toast } from "sonner"
 
 import { passwordMeetsPolicy, passwordPolicyMessage } from "../utils/passwordPolicy"
 import { canCreateRole, canManageUsers, normalizeRoleValue } from "../utils/roles"
+import params from "../params"
 
 const ROLE_OPTIONS = [
     { value: "1", role: "user", label: "Usuario" },
@@ -105,7 +106,7 @@ function CrearUsuarioForm() {
                 type: Number(rol),
             }
 
-            const response = await fetch("http://127.0.0.1:8000/admin/", {
+            const response = await fetch(`${params.BACKEND_URL}/admin/`, {
                 method: "POST",
                 body: JSON.stringify(usuarioNuevo),
                 headers: {

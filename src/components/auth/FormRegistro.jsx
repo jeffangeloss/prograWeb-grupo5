@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { passwordMeetsPolicy, passwordPolicyMessage } from "../../utils/passwordPolicy";
+import params from "../../params";
 
 /* para corroborar correo; “Desde el inicio hasta el final del texto, debe haber algo sin espacios + @ + algo sin espacios + . + algo sin espacios (ej. x@y.z”*/ 
 const EMAIL_REGEX = /^\S+@\S+\.\S+$/;
@@ -74,7 +75,7 @@ function FormRegistro() {
     }
 
     async function registrarHTTP(payload) {
-        const respuesta = await fetch("http://127.0.0.1:8000/register", {
+        const respuesta = await fetch(`${params.BACKEND_URL}/register`, {
             method: "POST",
             headers: {
                 "content-type": "application/json",
@@ -128,7 +129,7 @@ function FormRegistro() {
         }
 
         try {
-            await fetch("http://127.0.0.1:8000/mailverif/send", {
+            await fetch(`${params.BACKEND_URL}/mailverif/send`, {
                 method: "POST",
                 headers: {"Content-Type" : "application/json"},
                 body: JSON.stringify({ email: payload.email })

@@ -5,6 +5,7 @@ import UserCard from "../components/UserCard"
 import FilterHistorial from "../components/FilterHistorial"
 import TablaHistorial from "../components/TablaHistorial"
 import { normalizeRoleValue, roleLabel } from "../utils/roles"
+import params from "../params"
 
 function SeguridadUsuarioPage() {
     const { state: usuario } = useLocation()
@@ -62,7 +63,7 @@ function SeguridadUsuarioPage() {
         setErrorApi("")
 
         try {
-            const resp = await fetch(`http://127.0.0.1:8000/admin/auditoria/usuario/${usuario.id}`, {
+            const resp = await fetch(`${params.BACKEND_URL}/admin/auditoria/usuario/${usuario.id}`, {
                 method: "GET",
                 headers: {
                     "x-token": token,

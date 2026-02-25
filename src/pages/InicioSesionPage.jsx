@@ -5,6 +5,7 @@ import LoginForm from "../components/LoginForm"
 import Azul from "../components/auth/Azul"
 import { isAdminPanelRole, normalizeRoleValue } from "../utils/roles"
 import { getAuthSession, hasActiveSession } from "../utils/auth"
+import params from "../params"
 
 function InicioSesionPage() {
 
@@ -58,7 +59,7 @@ function InicioSesionPage() {
 
     async function loginHTTP(correo, password) {
         const navegadorActual = detectarNavegador()
-        const resp = await fetch("http://127.0.0.1:8000/login", {
+        const resp = await fetch(`${params.BACKEND_URL}/login`, {
             method: "post",
             body: JSON.stringify({
                 correo: correo,

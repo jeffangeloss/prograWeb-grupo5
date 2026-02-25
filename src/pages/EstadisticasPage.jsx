@@ -11,6 +11,7 @@ import {
   Tooltip
 } from "chart.js";
 import { Line } from "react-chartjs-2";
+import params from "../params";
 
 ChartJS.register(
   LineElement,
@@ -41,7 +42,7 @@ function EstadisticasPage() {
     return getSesion()?.token || "";
   }
 
-  const URL = "http://127.0.0.1:8000/admin/user_stats";
+  const URL = `${params.BACKEND_URL}/admin/user_stats`;
   const token = getToken();
   console.log(token)
 
