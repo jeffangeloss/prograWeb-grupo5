@@ -255,9 +255,11 @@ function GraficosUsuarioPage() {
                     "rgba(16, 185, 129, 0.8)",
                     "rgba(239, 68, 68, 0.8)",
                     "rgba(249, 115, 22, 0.8)",
-                    "rgba(147, 51, 234, 0.8)"
+                    "rgba(147, 51, 234, 0.8)",
+                    "rgba(59, 130, 246, 0.8)"
                 ],
-                borderWidth: 0
+                borderWidth: 1,
+                borderColor: "rgba(255, 255, 255, 255)"
             }
         ]
     };
