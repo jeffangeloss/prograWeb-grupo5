@@ -231,6 +231,9 @@ function NavBarUser({ onLogout }) {
     const avatarUsuario = resolverAvatarSrc(sesion?.avatar_url || sesion?.avatar || "")
     const roleValue = normalizeRoleValue(sesion?.rol || "user")
     const esAdminPanel = isAdminPanelRole(roleValue)
+    const enPerfil = location.pathname === "/perfil"
+    const enEgresos = location.pathname === "/user"
+    const enDashboard = location.pathname === "/admin"
 
     function abrirSpotifyToast() {
         toast.custom((t) => (
@@ -352,7 +355,7 @@ function NavBarUser({ onLogout }) {
                                     >
                                         {subiendoAvatar ? "Subiendo imagen..." : "Cambiar imagen"}
                                     </button>
-                                    {!esAdminPanel && location.pathname !== "/user" && (
+                                    {!esAdminPanel && !enEgresos && (
                                         <button
                                             type="button"
                                             className="w-full rounded-lg px-3 py-2.5 text-left text-slate-700 transition hover:bg-slate-100"
@@ -361,7 +364,7 @@ function NavBarUser({ onLogout }) {
                                             Mis egresos
                                         </button>
                                     )}
-                                    {esAdminPanel && location.pathname !== "/admin" && (
+                                    {esAdminPanel && !enDashboard && (
                                         <button
                                             type="button"
                                             className="w-full rounded-lg px-3 py-2.5 text-left text-slate-700 transition hover:bg-slate-100"
@@ -370,13 +373,15 @@ function NavBarUser({ onLogout }) {
                                             Dashboard
                                         </button>
                                     )}
-                                    <button
-                                        type="button"
-                                        className="w-full rounded-lg px-3 py-2.5 text-left text-slate-700 transition hover:bg-slate-100"
-                                        onClick={abrirPerfil}
-                                    >
-                                        Perfil
-                                    </button>
+                                    {!enPerfil && (
+                                        <button
+                                            type="button"
+                                            className="w-full rounded-lg px-3 py-2.5 text-left text-slate-700 transition hover:bg-slate-100"
+                                            onClick={abrirPerfil}
+                                        >
+                                            Perfil
+                                        </button>
+                                    )}
                                     <button
                                         type="button"
                                         className="w-full rounded-lg px-3 py-2.5 text-left text-rose-600 transition hover:bg-rose-50"
