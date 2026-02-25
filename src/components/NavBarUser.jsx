@@ -3,8 +3,9 @@ import { useLocation, useNavigate } from "react-router-dom"
 import RoleBadge from "./RoleBadge"
 import { isAdminPanelRole, normalizeRoleValue } from "../utils/roles"
 import { toast } from "sonner"
+import params from "../params"
 
-const API_URL = "http://127.0.0.1:8000"
+const API_URL = params.BACKEND_URL
 const MAX_AVATAR_BYTES = 5 * 1024 * 1024
 
 function NavBarUser({ onLogout }) {

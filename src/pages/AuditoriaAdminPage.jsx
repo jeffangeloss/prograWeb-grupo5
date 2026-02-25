@@ -2,6 +2,7 @@ import { useEffect, useMemo, useState } from "react"
 import { useNavigate } from "react-router-dom"
 import NavBarAdmin from "../components/NavBarAdmin"
 import { normalizeRoleValue } from "../utils/roles"
+import params from "../params"
 
 function getSesion() {
     try {
@@ -50,14 +51,14 @@ function AuditoriaAdminPage() {
         setCargando(true)
         setErrorApi("")
 
-        const params = new URLSearchParams()
-        params.set("limit", "200")
+        const queryParams = new URLSearchParams()
+        queryParams.set("limit", "200")
         if (accion !== "TODAS") {
-            params.set("action", accion)
+            queryParams.set("action", accion)
         }
 
         try {
-            const resp = await fetch(`http://127.0.0.1:8000/admin/auditoria/admin?${params.toString()}`, {
+            const resp = await fetch(`${params.BACKEND_URL}/admin/auditoria/admin?${queryParams.toString()}`, {
                 method: "GET",
                 headers: {
                     "x-token": token,

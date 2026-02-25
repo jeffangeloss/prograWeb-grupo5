@@ -15,6 +15,7 @@ import NavBarUser from "../components/NavBarUser"
 import { useNavigate } from "react-router-dom"
 import { isAdminPanelRole, normalizeRoleValue } from "../utils/roles"
 import PopUp_ToLogin from "../components/PopUp_ToLogin"
+import params from "../params"
 
 
 ChartJS.register(
@@ -100,7 +101,7 @@ function GraficosUsuarioPage() {
             const previousYear = currentYear - 1
 
             async function fetchYear(year) {
-                let url = `http://127.0.0.1:8000/expenses/stats?year=${year}`
+                let url = `${params.BACKEND_URL}/expenses/stats?year=${year}`
 
                 if (selectedMonth !== -1) {
                     url += `&month=${selectedMonth}`

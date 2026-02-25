@@ -7,8 +7,9 @@ import FiltroPopUp from "../components/FiltroPopUp"
 import NavBarUser from "../components/NavBarUser"
 import { clearAuthData, getAuthSession, getAuthToken, hasActiveSession } from "../utils/auth"
 import { isAdminPanelRole, normalizeRoleValue } from "../utils/roles"
+import params from "../params"
 
-const API_URL = "http://127.0.0.1:8000"
+const API_URL = params.BACKEND_URL
 const LOGIN_REDIRECT_DELAY_MS = 1400
 
 const EMPTY_FILTERS = {

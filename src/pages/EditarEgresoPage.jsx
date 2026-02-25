@@ -3,8 +3,9 @@ import { useLocation, useNavigate } from "react-router-dom"
 import NavBarUser from "../components/NavBarUser"
 import { isAdminPanelRole, normalizeRoleValue } from "../utils/roles"
 import { clearAuthData, hasActiveSession } from "../utils/auth"
+import params from "../params"
 
-const API_URL = "http://127.0.0.1:8000"
+const API_URL = params.BACKEND_URL
 
 function EditarEgresoPage() {
     const navigate = useNavigate()

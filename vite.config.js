@@ -5,7 +5,5 @@ import tailwindcss from '@tailwindcss/vite'
 // https://vite.dev/config/
 export default defineConfig({
   plugins: [react(), tailwindcss()],
-  server: {
-    allowedHosts: ['hamburg-scenic-noble-liberty.trycloudflare.com'], // para que todos se conecten por cualquier red
-  },
+  base: "/prograWeb-grupo5/"
 })

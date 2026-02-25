@@ -5,6 +5,7 @@ import ContraForm from "../components/ContraForm"
 import Mensaje from "../components/Mensaje"
 import PopUp_ToLogin from "../components/PopUp_ToLogin"
 import { passwordMeetsPolicy, passwordPolicyMessage } from "../utils/passwordPolicy"
+import params from "../params"
 
 function RestableceContra_3() {
     const location = useLocation()
@@ -53,8 +54,9 @@ function RestableceContra_3() {
             setMensajeVisible(true)
             setPopUpVisible(false)
             return
+        }
 
-        if (pass != passConfirm) {
+        if (pass !== passConfirm) {
             setMensaje("La contrasena ingresada debe ser igual en ambos campos")
             setMensajeVisible(true)
             setPopUpVisible(false)
@@ -64,7 +66,7 @@ function RestableceContra_3() {
         try {
             setCargando(true)
 
-            const resp = await fetch("http://127.0.0.1:8000/reset-pass/confirm", {
+            const resp = await fetch(`${params.BACKEND_URL}/reset-pass/confirm`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
@@ -162,5 +164,5 @@ function RestableceContra_3() {
         </div>
     </div>
 }
-}
+
 export default RestableceContra_3

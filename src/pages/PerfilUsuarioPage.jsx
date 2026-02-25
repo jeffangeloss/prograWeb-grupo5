@@ -6,8 +6,9 @@ import NavBarAdmin from "../components/NavBarAdmin"
 import RoleBadge from "../components/RoleBadge"
 import { passwordMeetsPolicy, passwordPolicyMessage } from "../utils/passwordPolicy"
 import { isAdminPanelRole, normalizeRoleValue } from "../utils/roles"
+import params from "../params"
 
-const API_URL = "http://127.0.0.1:8000"
+const API_URL = params.BACKEND_URL
 const MAX_AVATAR_BYTES = 5 * 1024 * 1024
 const ACCEPTED_IMAGE_TYPES = ".tiff,.jfif,.bmp,.pjp,.apng,.jpeg,.jpg,.png,.webp,.svg,.heic,.gif,.ico,.xbm,.xjl,.dib,.tif,.pjpeg,.avif"
 const ALLOWED_AVATAR_EXTENSIONS = new Set([

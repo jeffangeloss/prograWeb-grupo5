@@ -2,6 +2,7 @@ import { useEffect, useState } from "react"
 
 import Mensaje from "../components/Mensaje"
 import TextoContra from "../components/TextoContra"
+import params from "../params"
 
 function RestablecerContra_2() {
     const [correo, setCorreo] = useState("")
@@ -24,7 +25,7 @@ function RestablecerContra_2() {
             setMensaje("")
             setMensajeVisible(false)
 
-            const resp = await fetch("http://127.0.0.1:8000/reset-pass/request", {
+            const resp = await fetch(`${params.BACKEND_URL}/reset-pass/request`, {
                 method: "PUT",
                 headers: {
                     "Content-Type": "application/json",
