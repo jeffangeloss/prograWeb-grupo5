@@ -697,8 +697,8 @@ function EgresosPage() {
                                         </th>
                                         <th className="w-[220px] px-4 py-5">Categoria</th>
                                         <th className="px-4 py-5">Descripción</th>
-                                        <th className="w-[140px] px-4 py-5 text-right">Monto</th>
-                                        <th className="w-[220px] px-4 py-5 text-right">Acciones</th>
+                                        <th className="w-[150px] px-4 py-5 text-left">Monto</th>
+                                        <th className="w-[240px] px-4 py-5 text-right">Acciones</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -735,7 +735,7 @@ function EgresosPage() {
                                                             {egreso.description || "-"}
                                                         </span>
                                                     </td>
-                                                    <td className="px-4 py-5 text-right font-semibold">{formatearMonto(egreso.amount)}</td>
+                                                    <td className="px-4 py-5 text-left font-semibold">{formatearMonto(egreso.amount)}</td>
                                                     <td className="px-4 py-5">
                                                         <div className="flex items-center justify-end gap-3">
                                                             <button
