@@ -6,6 +6,7 @@ import Mensaje from "../components/Mensaje"
 import PopUp_ToLogin from "../components/PopUp_ToLogin"
 import { passwordMeetsPolicy, passwordPolicyMessage } from "../utils/passwordPolicy"
 import params from "../params"
+import ThemeToggleButton from "../components/ThemeToggleButton"
 
 function RestableceContra_3() {
     const location = useLocation()
@@ -107,7 +108,7 @@ function RestableceContra_3() {
     }
 
     return (
-        <div className="grid md:grid-cols-[20%_80%]">
+        <div className="min-h-screen bg-white text-slate-800 grid md:grid-cols-[20%_80%] dark:bg-slate-950 dark:text-slate-100">
             <div className="h-20 md:h-screen">
                 <img
                     className="w-full h-full"
@@ -117,6 +118,7 @@ function RestableceContra_3() {
 
             <div className="px-4 py-8 sm:px-8 lg:px-16">
                 <div className="flex flex-wrap items-center justify-end gap-2 text-sm text-slate-600">
+                    <ThemeToggleButton />
                     <span className="text-gray-700 text-sm sm:text-base">Recordaste tu contrasena?</span>
                     <a
                         href="#/sesion"

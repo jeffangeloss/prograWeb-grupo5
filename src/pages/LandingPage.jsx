@@ -1,4 +1,5 @@
 import { useNavigate } from "react-router-dom"
+import ThemeToggleButton from "../components/ThemeToggleButton"
 
 function LandingPage() {
     const navigate = useNavigate()
@@ -21,6 +22,7 @@ function LandingPage() {
 
                     {/* <!-- BOTONES NAV --> */}
                     <nav className="flex items-center gap-3">
+                        <ThemeToggleButton />
                         <button
                             type="button"
                             onClick={function () { navigate("/registro") }}

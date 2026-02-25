@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom"
 import CorreoForm from "../components/CorreoForm"
 import Mensaje from "../components/Mensaje"
 import params from "../params"
+import ThemeToggleButton from "../components/ThemeToggleButton"
 
 function RestableceContra() {
 
@@ -49,7 +50,7 @@ function RestableceContra() {
         await requestHTTP(correo)
     }
 
-    return <div className="grid md:grid-cols-[20%_80%]">
+    return <div className="min-h-screen bg-white text-slate-800 grid md:grid-cols-[20%_80%] dark:bg-slate-950 dark:text-slate-100">
         {/*imagen izq*/}
         <div className="h-20 md:h-screen">
             <img className="w-full h-full"
@@ -60,6 +61,7 @@ function RestableceContra() {
         <div className="px-4 py-8 sm:px-8 lg:px-16">
             {/* boton regresar */}
             <div className="flex flex-wrap items-center justify-end gap-2 text-sm text-slate-600">
+                <ThemeToggleButton />
                 <span className="text-gray-700 text-sm sm:text-base">¿Recordaste tu contraseña?</span>
                 <a href="#/sesion"
                     className="inline-flex items-center justify-center rounded-full border border-indigo-400 px-5 py-2 font-medium text-indigo-600 hover:bg-indigo-50 focus:outline-none focus:ring-2 focus:ring-indigo-300">
