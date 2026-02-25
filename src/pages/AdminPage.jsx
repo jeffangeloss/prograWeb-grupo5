@@ -278,12 +278,12 @@ function AdminPage() {
     }
 
     return (
-        <div className="bg-slate-50 min-h-screen">
+        <div className="bg-slate-50 min-h-screen dark:bg-slate-950 dark:text-slate-100">
             <NavBarAdmin onLogout={logout} />
             <div className="grid grid-cols-1 md:flex md:justify-center">
                 <div className="px-6 py-6 w-full max-w-7xl">
                     <div className="ml-6 flex flex-wrap items-center justify-between gap-3">
-                        <h1 className="object-left text-3xl font-semibold">Usuarios</h1>
+                        <h1 className="object-left text-3xl font-semibold text-slate-900 dark:text-slate-100">Usuarios</h1>
                         {puedeVerAuditoriaAdmin && (
                             <button
                                 type="button"

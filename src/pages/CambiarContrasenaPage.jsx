@@ -108,7 +108,7 @@ function CambiarContrasenaPage() {
     }
 
     return (
-        <div className="bg-slate-100 text-slate-800 min-h-screen">
+        <div className="bg-slate-100 text-slate-800 min-h-screen dark:bg-slate-950 dark:text-slate-100">
             <NavBarUser onLogout={logout} />
 
             <main className="w-full px-4 py-6 sm:px-6 lg:px-8">
