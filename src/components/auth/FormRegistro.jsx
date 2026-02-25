@@ -129,18 +129,32 @@ function FormRegistro() {
         }
 
         try {
-            await fetch(`${params.BACKEND_URL}/mailverif/send`, {
+            const mailResp = await fetch(`${params.BACKEND_URL}/mailverif/send`, {
                 method: "POST",
-                headers: {"Content-Type" : "application/json"},
-                body: JSON.stringify({ email: payload.email })
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ email: payload.email }),
             });
+
+            if (!mailResp.ok) {
+                let mailData = null;
+                try {
+                    mailData = await mailResp.json();
+                } catch {
+                    mailData = null;
+                }
+                const detail =
+                    typeof mailData?.detail === "string"
+                        ? mailData.detail
+                        : "No se pudo enviar el correo de verificacion";
+                throw new Error(detail);
+            }
+
+            setEnviando(false);
+            navigate("/registro/verif");
         } catch (error) {
-            console.error("No se pudo enviar el correo: ", error)
+            setErrores([`Cuenta creada, pero fallo el envio del correo: ${error.message}`]);
+            setEnviando(false);
         }
-
-        setEnviando(false)
-
-        navigate("/registro/verif")
     }
 
 
