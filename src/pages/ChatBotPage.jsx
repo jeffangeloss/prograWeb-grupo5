@@ -8,7 +8,7 @@ function ChatBotPage({ isOpen, setIsOpen }) {
     const [messages, setMessages] = useState([
         {
             role: 'model',
-            text: "Â¡Hola! Soy tu asesor financiero. Â¿En quÃ© puedo ayudarte hoy?",
+            text: "\u00A1Hola! Soy tu asesor financiero. \u00BFEn qu\u00E9 puedo ayudarte hoy?",
             timestamp: new Date(),
         }
     ])
@@ -27,7 +27,7 @@ function ChatBotPage({ isOpen, setIsOpen }) {
 
         const token = getAuthToken()
         if (!token) {
-            alert("No estÃ¡s autenticado")
+            alert("No est\u00E1s autenticado")
             return
         }
         const userMessage = {
@@ -62,7 +62,7 @@ function ChatBotPage({ isOpen, setIsOpen }) {
 
             if (!response.ok) {
                 const detail = Array.isArray(data?.detail)
-                    ? data.detail.map((item) => item?.msg || "Error de validacion").join(" | ")
+                    ? data.detail.map((item) => item?.msg || "Error de validaci\u00F3n").join(" | ")
                     : (typeof data?.detail === "string"
                         ? data.detail
                         : `Error ${response.status} en chatbot`)
@@ -78,7 +78,7 @@ function ChatBotPage({ isOpen, setIsOpen }) {
         } catch (error) {
             setMessages(prev => [...prev, {
                 role: 'model',
-                text: error?.message || "Error de conexion con el servidor.",
+                text: error?.message || "Error de conexi\u00F3n con el servidor.",
                 timestamp: new Date(),
             }])
         } finally {
@@ -103,7 +103,13 @@ function ChatBotPage({ isOpen, setIsOpen }) {
             }}>
                 <div style={{ padding: '15px', backgroundColor: '#4f46e5', color: 'white', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                     <span style={{ fontWeight: 'bold' }}>Asesor Financiero</span>
-                    <button onClick={() => setIsOpen(false)} style={{ background: 'none', border: 'none', color: 'white', cursor: 'pointer', fontSize: '20px' }}>Ã—</button>
+                    <button
+                        onClick={() => setIsOpen(false)}
+                        aria-label="Cerrar chatbot"
+                        style={{ background: 'none', border: 'none', color: 'white', cursor: 'pointer', fontSize: '20px', lineHeight: 1, fontWeight: 700 }}
+                    >
+                        {'\u00D7'}
+                    </button>
                 </div>
 
                 <div ref={scrollRef} style={{ flex: 1, padding: '15px', overflowY: 'auto', backgroundColor: '#f9fafb' }}>
