@@ -1,6 +1,7 @@
 import { useNavigate } from "react-router-dom"
 import RoleBadge from "./RoleBadge"
 import { canDeleteTarget, canEditTarget, normalizeRoleValue } from "../utils/roles"
+import imagen from "/img/trashbin.png"
 
 function CargarTablaAdmin({ listaUsuarios, borrarUsuario, actorRole }) {
     const navigate = useNavigate()
@@ -46,7 +47,7 @@ function CargarTablaAdmin({ listaUsuarios, borrarUsuario, actorRole }) {
                             <button className="rounded-full border border-red-200 bg-red-50 px-4 py-1.5 text-xs font-medium text-red-600 hover:bg-red-100 hover:border-red-300 transition"
                                 onClick={function () { borrarUsuario(usuario) }}>
                                 <img
-                                    src="img/trashbin.png"
+                                    src={imagen}
                                     alt="Eliminar"
                                     className="w-4 h-4 size-auto"
                                 />
