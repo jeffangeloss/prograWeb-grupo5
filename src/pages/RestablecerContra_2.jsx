@@ -24,7 +24,7 @@ function RestablecerContra_2() {
             setMensaje("")
             setMensajeVisible(false)
 
-            const resp = await fetch("http://127.0.0.1:8000/reset-pass/request", {
+            const resp = await fetch(`${params.API_URL}/reset-pass/request`, {
                 method: "PUT",
                 headers: {
                     "Content-Type": "application/json",
