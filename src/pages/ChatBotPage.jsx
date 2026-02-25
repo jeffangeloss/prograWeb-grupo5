@@ -1,13 +1,14 @@
-import { useState, useRef, useEffect } from 'react'
+﻿import { useState, useRef, useEffect } from 'react'
 import ReactMarkdown from 'react-markdown'
 import params from "../params"
+import { getAuthToken } from "../utils/auth"
 
 function ChatBotPage({ isOpen, setIsOpen }) {
     const [input, setInput] = useState('')
     const [messages, setMessages] = useState([
         {
             role: 'model',
-            text: "¡Hola! Soy tu asesor financiero. ¿En qué puedo ayudarte hoy?",
+            text: "Â¡Hola! Soy tu asesor financiero. Â¿En quÃ© puedo ayudarte hoy?",
             timestamp: new Date(),
         }
     ])
@@ -24,14 +25,11 @@ function ChatBotPage({ isOpen, setIsOpen }) {
         e?.preventDefault()
         if (!input.trim() || isTyping) return
 
-        const loginData = JSON.parse(localStorage.getItem("DATOS_LOGIN") || "{}")
-        if (!loginData.token) {
-            alert("No estás autenticado")
+        const token = getAuthToken()
+        if (!token) {
+            alert("No estÃ¡s autenticado")
             return
         }
-
-        const token = loginData.token
-
         const userMessage = {
             role: 'user',
             text: input,
@@ -54,10 +52,21 @@ function ChatBotPage({ isOpen, setIsOpen }) {
                 })
             })
 
-            const data = await response.json()
+            const raw = await response.text()
+            let data = {}
+            try {
+                data = raw ? JSON.parse(raw) : {}
+            } catch {
+                data = {}
+            }
 
             if (!response.ok) {
-                throw new Error("Error servidor")
+                const detail = Array.isArray(data?.detail)
+                    ? data.detail.map((item) => item?.msg || "Error de validacion").join(" | ")
+                    : (typeof data?.detail === "string"
+                        ? data.detail
+                        : `Error ${response.status} en chatbot`)
+                throw new Error(detail)
             }
 
             setMessages(prev => [...prev, {
@@ -69,7 +78,7 @@ function ChatBotPage({ isOpen, setIsOpen }) {
         } catch (error) {
             setMessages(prev => [...prev, {
                 role: 'model',
-                text: "Error de conexión con el servidor.",
+                text: error?.message || "Error de conexion con el servidor.",
                 timestamp: new Date(),
             }])
         } finally {
@@ -94,7 +103,7 @@ function ChatBotPage({ isOpen, setIsOpen }) {
             }}>
                 <div style={{ padding: '15px', backgroundColor: '#4f46e5', color: 'white', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                     <span style={{ fontWeight: 'bold' }}>Asesor Financiero</span>
-                    <button onClick={() => setIsOpen(false)} style={{ background: 'none', border: 'none', color: 'white', cursor: 'pointer', fontSize: '20px' }}>×</button>
+                    <button onClick={() => setIsOpen(false)} style={{ background: 'none', border: 'none', color: 'white', cursor: 'pointer', fontSize: '20px' }}>Ã—</button>
                 </div>
 
                 <div ref={scrollRef} style={{ flex: 1, padding: '15px', overflowY: 'auto', backgroundColor: '#f9fafb' }}>
@@ -138,3 +147,4 @@ function ChatBotPage({ isOpen, setIsOpen }) {
 }
 
 export default ChatBotPage
+
