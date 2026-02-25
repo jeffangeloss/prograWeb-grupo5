@@ -320,7 +320,7 @@ function GraficosUsuarioPage() {
         }
     }
 
-    return <div className="min-h-screen bg-slate-50 text-slate-800 overflow-x-hidden">
+    return <div className="min-h-screen bg-slate-50 text-slate-800 overflow-x-hidden dark:bg-slate-950 dark:text-slate-100">
         <NavBarUser onLogout={logout} />
         <PopUp_ToLogin
             onLogout={logout}

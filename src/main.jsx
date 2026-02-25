@@ -24,6 +24,9 @@ import EditarEgresoPage from './pages/EditarEgresoPage'
 import ConfirmarEmailPage from './pages/ConfirmarEmailPage'
 import { Toaster } from 'sonner'
 import ProtectedRoute from './components/auth/ProtectedRoute'
+import { initializeTheme } from './utils/theme'
+
+initializeTheme()
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>

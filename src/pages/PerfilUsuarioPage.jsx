@@ -534,7 +534,7 @@ function PerfilUsuarioPage() {
     const esRolAdminPanel = isAdminPanelRole(roleValue)
 
     return (
-        <div className="bg-slate-100 text-slate-800 min-h-screen">
+        <div className="bg-slate-100 text-slate-800 min-h-screen dark:bg-slate-950 dark:text-slate-100">
             {esRolAdminPanel ? <NavBarAdmin onLogout={logout} /> : <NavBarUser onLogout={logout} />}
 
             <main className="w-full px-2 py-3 sm:px-4 sm:py-5 lg:px-6">

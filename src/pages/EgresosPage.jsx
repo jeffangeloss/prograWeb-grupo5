@@ -539,17 +539,17 @@ function EgresosPage() {
     }
 
     return (
-        <div className="min-h-screen bg-slate-100 text-slate-800">
+        <div className="min-h-screen bg-slate-100 text-slate-800 dark:bg-slate-950 dark:text-slate-100">
             <Toaster position="bottom-right" richColors closeButton />
             <NavBarUser onLogout={logout} />
 
             <main className="w-full px-2 py-3 sm:px-4 sm:py-5 lg:px-6">
                 <div className="mx-auto w-full max-w-[1280px]">
-                    <section className="rounded-2xl border border-slate-200 bg-slate-100/90 p-4 shadow-sm sm:p-5 lg:p-6">
+                    <section className="rounded-2xl border border-slate-200 bg-slate-100/90 p-4 shadow-sm sm:p-5 lg:p-6 dark:border-slate-700 dark:bg-slate-900/70">
                         <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
                             <div>
-                                <h2 className="text-xl font-extrabold tracking-tight text-slate-700">MIS EGRESOS</h2>
-                                <p className="text-sm text-slate-500">Total registrado: {formatearMonto(totalRegistrado)}</p>
+                                <h2 className="text-xl font-extrabold tracking-tight text-slate-700 dark:text-slate-100">MIS EGRESOS</h2>
+                                <p className="text-sm text-slate-500 dark:text-slate-300">Total registrado: {formatearMonto(totalRegistrado)}</p>
                             </div>
 
                             <div className="flex flex-wrap items-center gap-2">

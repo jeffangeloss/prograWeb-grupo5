@@ -4,6 +4,7 @@ import RoleBadge from "./RoleBadge"
 import { normalizeRoleValue, roleLabel } from "../utils/roles"
 import { toast } from "sonner"
 import params from "../params"
+import { THEME_CHANGED_EVENT, isDarkThemeActive, toggleThemeMode } from "../utils/theme"
 
 const API_URL = params.BACKEND_URL
 const MAX_AVATAR_BYTES = 5 * 1024 * 1024
@@ -32,6 +33,9 @@ function NavBarAdmin({ onLogout }) {
     })
     const [avatarError, setAvatarError] = useState("")
     const [subiendoAvatar, setSubiendoAvatar] = useState(false)
+    const [isDarkMode, setIsDarkMode] = useState(function () {
+        return isDarkThemeActive()
+    })
     const menuRef = useRef(null)
     const avatarInputRef = useRef(null)
 
@@ -65,6 +69,11 @@ function NavBarAdmin({ onLogout }) {
 
     function refrescarSesion() {
         setSesion(leerSesion())
+    }
+
+    function alternarTema() {
+        const temaAplicado = toggleThemeMode()
+        setIsDarkMode(temaAplicado === "dark")
     }
 
     function persistirUsuarioEnStorage(user) {
@@ -184,6 +193,20 @@ function NavBarAdmin({ onLogout }) {
         }
     }, [])
 
+    useEffect(function () {
+        function sincronizarTema() {
+            setIsDarkMode(isDarkThemeActive())
+        }
+
+        window.addEventListener(THEME_CHANGED_EVENT, sincronizarTema)
+        window.addEventListener("storage", sincronizarTema)
+
+        return function () {
+            window.removeEventListener(THEME_CHANGED_EVENT, sincronizarTema)
+            window.removeEventListener("storage", sincronizarTema)
+        }
+    }, [])
+
     const enEstadisticas = location.pathname === "/estadisticas"
     const enDashboard = location.pathname === "/admin"
     const enAuditoriaAdmin = location.pathname === "/auditoriaAdmin"
@@ -222,7 +245,7 @@ function NavBarAdmin({ onLogout }) {
     }
 
     return (
-        <header className="border-b border-slate-200/80 bg-gradient-to-r from-[#96c7ef] to-[#cfe6f2] shadow-md">
+        <header className="border-b border-slate-200/80 bg-gradient-to-r from-[#96c7ef] to-[#cfe6f2] shadow-md dark:border-slate-700/70 dark:from-slate-900 dark:to-slate-800">
             <div className="mx-auto flex w-full max-w-[1400px] flex-col gap-3 px-4 py-3 sm:flex-row sm:items-center sm:justify-between sm:px-6 sm:py-4">
                 <div className="flex items-center gap-2">
                     <img
@@ -232,12 +255,30 @@ function NavBarAdmin({ onLogout }) {
                         onClick={() => navigate("/admin")}
                     />
                     <span
-                        className="text-xl font-extrabold tracking-tight text-slate-900 sm:text-2xl cursor-pointer hover:text-slate-700"
+                        className="text-xl font-extrabold tracking-tight text-slate-900 sm:text-2xl cursor-pointer hover:text-slate-700 dark:text-slate-100 dark:hover:text-slate-300"
                         onClick={function () { abrirSpotifyToast() }}
                     >GRUPO 5
                     </span>
                 </div>
                 <div className="flex flex-wrap items-center justify-end gap-2 sm:gap-3">
+                    <button
+                        type="button"
+                        className="inline-flex h-9 w-9 items-center justify-center rounded-full border border-slate-300 bg-white/80 text-slate-700 transition hover:bg-slate-100 dark:border-slate-600 dark:bg-slate-800 dark:text-slate-200 dark:hover:bg-slate-700"
+                        onClick={alternarTema}
+                        aria-label={isDarkMode ? "Activar modo claro" : "Activar modo oscuro"}
+                        title={isDarkMode ? "Activar modo claro" : "Activar modo oscuro"}
+                    >
+                        {isDarkMode ? (
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" className="h-4 w-4" aria-hidden="true">
+                                <circle cx="12" cy="12" r="4" />
+                                <path d="M12 2v2.5M12 19.5V22M4.9 4.9l1.8 1.8M17.3 17.3l1.8 1.8M2 12h2.5M19.5 12H22M4.9 19.1l1.8-1.8M17.3 6.7l1.8-1.8" />
+                            </svg>
+                        ) : (
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" className="h-4 w-4" aria-hidden="true">
+                                <path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z" />
+                            </svg>
+                        )}
+                    </button>
                     <div ref={menuRef} className="relative">
                         <input
                             ref={avatarInputRef}
@@ -253,7 +294,7 @@ function NavBarAdmin({ onLogout }) {
 
                         <button
                             type="button"
-                            className="inline-flex items-center gap-2 px-1 py-1 text-slate-700 transition"
+                            className="inline-flex items-center gap-2 px-1 py-1 text-slate-700 transition dark:text-slate-200"
                             onClick={function () {
                                 setOpenMenu(!openMenu)
                             }}
@@ -265,10 +306,10 @@ function NavBarAdmin({ onLogout }) {
                                     <h1 className="truncate text-sm font-semibold sm:text-base">{nombre}</h1>
                                     <RoleBadge role={roleValue} />
                                 </div>
-                                {correo && <p className="truncate text-[11px] text-slate-500 sm:text-xs">{correo}</p>}
+                                {correo && <p className="truncate text-[11px] text-slate-500 sm:text-xs dark:text-slate-400">{correo}</p>}
                             </div>
 
-                            <span className="inline-flex h-9 w-9 items-center justify-center rounded-full border border-blue-900/20 bg-white">
+                            <span className="inline-flex h-9 w-9 items-center justify-center rounded-full border border-blue-900/20 bg-white dark:border-slate-600 dark:bg-slate-700">
                                 <img
                                     src={avatarUsuario}
                                     alt={roleLabel(roleValue)}
@@ -283,7 +324,7 @@ function NavBarAdmin({ onLogout }) {
                                 fill="none"
                                 stroke="currentColor"
                                 strokeWidth="1.8"
-                                className={`h-4 w-4 text-slate-600 transition-transform ${openMenu ? "rotate-180" : ""}`}
+                                className={`h-4 w-4 text-slate-600 transition-transform dark:text-slate-300 ${openMenu ? "rotate-180" : ""}`}
                                 aria-hidden="true"
                             >
                                 <path d="M5 8l5 5 5-5" />
@@ -291,18 +332,18 @@ function NavBarAdmin({ onLogout }) {
                         </button>
 
                         {openMenu && (
-                            <div className="absolute right-0 z-50 mt-2 w-72 overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-xl">
-                                <div className="border-b border-slate-100 px-4 py-4 text-center">
+                            <div className="absolute right-0 z-50 mt-2 w-72 overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-xl dark:border-slate-700 dark:bg-slate-900">
+                                <div className="border-b border-slate-100 px-4 py-4 text-center dark:border-slate-700">
                                     <img
                                         src={avatarUsuario}
                                         alt={roleLabel(roleValue)}
-                                        className="mx-auto h-14 w-14 rounded-full border border-blue-900/20 object-cover"
+                                        className="mx-auto h-14 w-14 rounded-full border border-blue-900/20 object-cover dark:border-slate-600"
                                         onError={function (ev) {
                                             ev.currentTarget.src = "https://res.cloudinary.com/dmmyupwuu/image/upload/v1771912745/gatito-1_pmyxdz.png"
                                         }}
                                     />
-                                    <p className="mt-2 truncate text-sm font-semibold text-slate-700">{nombre}</p>
-                                    {correo && <p className="truncate text-xs text-slate-500">{correo}</p>}
+                                    <p className="mt-2 truncate text-sm font-semibold text-slate-700 dark:text-slate-100">{nombre}</p>
+                                    {correo && <p className="truncate text-xs text-slate-500 dark:text-slate-400">{correo}</p>}
                                     <div className="mt-2">
                                         <RoleBadge role={roleValue} />
                                     </div>
@@ -311,7 +352,7 @@ function NavBarAdmin({ onLogout }) {
                                 <div className="space-y-1 p-2">
                                     <button
                                         type="button"
-                                        className="w-full rounded-lg px-3 py-2.5 text-left text-sky-600 transition hover:bg-sky-50"
+                                        className="w-full rounded-lg px-3 py-2.5 text-left text-sky-600 transition hover:bg-sky-50 dark:text-sky-300 dark:hover:bg-slate-800"
                                         onClick={function () {
                                             if (avatarInputRef.current) {
                                                 avatarInputRef.current.click()
@@ -323,7 +364,7 @@ function NavBarAdmin({ onLogout }) {
                                     {!enDashboard && (
                                         <button
                                             type="button"
-                                            className="w-full rounded-lg px-3 py-2.5 text-left text-slate-700 transition hover:bg-slate-100"
+                                            className="w-full rounded-lg px-3 py-2.5 text-left text-slate-700 transition hover:bg-slate-100 dark:text-slate-200 dark:hover:bg-slate-800"
                                             onClick={function () {
                                                 navegar("/admin")
                                             }}
@@ -334,7 +375,7 @@ function NavBarAdmin({ onLogout }) {
                                     {!enEstadisticas && (
                                         <button
                                             type="button"
-                                            className="w-full rounded-lg px-3 py-2.5 text-left text-slate-700 transition hover:bg-slate-100"
+                                            className="w-full rounded-lg px-3 py-2.5 text-left text-slate-700 transition hover:bg-slate-100 dark:text-slate-200 dark:hover:bg-slate-800"
                                             onClick={function () {
                                                 navegar("/estadisticas")
                                             }}
@@ -345,7 +386,7 @@ function NavBarAdmin({ onLogout }) {
                                     {puedeVerAuditoriaAdmin && !enAuditoriaAdmin && (
                                         <button
                                             type="button"
-                                            className="w-full rounded-lg px-3 py-2.5 text-left text-slate-700 transition hover:bg-slate-100"
+                                            className="w-full rounded-lg px-3 py-2.5 text-left text-slate-700 transition hover:bg-slate-100 dark:text-slate-200 dark:hover:bg-slate-800"
                                             onClick={function () {
                                                 navegar("/auditoriaAdmin")
                                             }}
@@ -356,7 +397,7 @@ function NavBarAdmin({ onLogout }) {
                                     {!enPerfil && (
                                         <button
                                             type="button"
-                                            className="w-full rounded-lg px-3 py-2.5 text-left text-slate-700 transition hover:bg-slate-100"
+                                            className="w-full rounded-lg px-3 py-2.5 text-left text-slate-700 transition hover:bg-slate-100 dark:text-slate-200 dark:hover:bg-slate-800"
                                             onClick={function () {
                                                 navegar("/perfil")
                                             }}
@@ -366,7 +407,7 @@ function NavBarAdmin({ onLogout }) {
                                     )}
                                     <button
                                         type="button"
-                                        className="w-full rounded-lg px-3 py-2.5 text-left text-rose-600 transition hover:bg-rose-50"
+                                        className="w-full rounded-lg px-3 py-2.5 text-left text-rose-600 transition hover:bg-rose-50 dark:text-rose-300 dark:hover:bg-rose-950/30"
                                         onClick={function () {
                                             setOpenMenu(false)
                                             onLogout()
@@ -376,7 +417,7 @@ function NavBarAdmin({ onLogout }) {
                                     </button>
                                 </div>
                                 {avatarError && (
-                                    <p className="px-4 pb-3 text-xs font-medium text-rose-600">{avatarError}</p>
+                                    <p className="px-4 pb-3 text-xs font-medium text-rose-600 dark:text-rose-300">{avatarError}</p>
                                 )}
                             </div>
                         )}

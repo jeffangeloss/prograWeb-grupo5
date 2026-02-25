@@ -215,7 +215,7 @@ function SeguridadUsuarioPage() {
     }
 
     return (
-        <div className="bg-slate-50 text-slate-800 min-h-screen">
+        <div className="bg-slate-50 text-slate-800 min-h-screen dark:bg-slate-950 dark:text-slate-100">
             <NavBarAdmin onLogout={logout} />
             <div className="p-6">
                 <div className="max-w-6xl mx-auto">
