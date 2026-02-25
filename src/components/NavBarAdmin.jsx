@@ -139,7 +139,7 @@ function NavBarAdmin({ onLogout }) {
 
         const token = obtenerToken()
         if (!token) {
-            setAvatarError("Sesion expirada. Inicia sesion nuevamente.")
+            setAvatarError("Sesión expirada. Inicia sesión nuevamente.")
             return
         }
 
@@ -416,7 +416,7 @@ function NavBarAdmin({ onLogout }) {
                                             onLogout()
                                         }}
                                     >
-                                        Cerrar sesion
+                                        Cerrar sesión
                                     </button>
                                 </div>
                                 {avatarError && (
