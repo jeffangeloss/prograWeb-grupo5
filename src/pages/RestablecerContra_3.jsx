@@ -5,6 +5,7 @@ import ContraForm from "../components/ContraForm"
 import Mensaje from "../components/Mensaje"
 import PopUp_ToLogin from "../components/PopUp_ToLogin"
 import { passwordMeetsPolicy, passwordPolicyMessage } from "../utils/passwordPolicy"
+import params from "../params"
 
 function RestableceContra_3() {
     const location = useLocation()
@@ -59,8 +60,8 @@ function RestableceContra_3() {
 
         try {
             setCargando(true)
-
-            const resp = await fetch("http://127.0.0.1:8000/reset-pass/confirm", {
+        
+            const resp = await fetch(`${params.API_URL}/reset-pass/confirm`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
@@ -153,7 +154,7 @@ function RestableceContra_3() {
                 <PopUp_ToLogin onLogout={logout} mensaje={popUpMensaje} visible={popUpVisible} />
             </div>
         </div>
-    )
+    </div>
 }
 
 export default RestableceContra_3

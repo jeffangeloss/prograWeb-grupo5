@@ -2,6 +2,7 @@ import { useState } from "react"
 import { useNavigate } from "react-router-dom"
 import CorreoForm from "../components/CorreoForm"
 import Mensaje from "../components/Mensaje"
+import params from "../params"
 
 function RestableceContra() {
 
@@ -11,7 +12,7 @@ function RestableceContra() {
 
     async function requestHTTP(correo) {
         try {
-            const resp = await fetch("http://127.0.0.1:8000/reset-pass/request", {
+            const resp = await fetch(`${params.API_URL}/reset-pass/request`, {
                 method: "PUT",
                 headers: {
                     "Content-Type": "application/json"
