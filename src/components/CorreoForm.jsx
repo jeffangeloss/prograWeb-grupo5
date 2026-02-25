@@ -16,7 +16,7 @@ function CorreoForm({ onContinue }) {
                 onClick={function () {
                     onContinue(correo)
                 }}
-                className="mt-4 w-min rounded-full bg-indigo-600 px-16 py-3 font-semibold text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-300 active:scale-[0.99] transition"
+                className="mt-4 w-full rounded-full bg-indigo-600 px-8 py-3 font-semibold text-white shadow-sm transition hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-300 active:scale-[0.99] sm:w-fit sm:px-16"
                 type="button">Continuar
             </button>
         </form>
