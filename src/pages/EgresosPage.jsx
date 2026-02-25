@@ -20,6 +20,13 @@ const EMPTY_FILTERS = {
     amount_max: "",
 }
 
+const PAGE_SIZE_OPTIONS = [
+    { value: "5", label: "5" },
+    { value: "10", label: "10" },
+    { value: "20", label: "20" },
+    { value: "all", label: "Todos" },
+]
+
 function EgresosPage() {
     const navigate = useNavigate()
 
@@ -43,6 +50,8 @@ function EgresosPage() {
     const sesionTimerRef = useRef(null)
 
     const [chatOpen, setChatOpen] = useState(false)
+    const [pageSize, setPageSize] = useState("10")
+    const [currentPage, setCurrentPage] = useState(1)
 
     const totalRegistrado = useMemo(function () {
         return egresos.reduce(function (acc, item) {
@@ -84,6 +93,43 @@ function EgresosPage() {
 
         return chips
     }, [appliedFilters, categories])
+
+    const pageSizeNumber = useMemo(function () {
+        if (pageSize === "all") {
+            return Math.max(egresos.length, 1)
+        }
+        const parsed = Number(pageSize)
+        return Number.isFinite(parsed) && parsed > 0 ? parsed : 10
+    }, [pageSize, egresos.length])
+
+    const totalPaginas = useMemo(function () {
+        if (pageSize === "all") {
+            return 1
+        }
+        return Math.max(1, Math.ceil(egresos.length / pageSizeNumber))
+    }, [egresos.length, pageSize, pageSizeNumber])
+
+    const egresosPaginados = useMemo(function () {
+        if (pageSize === "all") {
+            return egresos
+        }
+        const inicio = (currentPage - 1) * pageSizeNumber
+        return egresos.slice(inicio, inicio + pageSizeNumber)
+    }, [egresos, pageSize, currentPage, pageSizeNumber])
+
+    const resumenPaginacion = useMemo(function () {
+        if (egresos.length === 0) {
+            return "0 de 0"
+        }
+
+        if (pageSize === "all") {
+            return `1-${egresos.length} de ${egresos.length}`
+        }
+
+        const inicio = (currentPage - 1) * pageSizeNumber + 1
+        const fin = Math.min(currentPage * pageSizeNumber, egresos.length)
+        return `${inicio}-${fin} de ${egresos.length}`
+    }, [egresos.length, pageSize, currentPage, pageSizeNumber])
 
     function logout() {
         clearAuthData()
@@ -143,6 +189,16 @@ function EgresosPage() {
         }
         cargarEgresos()
     }, [ordenFecha, appliedFilters, sesionBloqueada])
+
+    useEffect(function () {
+        setCurrentPage(1)
+    }, [pageSize, ordenFecha, appliedFilters])
+
+    useEffect(function () {
+        if (currentPage > totalPaginas) {
+            setCurrentPage(totalPaginas)
+        }
+    }, [currentPage, totalPaginas])
 
     function formatearFecha(isoDate) {
         const parsed = new Date(isoDate)
@@ -470,6 +526,18 @@ function EgresosPage() {
         return "rounded-full border border-slate-300 bg-white px-4 py-2 text-sm font-semibold text-slate-700 shadow-sm transition hover:bg-slate-100"
     }
 
+    function irPaginaAnterior() {
+        setCurrentPage(function (prev) {
+            return Math.max(1, prev - 1)
+        })
+    }
+
+    function irPaginaSiguiente() {
+        setCurrentPage(function (prev) {
+            return Math.min(totalPaginas, prev + 1)
+        })
+    }
+
     return (
         <div className="min-h-screen bg-slate-100 text-slate-800">
             <Toaster position="bottom-right" richColors closeButton />
@@ -514,6 +582,25 @@ function EgresosPage() {
                                 <span className="rounded-full border border-slate-200 bg-white/70 px-3 py-1 text-xs font-semibold text-slate-700">
                                     {egresos.length} {egresos.length === 1 ? "registro" : "registros"}
                                 </span>
+
+                                <label className="inline-flex items-center gap-2 rounded-full border border-slate-200 bg-white px-3 py-1 text-xs font-semibold text-slate-700">
+                                    Mostrar
+                                    <select
+                                        value={pageSize}
+                                        onChange={function (ev) {
+                                            setPageSize(ev.target.value)
+                                        }}
+                                        className="rounded-md border border-slate-300 bg-white px-2 py-1 text-xs font-semibold text-slate-700 focus:border-indigo-400 focus:ring-2 focus:ring-indigo-200"
+                                    >
+                                        {PAGE_SIZE_OPTIONS.map(function (option) {
+                                            return (
+                                                <option key={option.value} value={option.value}>
+                                                    {option.label}
+                                                </option>
+                                            )
+                                        })}
+                                    </select>
+                                </label>
                             </div>
                         </div>
 
@@ -628,7 +715,7 @@ function EgresosPage() {
                                             </td>
                                         </tr>
                                     ) : (
-                                        egresos.map(function (egreso) {
+                                        egresosPaginados.map(function (egreso) {
                                             return (
                                                 <tr key={egreso.id} className="border-b border-slate-100">
                                                     <td className="px-4 py-5">{formatearFecha(egreso.expense_date)}</td>
@@ -700,6 +787,38 @@ function EgresosPage() {
                                 </tbody>
                             </table>
                         </div>
+
+                        {!cargando && egresos.length > 0 && (
+                            <div className="mt-4 flex flex-col gap-2 text-sm text-slate-600 sm:flex-row sm:items-center sm:justify-between">
+                                <p>
+                                    Mostrando {resumenPaginacion}
+                                </p>
+
+                                <div className="flex items-center gap-2">
+                                    <button
+                                        type="button"
+                                        onClick={irPaginaAnterior}
+                                        disabled={currentPage <= 1 || pageSize === "all"}
+                                        className="rounded-md border border-slate-300 bg-white px-3 py-1.5 font-semibold text-slate-700 transition hover:bg-slate-100 disabled:cursor-not-allowed disabled:opacity-50"
+                                    >
+                                        Anterior
+                                    </button>
+
+                                    <span className="rounded-md border border-slate-200 bg-white px-3 py-1.5 font-semibold text-slate-700">
+                                        Pagina {currentPage} de {totalPaginas}
+                                    </span>
+
+                                    <button
+                                        type="button"
+                                        onClick={irPaginaSiguiente}
+                                        disabled={currentPage >= totalPaginas || pageSize === "all"}
+                                        className="rounded-md border border-slate-300 bg-white px-3 py-1.5 font-semibold text-slate-700 transition hover:bg-slate-100 disabled:cursor-not-allowed disabled:opacity-50"
+                                    >
+                                        Siguiente
+                                    </button>
+                                </div>
+                            </div>
+                        )}
                     </section>
                 </div>
             </main>
