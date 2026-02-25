@@ -114,9 +114,24 @@ function InicioSesionPage() {
         }
 
         if (FORCE_2FA && data.msg == "Acceso concedido") {
+            const tmpCompatToken = data.access_token || data.token || ""
+            if (!tmpCompatToken) {
+                return {
+                    valido: false,
+                    error: "Este acceso requiere validacion con autenticador."
+                }
+            }
+
+            const rolNormalizado = normalizeRoleValue(data.rol)
             return {
-                valido: false,
-                error: "Este acceso requiere validacion con autenticador."
+                valido: true,
+                requiere2FA: true,
+                rol: rolNormalizado,
+                tmp_token: tmpCompatToken,
+                nombre: data.name || "",
+                correo: data.email || correo,
+                id: data.id || "",
+                avatar_url: data.avatar_url || "",
             }
         }
 
