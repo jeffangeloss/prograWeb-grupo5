@@ -1,6 +1,6 @@
 {
   "name": "proyecto_pw",
-  "homepage": "https://jeffangeloss.github.io/prograWeb-grupo5",
+  "homepage": "https://app.grupo5app.lat",
   "private": true,
   "version": "0.0.0",
   "type": "module",
@@ -9,7 +9,7 @@
     "build": "vite build",
     "lint": "eslint .",
     "preview": "vite preview",
-    "deploy": "gh-pages -d dist",
+    "deploy": "gh-pages -d dist --cname app.grupo5app.lat",
     "predeploy": "npm run build"
   },
   "dependencies": {
