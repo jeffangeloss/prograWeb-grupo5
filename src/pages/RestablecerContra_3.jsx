@@ -154,7 +154,7 @@ function RestableceContra_3() {
                 <PopUp_ToLogin onLogout={logout} mensaje={popUpMensaje} visible={popUpVisible} />
             </div>
         </div>
-    </div>
+    )
 }
 
 export default RestableceContra_3
