@@ -15,7 +15,7 @@ import NavBarUser from "../components/NavBarUser"
 import { useNavigate } from "react-router-dom"
 import { isAdminPanelRole, normalizeRoleValue } from "../utils/roles"
 import PopUp_ToLogin from "../components/PopUp_ToLogin"
-
+import params from "../params"
 
 ChartJS.register(
     LineElement,
@@ -99,7 +99,7 @@ function GraficosUsuarioPage() {
             setPopUpVisible(false)
 
             async function fetchYear(year) {
-                let url = `http://127.0.0.1:8000/expenses/stats?year=${year}`
+                let url = `${params.API_URL}/expenses/stats?year=${year}`
 
                 if (selectedMonth !== -1) {
                     url += `&month=${selectedMonth}`
@@ -236,14 +236,7 @@ function GraficosUsuarioPage() {
             {
                 label: `Egresos ${selectedYear1}`,
                 data: monthlyCurrent,
-                backgroundColor: [
-                    "rgba(99, 102, 241, 0.8)",
-                    "rgba(16, 185, 129, 0.8)",
-                    "rgba(239, 68, 68, 0.8)",
-                    "rgba(249, 115, 22, 0.8)",
-                    "rgba(147, 51, 234, 0.8)",
-                    "rgba(59, 130, 246, 0.8)"
-                ],
+                backgroundColor: "rgba(99, 102, 241, 0.8)",
                 borderWidth: 1,
             }
         ]
