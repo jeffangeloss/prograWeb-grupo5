@@ -1,4 +1,5 @@
 import { useState, useRef, useEffect } from 'react'
+import ReactMarkdown from 'react-markdown'
 
 function ChatBotPage({ isOpen, setIsOpen }) {
     const [input, setInput] = useState('')
@@ -108,7 +109,10 @@ function ChatBotPage({ isOpen, setIsOpen }) {
                                 color: msg.role === 'user' ? 'white' : '#333',
                                 border: msg.role === 'user' ? 'none' : '1px solid #eee'
                             }}>
-                                {msg.text}
+                                {msg.role === 'user'
+                                    ? msg.text
+                                    : <ReactMarkdown>{msg.text}</ReactMarkdown>
+                                }
                             </div>
                         </div>
                     ))}
