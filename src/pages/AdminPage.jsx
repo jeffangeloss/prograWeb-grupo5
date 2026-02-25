@@ -5,13 +5,13 @@ import TablaAdmin from "../components/TablaAdmin"
 import PopUp_BorrarUsuario from "../components/PopUp_BorrarUsuarioConfirm"
 import { useEffect, useMemo, useState } from "react"
 import { toast } from "sonner"
+import params from "../params"
 import {
     canManageUsers,
     isAdminPanelRole,
     normalizeRoleValue,
     roleLabel,
 } from "../utils/roles"
-import params from "../params"
 
 function getSesion() {
     try {
@@ -95,7 +95,7 @@ function AdminPage() {
         if (rol === "3") filtroRol = "user_type=3"
         if (rol === "4") filtroRol = "user_type=4"
 
-        const URL = `${params.BACKEND_URL}/admin/${filtroRol ? `?${filtroRol}` : ""}`
+        const URL = `${params.API_URL}/admin/${filtroRol ? `?${filtroRol}` : ""}`
         try {
             const resp = await fetch(URL, {
                 method: "GET",
@@ -152,7 +152,7 @@ function AdminPage() {
         const toastId = toast.loading("Eliminando usuario...")
 
         try {
-            const URL = `${params.BACKEND_URL}/admin/${usuarioSeleccionado.id}`
+            const URL = `${params.API_URL}/admin/${usuarioSeleccionado.id}`
             const response = await fetch(URL, {
                 method: "DELETE",
                 headers: {

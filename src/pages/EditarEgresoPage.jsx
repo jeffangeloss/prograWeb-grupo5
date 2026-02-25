@@ -18,6 +18,8 @@ function EditarEgresoPage() {
     const [descripcion, setDescripcion] = useState("")
     const [error, setError] = useState("")
     const [guardando, setGuardando] = useState(false)
+    const [categoriaId, setCategoriaId] = useState("")
+    const [categories, setCategories] = useState([])
 
     function obtenerSesion() {
         try {
@@ -84,11 +86,26 @@ function EditarEgresoPage() {
 
         const fechaRaw = String(egreso.expense_date || "")
         setFecha(fechaRaw.slice(0, 10))
+
+        setCategoriaId(egreso.category_id)
     }, [egreso])
 
     const categoriaNombre = useMemo(function () {
         return egreso?.category_name || "-"
     }, [egreso])
+
+    useEffect(function () {
+        const token = obtenerToken()
+        fetch(`${API_URL}/categories`, {
+            headers: token
+                ? {
+                    Authorization: `Bearer ${token}`,
+                }
+                : {},
+        })
+            .then(function (res) { return res.json() })
+            .then(function (data) { setCategories(data) })
+    }, [])
 
     async function guardarCambios(ev) {
         ev.preventDefault()
@@ -118,8 +135,8 @@ function EditarEgresoPage() {
             description: descripcion.trim(),
         }
 
-        if (egreso.category_id) {
-            payload.category_id = egreso.category_id
+        if (categoriaId) {
+            payload.category_id = categoriaId
         }
 
         setGuardando(true)
@@ -200,12 +217,16 @@ function EditarEgresoPage() {
 
                                 <div className="space-y-1">
                                     <label className="text-sm font-medium text-slate-700">Categoria</label>
-                                    <input
-                                        type="text"
-                                        value={categoriaNombre}
-                                        readOnly
-                                        className="w-full rounded-md border border-slate-200 bg-slate-50 px-3 py-2 text-slate-600"
-                                    />
+                                    <select 
+                                        value={categoriaId}
+                                        onChange={(e) => setCategoriaId(e.target.value)}
+                                    >
+                                        {categories.map(cat => (
+                                            <option key={cat.id} value={cat.id}>
+                                                {cat.name}
+                                            </option>
+                                        ))}
+                                    </select>
                                 </div>
 
                                 <div className="space-y-1">

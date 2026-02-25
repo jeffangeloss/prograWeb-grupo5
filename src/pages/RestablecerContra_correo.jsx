@@ -10,10 +10,10 @@ function RestablecerContra_correo() {
 
     return <div className="grid grid-cols-1">
         {/* contenido */}
-        <div className="w-1/2 justify-self-center text-center">
+        <div className="w-full max-w-xl justify-self-center px-4 text-center sm:px-8">
             {/* header */}
-            <div className="my-10">
-                <h1 className="text-4xl font-extrabold tracking-tight text-slate-700">RESTABLECER CONTRASEÑA</h1>
+            <div className="my-8 sm:my-10">
+                <h1 className="text-3xl sm:text-4xl font-extrabold tracking-tight text-slate-700">RESTABLECER CONTRASEÑA</h1>
             </div>
 
             {/* texto */}

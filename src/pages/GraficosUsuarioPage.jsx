@@ -17,7 +17,6 @@ import { isAdminPanelRole, normalizeRoleValue } from "../utils/roles"
 import PopUp_ToLogin from "../components/PopUp_ToLogin"
 import params from "../params"
 
-
 ChartJS.register(
     LineElement,
     BarElement,
@@ -35,7 +34,6 @@ function GraficosUsuarioPage() {
     const navigate = useNavigate()
     const [statsCurrent, setStatsCurrent] = useState(null)
     const [statsPrevious, setStatsPrevious] = useState(null)
-    const [loading, setLoading] = useState(true)
     const [selectedMonth, setSelectedMonth] = useState(-1)
     const [popUpVisible, setPopUpVisible] = useState(false)
     const [popUpMensaje, setPopUpMensaje] = useState("")
@@ -56,8 +54,10 @@ function GraficosUsuarioPage() {
         })
     }
 
-    const currentYear = new Date().getFullYear()
-    const previousYear = currentYear - 1
+    const actualYear = new Date().getFullYear()
+
+    const [selectedYear1, setSelectedYear1] = useState(actualYear)
+    const [selectedYear2, setSelectedYear2] = useState(actualYear - 1)
 
     const monthlyCurrent = buildMonthlyData(statsCurrent)
     const monthlyPrevious = buildMonthlyData(statsPrevious)
@@ -88,20 +88,15 @@ function GraficosUsuarioPage() {
         async function statsHTTP() {
             const token = obtenerToken()
             if (!token) {
-                setLoading(false)
                 setPopUpMensaje("No hay sesion activa. Inicia sesion nuevamente.")
                 setPopUpVisible(true)
                 return
             }
 
-            setLoading(true)
             setPopUpVisible(false)
 
-            const currentYear = new Date().getFullYear()
-            const previousYear = currentYear - 1
-
             async function fetchYear(year) {
-                let url = `${params.BACKEND_URL}/expenses/stats?year=${year}`
+                let url = `${params.API_URL}/expenses/stats?year=${year}`
 
                 if (selectedMonth !== -1) {
                     url += `&month=${selectedMonth}`
@@ -114,7 +109,6 @@ function GraficosUsuarioPage() {
                 if (resp.status === 401) {
                     setPopUpMensaje("Tu sesión ha expirado. Inicia sesión nuevamente.")
                     setPopUpVisible(true)
-                    setLoading(false)
                     return null
                 }
 
@@ -126,23 +120,21 @@ function GraficosUsuarioPage() {
             }
 
             try {
-                const currentData = await fetchYear(currentYear)
+                const currentData = await fetchYear(selectedYear1)
 
                 if (!currentData) return
 
-                const previousData = await fetchYear(previousYear)
+                const previousData = await fetchYear(selectedYear2)
                 setStatsCurrent(currentData)
                 setStatsPrevious(previousData)
 
             } catch (err) {
                 console.error(err)
-            } finally {
-                setLoading(false)
             }
         }
 
         statsHTTP()
-    }, [selectedMonth])
+    }, [selectedMonth, selectedYear1, selectedYear2])
 
     useEffect(function () {
         const sesion = obtenerSesion()
@@ -215,7 +207,7 @@ function GraficosUsuarioPage() {
         labels: monthLabels,
         datasets: [
             {
-                label: `Egresos ${currentYear}`,
+                label: `Egresos ${selectedYear1}`,
                 data: monthlyCurrent,
                 borderColor: "#3b82f6",
                 backgroundColor: "rgba(59,130,246,0.2)",
@@ -223,7 +215,7 @@ function GraficosUsuarioPage() {
                 tension: 0.4,
             },
             {
-                label: `Egresos ${previousYear}`,
+                label: `Egresos ${selectedYear2}`,
                 data: monthlyPrevious,
                 borderColor: "#f59e0b",
                 backgroundColor: "rgba(245,158,11,0.2)",
@@ -236,16 +228,9 @@ function GraficosUsuarioPage() {
         labels: monthLabels,
         datasets: [
             {
-                label: `Egresos ${currentYear}`,
+                label: `Egresos ${selectedYear1}`,
                 data: monthlyCurrent,
-                backgroundColor: [
-                    "rgba(99, 102, 241, 0.8)",
-                    "rgba(16, 185, 129, 0.8)",
-                    "rgba(239, 68, 68, 0.8)",
-                    "rgba(249, 115, 22, 0.8)",
-                    "rgba(147, 51, 234, 0.8)",
-                    "rgba(59, 130, 246, 0.8)"
-                ],
+                backgroundColor: "rgba(99, 102, 241, 0.8)",
                 borderWidth: 1,
             }
         ]
@@ -335,76 +320,123 @@ function GraficosUsuarioPage() {
         }
     }
 
-    return <div className="h-screen bg-slate-50 text-slate-800 overflow-x-hidden">
+    return <div className="min-h-screen bg-slate-50 text-slate-800 overflow-x-hidden">
         <NavBarUser onLogout={logout} />
         <PopUp_ToLogin
             onLogout={logout}
             mensaje={popUpMensaje}
             visible={popUpVisible}
         />
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
 
-            <div className="my-3 flex justify-between items-center">
-                <div className="flex items-center gap-4">
-                    <h1 className="whitespace-nowrap text-xl font-extrabold tracking-tight text-slate-700">Resumen de los egresos</h1>
-                    <select
-                        value={selectedMonth}
-                        onChange={function (e) {
-                            setSelectedMonth(Number(e.target.value))
-                        }}
-                        className="mb-2 w-full rounded-md border border-slate-200 bg-white px-3 py-2 text-slate-700 shadow-sm focus:border-indigo-400 focus:ring-2 focus:ring-indigo-200"
-                    >
-                        <option value={-1}>Todos los meses</option>
-                        <option value={1}>Enero</option>
-                        <option value={2}>Febrero</option>
-                        <option value={3}>Marzo</option>
-                        <option value={4}>Abril</option>
-                        <option value={5}>Mayo</option>
-                        <option value={6}>Junio</option>
-                        <option value={7}>Julio</option>
-                        <option value={8}>Agosto</option>
-                        <option value={9}>Septiembre</option>
-                        <option value={10}>Octubre</option>
-                        <option value={11}>Noviembre</option>
-                        <option value={12}>Diciembre</option>
-                    </select>
-                </div>
+        <div className="my-6 max-w-7xl mx-auto px-4 space-y-4">
 
+            <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-3">
                 <button
                     type="button"
-                    className="w-min sm:w-auto px-6 py-2.5 rounded-full border border-blue-900/30 text-blue-900 hover:bg-blue-900/10 transition"
-                    onClick={function () { navigate("/user") }}>Regresar
+                    className="w-full md:w-auto px-6 py-2 rounded-full border border-slate-300 hover:bg-slate-100 transition"
+                    onClick={function () { navigate("/user") }}>← Regresar
                 </button>
 
+                <h1 className="text-2xl font-bold text-slate-700 text-center md:text-left">Resumen de los egresos</h1>
             </div>
 
-            
-                {statsCurrent?.total !== 0 && statsPrevious?.total !== 0 ? (
-                    <>
-                <div className="grid grid-cols-1 justify-items-center lg:grid-cols-2 xl:grid-cols-3 gap-4 m-3 ">
-                    <div className="bg-white rounded-2xl shadow-xl border border-slate-200 p-6 w-min">
-                        {statsCurrent && statsPrevious && (
-                            <Line data={dataMultiAxis} options={multiAxisOptions} />
-                        )}
+            <div className="bg-white rounded-2xl shadow-sm border border-slate-200 p-4">
+                <div className="flex flex-col md:flex-row md:items-end gap-4">
+
+                    <div className="flex flex-col w-full md:w-auto">
+                        <label className="text-sm text-slate-500 mb-1">Mes</label>
+                        <select
+                            value={selectedMonth}
+                            onChange={function (e) {
+                                setSelectedMonth(Number(e.target.value))
+                            }}
+                            className="rounded-lg border border-slate-300 px-3 py-2 focus:ring-2 focus:ring-indigo-200"
+                        >
+                            <option value={-1}>Todos los meses</option>
+                            <option value={1}>Enero</option>
+                            <option value={2}>Febrero</option>
+                            <option value={3}>Marzo</option>
+                            <option value={4}>Abril</option>
+                            <option value={5}>Mayo</option>
+                            <option value={6}>Junio</option>
+                            <option value={7}>Julio</option>
+                            <option value={8}>Agosto</option>
+                            <option value={9}>Septiembre</option>
+                            <option value={10}>Octubre</option>
+                            <option value={11}>Noviembre</option>
+                            <option value={12}>Diciembre</option>
+                        </select>
                     </div>
-                    <div className="bg-white rounded-2xl shadow-xl border border-slate-200 p-6 w-min">
-                        {statsCurrent && <Doughnut data={dataDoughnut} options={doughnutOptions} />}
+
+                    <div className="flex flex-col w-full md:w-auto">
+                        <label className="text-sm text-slate-500 mb-1">Año principal</label>
+                        <select
+                            value={selectedYear1}
+                            onChange={(e) => setSelectedYear1(Number(e.target.value))}
+                            className="rounded-lg border border-slate-300 px-3 py-2"
+                        >
+                            {[...Array(6)].map((_, i) => {
+                                const year = actualYear - i
+                                return (
+                                    <option key={year} value={year}>
+                                        {year}
+                                    </option>
+                                )
+                            })}
+                        </select>
                     </div>
-                    <div className="bg-white rounded-2xl shadow-xl border border-slate-200 p-6 w-min">
-                        {statsCurrent && <Bar data={dataBar} options={barOptions} />}
+
+                    <div className="flex flex-col w-full md:w-auto">
+                        <label className="text-sm text-slate-500 mb-1">Comparar con</label>
+                        <select
+                            value={selectedYear2}
+                            onChange={(e) => setSelectedYear2(Number(e.target.value))}
+                            className="rounded-lg border border-slate-300 px-3 py-2"
+                        >
+                            {[...Array(6)].map((_, i) => {
+                                const year = actualYear - i
+                                return (
+                                    <option key={year} value={year}>
+                                        {year}
+                                    </option>
+                                )
+                            })}
+                        </select>
                     </div>
-                    <div className="bg-white rounded-2xl shadow-xl border border-slate-200 p-6 w-min">
-                        {statsCurrent && <Bar data={dataStacked} options={stackedOptions} />}
-                    </div>
+
                 </div>
-                </>
-                ):
+            </div>
+        </div>
+
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 ">
+            {!statsCurrent ?
                 (
                     <div className="text-center bg-white rounded-2xl shadow-xl border border-slate-200 p-6">
                         No se tienen egresos registrados de este año
                     </div>
-                )}
-            
+                ) :
+                (
+                    <>
+                        <div className="m-3 grid grid-cols-1 justify-items-center gap-4 lg:grid-cols-2 xl:grid-cols-3">
+                            <div className="w-full max-w-[560px] rounded-2xl border border-slate-200 bg-white p-4 shadow-xl sm:p-6">
+                                {statsCurrent && statsPrevious && (
+                                    <Line data={dataMultiAxis} options={multiAxisOptions} />
+                                )}
+                            </div>
+                            <div className="w-full max-w-[560px] rounded-2xl border border-slate-200 bg-white p-4 shadow-xl sm:p-6">
+                                {statsCurrent && <Doughnut data={dataDoughnut} options={doughnutOptions} />}
+                            </div>
+                            <div className="w-full max-w-[560px] rounded-2xl border border-slate-200 bg-white p-4 shadow-xl sm:p-6">
+                                {statsCurrent && <Bar data={dataBar} options={barOptions} />}
+                            </div>
+                            <div className="w-full max-w-[560px] rounded-2xl border border-slate-200 bg-white p-4 shadow-xl sm:p-6">
+                                {statsCurrent && <Bar data={dataStacked} options={stackedOptions} />}
+                            </div>
+                        </div>
+                    </>
+                )
+            }
+
 
         </div>
 
