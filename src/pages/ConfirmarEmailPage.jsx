@@ -1,13 +1,21 @@
-import { useState } from "react"
-import { useNavigate } from "react-router-dom"
+import { useEffect, useState } from "react"
+import { useNavigate, useSearchParams } from "react-router-dom"
 import params from "../params"
 
 export default function ConfirmarEmailPage() {
   const navigate = useNavigate()
+  const [searchParams] = useSearchParams()
 
   const [token, setToken] = useState("")
   const [estado, setEstado] = useState("idle")
   const [error, setError] = useState("")
+
+  useEffect(() => {
+    const tokenFromUrl = (searchParams.get("token") || "").trim()
+    if (tokenFromUrl) {
+      setToken(tokenFromUrl)
+    }
+  }, [searchParams])
 
   async function verificarCorreo(e) {
     e.preventDefault()
